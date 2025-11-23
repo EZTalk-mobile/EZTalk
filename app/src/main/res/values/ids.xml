@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="rvRecentChats" type="id" />
+    <item name="layoutRecentHeader" type="id" />
+    <item name="tvSeeAll" type="id" />
+    <item name="layoutQuickActions" type="id" />
+    <item name="cardVideoCall" type="id" />
+    <item name="cardVoiceCall" type="id" />
+    <item name="cardNewChat" type="id" />
+    <item name="tvQuickActions" type="id" />
+    <item name="cardWelcome" type="id" />
+    <item name="ivSettings" type="id" />
+    <item name="tvWelcome" type="id" />
+    <item name="rvCallHistory" type="id" />
+    <item name="tvRole" type="id" />
+    <item name="tvStatus" type="id" />
+</resources>

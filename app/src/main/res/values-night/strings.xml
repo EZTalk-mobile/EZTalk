@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu" />
+    <string name="more" />
+    <string name="forgot_password_icon" />
+    <string name="email_icon" />
+</resources>

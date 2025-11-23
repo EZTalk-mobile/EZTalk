@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Outlined Button Style -->
+    <style name="Widget.EZTalk.Button.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeColor">@color/primary_purple</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="android:textColor">@color/primary_purple</item>
+        <item name="rippleColor">@color/primary_purple_light</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:fontFamily">@font/inter_semibold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="iconTint">@color/primary_purple</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+    </style>
+
+    <!-- Filled Button Style -->
+    <style name="Widget.EZTalk.Button.Filled" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/primary_purple</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="rippleColor">@color/primary_purple_dark</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:fontFamily">@font/inter_semibold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+    <!-- Text Button Style -->
+    <style name="Widget.EZTalk.Button.Text" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/primary_purple</item>
+        <item name="rippleColor">@color/primary_purple_light</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:fontFamily">@font/inter_semibold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Tonal Button Style (Subtle filled) -->
+    <style name="Widget.EZTalk.Button.Tonal" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/background_card</item>
+        <item name="android:textColor">@color/primary_purple</item>
+        <item name="rippleColor">@color/primary_purple_light</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:fontFamily">@font/inter_semibold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+    <!-- Dialog Cancel Button Style -->
+    <style name="Widget.EZTalk.Button.Dialog.Cancel" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">#E0E0E0</item>
+        <item name="backgroundTint">@color/background_dark</item>
+        <item name="strokeColor">@color/divider</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:fontFamily">@font/inter_semibold</item>
+        <item name="android:textSize">15sp</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+    <!-- Dialog Action Button Style -->
+    <style name="Widget.EZTalk.Button.Dialog.Action" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/primary_purple</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="rippleColor">@color/primary_purple_dark</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:fontFamily">@font/inter_semibold</item>
+        <item name="android:textSize">15sp</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+</resources>

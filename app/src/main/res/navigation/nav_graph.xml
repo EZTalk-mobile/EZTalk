@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--suppress ALL -->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/welcomeFragment">
+
+    <!-- ==================== AUTH FLOW ==================== -->
+    <include app:graph="@navigation/nav_auth" />
+
+    <!-- ==================== MAIN APP ==================== -->
+    <fragment
+        android:id="@+id/mainHostFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:label="EZTalk"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_bottom_tabs"
+        tools:layout="@layout/activity_main" />
+
+</navigation>
