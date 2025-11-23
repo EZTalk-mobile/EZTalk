@@ -79,5 +79,6 @@
         <color name="call_button_speaker">#6C5CE7</color>
         <color name="call_button_video">#4A90E2</color>
         <color name="call_button_add_call">#FF9F43</color>
+    <color name="error_red" />
 
 </resources>

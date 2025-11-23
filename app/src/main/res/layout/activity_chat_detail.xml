@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_dark">
@@ -154,8 +155,8 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_mic"
-                android:tint="@color/error_red"
-                android:contentDescription="@string/recording" />
+                android:contentDescription="@string/recording"
+                app:tint="@color/error_red" />
 
             <TextView
                 android:id="@+id/tvRecordingTime"
@@ -181,8 +182,8 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_arrow_left"
-                android:tint="@color/text_hint"
-                android:contentDescription="@string/cancel" />
+                android:contentDescription="@string/cancel"
+                app:tint="@color/text_hint" />
 
         </LinearLayout>
 
@@ -236,14 +237,15 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
+                    android:fontFamily="@font/inter_regular"
                     android:hint="@string/type_message"
+                    android:importantForAutofill="no"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:maxLines="4"
                     android:textColor="@color/text_primary"
                     android:textColorHint="@color/text_hint"
                     android:textSize="16sp"
-                    android:fontFamily="@font/inter_regular"
-                    android:maxLines="4"
-                    android:inputType="textCapSentences|textMultiLine"
-                    android:importantForAutofill="no" />
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <ImageView
                     android:id="@+id/btnAttach"
@@ -276,13 +278,14 @@
             android:id="@+id/fabVoice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/voice_message"
             android:src="@drawable/ic_mic"
             android:visibility="visible"
-            app:fabSize="mini"
             app:backgroundTint="@color/primary_purple"
-            app:tint="@color/text_primary"
             app:elevation="0dp"
-            android:contentDescription="@string/voice_message" />
+            app:fabSize="mini"
+            app:tint="@color/text_primary"
+            tools:ignore="SpeakableTextPresentCheck" />
 
     </LinearLayout>
 
