@@ -233,5 +233,26 @@
     <string name="share">Share</string>
     <string name="description">Description</string>
     <string name="empty_state">No data available</string>
+    <string name="document">document</string>
+    <string name="gallery">gallery</string>
+    <string name="camera"> camera</string>
+    <string name="audio">audio</string>
+    <string name="change_photo">Change Photo</string>
+    <!-- Account -->
+    <string name="account">Account</string>
+    <!-- Privacy -->
+    <string name="privacy">Privacy</string>
+    <!-- Edit Profile -->
+    <string name="edit_profile">Edit Profile</string>
+    <!-- Contact Name -->
+    <string name="contact_name">Contact Name</string>
+    <!-- Call Info -->
+    <string name="call_info">Call Info</string>
+
+    <string name="result_title">result_title</string>
+    <string name="result_subtitle">result_subtitle</string>
+    <string name="time">time</string>
+
+
 
 </resources>

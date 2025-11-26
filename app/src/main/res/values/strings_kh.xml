@@ -233,5 +233,31 @@
     <string name="share">ចែករំលែក</string>
     <string name="description">ពិពណ៌នា</string>
     <string name="empty_state">មិនមានទិន្នន័យ</string>
+    <string name="document">ឯកសារ</string>
+    <string name="gallery">វិចិត្រសាល</string>
+    <string name="camera"> កាមេរ៉ា</string>
+    <string name="audio">តន្ត្រី</string>
+
+    <string name="change_photo_kh">ប្ដូររូបភាព</string>
+
+    <!-- Account -->
+
+    <string name="account_kh">គណនី</string>
+
+    <!-- Privacy -->
+    <string name="privacy_kh">ភាពឯកជន</string>
+    <string name="edit_profile_kh">កែប្រែប្រវត្តិរូប</string>
+    <!-- Contact Name -->
+    <string name="contact_name_kh">ឈ្មោះទំនាក់ទំនង</string>
+    <!-- Call Info -->
+    <string name="call_info_kh">ព័ត៌មានការហៅ</string>
+    <string name="result_title">ចំណងជើងលទ្ធផល</string>
+    <string name="result_subtitle">ចំណងជើងរងលទ្ធផល</string>
+    <string name="time">ពេលវេលា</string>
+
+
+
+
+
 
 </resources>
