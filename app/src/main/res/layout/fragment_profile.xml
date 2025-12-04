@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:padding="24dp">
 
+        <!-- Profile Picture -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cvProfilePicture"
             android:layout_width="120dp"
@@ -35,6 +36,7 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Edit Photo FAB -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabEditPhoto"
             android:layout_width="wrap_content"
@@ -48,6 +50,7 @@
             app:tint="@color/text_primary"
             tools:ignore="ImageContrastCheck" />
 
+        <!-- Username -->
         <TextView
             android:id="@+id/tvUserName"
             android:layout_width="wrap_content"
@@ -62,6 +65,7 @@
             app:layout_constraintTop_toBottomOf="@id/cvProfilePicture"
             tools:ignore="HardcodedText" />
 
+        <!-- Email -->
         <TextView
             android:id="@+id/tvUserEmail"
             android:layout_width="wrap_content"
@@ -76,7 +80,7 @@
             app:layout_constraintTop_toBottomOf="@id/tvUserName"
             tools:ignore="HardcodedText" />
 
-        <!-- Profile Options -->
+        <!-- Edit Profile Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEditProfile"
             style="@style/Widget.EZTalk.Button.Outlined"
@@ -85,11 +89,11 @@
             android:layout_marginTop="24dp"
             android:text="@string/edit_profile"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvUserEmail"
             tools:ignore="TextContrastCheck" />
 
+        <!-- Profile Options -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cvProfileOptions"
             android:layout_width="0dp"
@@ -142,7 +146,6 @@
                         android:rotation="180"
                         app:tint="@color/text_secondary"
                         android:contentDescription="@string/more" />
-
                 </LinearLayout>
 
                 <View
@@ -185,7 +188,6 @@
                         android:rotation="180"
                         app:tint="@color/text_secondary"
                         android:contentDescription="@string/more" />
-
                 </LinearLayout>
 
                 <View
@@ -228,13 +230,13 @@
                         android:rotation="180"
                         app:tint="@color/text_secondary"
                         android:contentDescription="@string/more" />
-
                 </LinearLayout>
 
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
+        <!-- Logout Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogout"
             style="@style/Widget.EZTalk.Button.Text"
@@ -246,10 +248,22 @@
             app:icon="@drawable/ic_logout"
             app:iconTint="@color/accent_red"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cvProfileOptions" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- BOTTOM DRAGGABLE FAB -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAddFriendBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add"
+            android:contentDescription="@string/add_friend"
+            app:backgroundTint="@color/primary_purple"
+            app:tint="@color/text_primary"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="16dp"/>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

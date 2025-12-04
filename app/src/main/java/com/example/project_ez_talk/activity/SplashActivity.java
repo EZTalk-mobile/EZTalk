@@ -6,6 +6,7 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.project_ez_talk.R;
+import com.example.project_ez_talk.ui.profile.ProfileActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -15,14 +16,12 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash); // your splash XML
+        setContentView(R.layout.activity_splash);
 
-        // Delay then start MainActivity
-        new Handler().postDelayed(() -> {
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish(); // close splash so user can't return to it
-        }, SPLASH_DURATION);
+        // Directly open ProfileActivity for testing
+        startActivity(new Intent(this, ProfileActivity.class));
+        finish();
     }
 }
+
 
