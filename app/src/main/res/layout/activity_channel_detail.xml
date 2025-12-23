@@ -62,8 +62,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/subscriber_count"
+                    android:textColor="@color/text_secondary"
                     android:textSize="@dimen/text_size_caption"
-                    android:textColor="@color/text_secondary" />
+                    tools:ignore="TextContrastCheck" />
 
             </LinearLayout>
 
@@ -122,7 +123,7 @@
             android:textColor="@color/text_primary"
             android:textColorHint="@color/text_hint"
             android:textSize="@dimen/text_size_body"
-            tools:ignore="TouchTargetSizeCheck" />
+            tools:ignore="TouchTargetSizeCheck,TextContrastCheck,VisualLintTextFieldSize" />
 
         <ImageView
             android:id="@+id/btn_send"

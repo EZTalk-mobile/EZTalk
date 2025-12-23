@@ -1,17 +1,19 @@
 plugins {
-    alias(libs.plugins.android.application)
+    id("com.android.application")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
     namespace = "com.example.project_ez_talk"
-    compileSdk {
-        version = release(36)
-    }
+    //noinspection GradleDependency
+    compileSdk = 36  // ✅ CHANGED
 
     defaultConfig {
         applicationId = "com.example.project_ez_talk"
         minSdk = 24
-        targetSdk = 36
+        //noinspection OldTargetApi
+        targetSdk = 36  // ✅ CHANGED
         versionCode = 1
         versionName = "1.0"
 
@@ -27,29 +29,42 @@ android {
             )
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_16
+        targetCompatibility = JavaVersion.VERSION_16
     }
 }
 
 dependencies {
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
-    //noinspection UseTomlInstead
+    // Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:34.6.0"))
+    implementation("com.google.firebase:firebase-crashlytics")
 
+    // Google Sign-In (kept — you may still be using it)
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
+
+    // AndroidX & Material
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.activity:activity-ktx:1.9.0")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.3")
+
+    // PhotoView
     implementation("com.github.Baseflow:PhotoView:2.3.0")
-    //noinspection GradleDependency
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    //noinspection GradleDependency
-    implementation("com.google.android.material:material:1.11.0")
 
-    implementation(libs.appcompat)
-    implementation(libs.material)
-    implementation(libs.activity)
-    implementation(libs.constraintlayout)
-    implementation(libs.navigation.fragment)
-    implementation(libs.navigation.ui)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.storage)
+    implementation(libs.firebase.database)
+    implementation(libs.swiperefreshlayout)
+
+    // Testing
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }

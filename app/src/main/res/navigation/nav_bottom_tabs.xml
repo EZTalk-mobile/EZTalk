@@ -9,7 +9,7 @@
     <!-- Home Fragment -->
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.project_ez_talk.ui.home.HomeFragment"
+        android:name="com.example.project_ez_talk.fragment.HomeFragment"
         android:label="@string/home"
         tools:layout="@layout/fragment_home">
 
@@ -29,7 +29,7 @@
     <!-- Chats Fragment -->
     <fragment
         android:id="@+id/navigation_chats"
-        android:name="com.example.project_ez_talk.ui.chats.ChatsFragment"
+        android:name="com.example.project_ez_talk.fragment.ChatListFragment"
         android:label="@string/chats"
         tools:layout="@layout/fragment_chat_list">
 
@@ -45,19 +45,19 @@
     <!-- Calls Fragment -->
     <fragment
         android:id="@+id/navigation_calls"
-        android:name="com.example.project_ez_talk.ui.calls.CallsFragment"
+        android:name="com.example.project_ez_talk.fragment.CallsFragment"
         android:label="@string/calls"
         tools:layout="@layout/fragment_calls">
 
         <action
-            android:id="@+id/action_calls_to_call"/>
-<!--            app:destination="@id/callActivity" -->
+            android:id="@+id/action_calls_to_call"
+            app:destination="@id/callActivity" />
     </fragment>
 
     <!-- Contacts Fragment -->
     <fragment
         android:id="@+id/navigation_contacts"
-        android:name="com.example.project_ez_talk.ui.contacts.ContactsFragment"
+        android:name="com.example.project_ez_talk.fragment.ContactsFragment"
         android:label="@string/contacts"
         tools:layout="@layout/fragment_contacts">
 
@@ -73,7 +73,7 @@
     <!-- Profile Fragment -->
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.example.project_ez_talk.ui.profile.ProfileFragment"
+        android:name="com.example.project_ez_talk.fragment.ProfileFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_profile">
 
@@ -89,13 +89,13 @@
     <!-- Activities (as destinations) -->
     <activity
         android:id="@+id/chatDetailActivity"
-        android:name="com.example.project_ez_talk.ui.chat.ChatDetailActivity"
+        android:name="com.example.project_ez_talk.ui.chat.detail.ChatDetailActivity"
         android:label="@string/chats"
         tools:layout="@layout/activity_chat_detail" />
 
     <activity
         android:id="@+id/settingsActivity"
-        android:name="com.example.project_ez_talk.ui.settings.SettingsActivity"
+        android:name="com.example.project_ez_talk.ui.profile.SettingsActivity"
         android:label="@string/settings"
         tools:layout="@layout/activity_settings" />
 
@@ -106,8 +106,14 @@
         tools:layout="@layout/activity_edit_profile" />
 
     <activity
+        android:id="@+id/callActivity"
+        android:name="com.example.project_ez_talk.ui.call.ongoing.CallActivity"
+        android:label="@string/call"
+        tools:layout="@layout/activity_call" />
+
+    <activity
         android:id="@+id/incomingCallActivity"
-        android:name="com.example.project_ez_talk.ui.call.IncomingCallActivity"
+        android:name="com.example.project_ez_talk.ui.call.incoming.IncomingCallActivity"
         android:label="@string/incoming_call"
         tools:layout="@layout/activity_incoming_call" />
 

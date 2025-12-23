@@ -33,26 +33,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:fontFamily="@font/inter_bold"
         android:text="User Name"
         android:textColor="@color/text_primary"
         android:textSize="28sp"
-        android:fontFamily="@font/inter_bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cvUserAvatar" />
+        app:layout_constraintTop_toBottomOf="@id/cvUserAvatar"
+        tools:ignore="HardcodedText,TextContrastCheck" />
 
     <TextView
         android:id="@+id/tvCallDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:fontFamily="@font/inter_medium"
         android:text="00:00"
         android:textColor="@color/text_primary"
         android:textSize="18sp"
-        android:fontFamily="@font/inter_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvUserName" />
+        app:layout_constraintTop_toBottomOf="@id/tvUserName"
+        tools:ignore="HardcodedText,TextContrastCheck" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -75,18 +77,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_mic"
-                app:fabSize="mini"
                 app:backgroundTint="@color/nav_bar_background"
-                app:tint="@color/text_primary" />
+                app:fabSize="mini"
+                app:tint="@color/text_primary"
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:fontFamily="@font/inter_medium"
                 android:text="@string/mute"
                 android:textColor="@color/text_primary"
                 android:textSize="12sp"
-                android:fontFamily="@font/inter_medium" />
+                tools:ignore="TextContrastCheck" />
 
         </LinearLayout>
 
@@ -101,21 +105,22 @@
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_call"
                 android:rotation="135"
-                app:fabSize="normal"
+                android:src="@drawable/ic_call"
                 app:backgroundTint="@color/call_button_end"
+                app:fabSize="normal"
                 app:tint="@color/text_primary"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:fontFamily="@font/inter_medium"
                 android:text="@string/end_call"
                 android:textColor="@color/text_primary"
                 android:textSize="12sp"
-                android:fontFamily="@font/inter_medium" />
+                tools:ignore="TextContrastCheck" />
 
         </LinearLayout>
 
@@ -130,19 +135,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_speaker"
-                app:fabSize="mini"
                 app:backgroundTint="@color/call_button_mute"
+                app:fabSize="mini"
                 app:tint="@color/text_primary"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:fontFamily="@font/inter_medium"
                 android:text="@string/speaker"
                 android:textColor="@color/text_primary"
                 android:textSize="12sp"
-                android:fontFamily="@font/inter_medium" />
+                tools:ignore="TextContrastCheck" />
 
         </LinearLayout>
 

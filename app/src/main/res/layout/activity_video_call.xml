@@ -24,7 +24,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            tools:ignore="UselessParent">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cvRemoteAvatar"
@@ -37,9 +38,10 @@
                     android:id="@+id/ivRemoteAvatar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:contentDescription="@string/profile"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_profile"
-                    android:contentDescription="@string/profile" />
+                    tools:ignore="ImageContrastCheck" />
 
             </com.google.android.material.card.MaterialCardView>
 

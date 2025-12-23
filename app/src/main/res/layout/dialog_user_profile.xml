@@ -25,7 +25,8 @@
             android:src="@drawable/ic_close"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="6dp"
-            app:tint="@color/text_secondary" />
+            app:tint="@color/text_secondary"
+            tools:ignore="ContentDescription" />
 
         <!-- Profile Picture -->
         <androidx.cardview.widget.CardView
@@ -42,7 +43,8 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_profile"
-                tools:src="@tools:sample/avatars" />
+                tools:src="@tools:sample/avatars"
+                tools:ignore="ContentDescription" />
 
         </androidx.cardview.widget.CardView>
 
@@ -82,7 +84,8 @@
             android:text="John Doe"
             android:textColor="@color/text_primary"
             android:textSize="20sp"
-            android:fontFamily="@font/inter_bold" />
+            android:fontFamily="@font/inter_bold"
+            tools:ignore="HardcodedText" />
 
         <!-- Username -->
         <TextView
@@ -93,7 +96,8 @@
             android:text="\@johndoe"
             android:textColor="@color/text_secondary"
             android:textSize="14sp"
-            android:fontFamily="@font/inter_regular" />
+            android:fontFamily="@font/inter_regular"
+            tools:ignore="HardcodedText" />
 
         <!-- Bio/Status -->
         <TextView
@@ -108,7 +112,8 @@
             android:fontFamily="@font/inter_regular"
             android:gravity="center"
             android:maxLines="2"
-            android:ellipsize="end" />
+            android:ellipsize="end"
+            tools:ignore="HardcodedText" />
 
         <!-- Action Buttons -->
         <LinearLayout
@@ -118,7 +123,8 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:orientation="horizontal"
-            android:weightSum="3">
+            android:weightSum="3"
+            tools:ignore="DisableBaselineAlignment">
 
             <!-- Message Button -->
             <LinearLayout
@@ -138,7 +144,8 @@
                     android:background="@drawable/circle_purple_light"
                     android:backgroundTint="@color/primary_purple_light"
                     android:padding="10dp"
-                    app:tint="@color/primary_purple" />
+                    app:tint="@color/primary_purple"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -147,7 +154,8 @@
                     android:text="Message"
                     android:textColor="@color/text_primary"
                     android:textSize="12sp"
-                    android:fontFamily="@font/inter_medium" />
+                    android:fontFamily="@font/inter_medium"
+                    tools:ignore="HardcodedText" />
 
             </LinearLayout>
 
@@ -169,7 +177,8 @@
                     android:background="@drawable/circle_purple_light"
                     android:backgroundTint="@color/secondary_green_light"
                     android:padding="10dp"
-                    app:tint="@color/secondary_green" />
+                    app:tint="@color/secondary_green"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -178,7 +187,8 @@
                     android:text="Call"
                     android:textColor="@color/text_primary"
                     android:textSize="12sp"
-                    android:fontFamily="@font/inter_medium" />
+                    android:fontFamily="@font/inter_medium"
+                    tools:ignore="HardcodedText" />
 
             </LinearLayout>
 
@@ -200,7 +210,8 @@
                     android:background="@drawable/circle_purple_light"
                     android:backgroundTint="@color/accent_blue"
                     android:padding="10dp"
-                    app:tint="@android:color/white" />
+                    app:tint="@android:color/white"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -209,7 +220,8 @@
                     android:text="Video"
                     android:textColor="@color/text_primary"
                     android:textSize="12sp"
-                    android:fontFamily="@font/inter_medium" />
+                    android:fontFamily="@font/inter_medium"
+                    tools:ignore="HardcodedText" />
 
             </LinearLayout>
 

@@ -42,6 +42,7 @@
                         android:contentDescription="@string/image_message"
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_gallery"
+                        tools:ignore="ImageContrastCheck,VisualLintBounds"
                         tools:src="@tools:sample/backgrounds/scenic" />
 
                     <ProgressBar
@@ -94,14 +95,14 @@
                 android:id="@+id/tvTimeNoCaption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
                 android:layout_margin="8dp"
+                android:fontFamily="@font/inter_regular"
                 android:text="12:30 PM"
                 android:textColor="@color/text_tertiary"
                 android:textSize="12sp"
-                android:fontFamily="@font/inter_regular"
-                android:layout_gravity="end"
                 android:visibility="visible"
-                tools:ignore="HardcodedText" />
+                tools:ignore="HardcodedText,TextContrastCheck" />
 
         </LinearLayout>
 

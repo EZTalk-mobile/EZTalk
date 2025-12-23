@@ -1,79 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="8dp">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cvAvatar"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+    <FrameLayout
+        android:layout_width="64dp"
+        android:layout_height="64dp">
 
-        <ImageView
-            android:id="@+id/ivAvatar"
+        <!-- Avatar Circle -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_profile"
-            android:contentDescription="@string/profile" />
+            app:cardCornerRadius="32dp"
+            app:cardElevation="2dp"
+            app:strokeColor="@color/divider"
+            app:strokeWidth="1dp">
 
-    </com.google.android.material.card.MaterialCardView>
+            <ImageView
+                android:id="@+id/ivAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/profile"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_profile"
+                tools:ignore="ImageContrastCheck" />
 
-    <LinearLayout
-        android:layout_width="0dp"
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Remove Button -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnRemove"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="-4dp"
+            android:layout_marginEnd="-4dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/accent_red"
+            app:strokeColor="@color/white"
+            app:strokeWidth="2dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="4dp"
+                android:src="@drawable/ic_close"
+                android:contentDescription="@string/remove"
+                android:scaleType="centerInside"
+                app:tint="@color/white" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </FrameLayout>
+
+    <!-- Name Label -->
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="64dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        app:layout_constraintStart_toEndOf="@id/cvAvatar"
-        app:layout_constraintEnd_toStartOf="@id/checkbox"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_marginTop="8dp"
+        android:text="Name"
+        android:textColor="@color/text_primary"
+        android:textSize="13sp"
+        android:fontFamily="@font/inter_medium"
+        android:gravity="center"
+        android:maxLines="2"
+        android:ellipsize="end"
+        tools:ignore="HardcodedText" />
 
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Contact Name"
-            android:textColor="@color/text_primary"
-            android:textSize="16sp"
-            android:fontFamily="@font/inter_semibold"
-            android:maxLines="1"
-            android:ellipsize="end"
-            tools:ignore="HardcodedText" />
-
-        <TextView
-            android:id="@+id/tvStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/online"
-            android:textColor="@color/text_secondary"
-            android:textSize="14sp"
-            android:fontFamily="@font/inter_regular"
-            android:maxLines="1"
-            android:ellipsize="end" />
-
-    </LinearLayout>
-
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:buttonTint="@color/primary_purple"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

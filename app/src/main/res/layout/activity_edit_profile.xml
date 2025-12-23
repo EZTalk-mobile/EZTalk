@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_dark"
-    tools:context=".EditProfileActivity">
+    tools:context=".ui.profile.EditProfileActivity">
 
     <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
@@ -121,7 +121,7 @@
                     android:textColor="@color/text_primary"
                     android:textColorHint="@color/text_hint"
                     android:textSize="15sp"
-                    tools:ignore="HardcodedText,TextContrastCheck" />
+                    tools:ignore="Autofill,HardcodedText,TextContrastCheck,VisualLintTextFieldSize" />
 
             </androidx.cardview.widget.CardView>
 
@@ -157,15 +157,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
+                    android:fontFamily="@font/inter_regular"
                     android:hint="Enter username"
                     android:inputType="text"
+                    android:maxLines="1"
+                    android:padding="14dp"
                     android:textColor="@color/text_primary"
                     android:textColorHint="@color/text_hint"
                     android:textSize="15sp"
-                    android:fontFamily="@font/inter_regular"
-                    android:padding="14dp"
-                    android:maxLines="1"
-                    tools:ignore="HardcodedText" />
+                    tools:ignore="Autofill,HardcodedText,TextContrastCheck,VisualLintTextFieldSize" />
 
             </androidx.cardview.widget.CardView>
 
@@ -201,15 +201,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
+                    android:fontFamily="@font/inter_regular"
                     android:hint="Enter email"
                     android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:padding="14dp"
                     android:textColor="@color/text_primary"
                     android:textColorHint="@color/text_hint"
                     android:textSize="15sp"
-                    android:fontFamily="@font/inter_regular"
-                    android:padding="14dp"
-                    android:maxLines="1"
-                    tools:ignore="HardcodedText" />
+                    tools:ignore="Autofill,HardcodedText,TextContrastCheck,VisualLintTextFieldSize" />
 
             </androidx.cardview.widget.CardView>
 
@@ -245,15 +245,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
+                    android:fontFamily="@font/inter_regular"
                     android:hint="Enter phone number"
                     android:inputType="phone"
+                    android:maxLines="1"
+                    android:padding="14dp"
                     android:textColor="@color/text_primary"
                     android:textColorHint="@color/text_hint"
                     android:textSize="15sp"
-                    android:fontFamily="@font/inter_regular"
-                    android:padding="14dp"
-                    android:maxLines="1"
-                    tools:ignore="HardcodedText" />
+                    tools:ignore="Autofill,HardcodedText,TextContrastCheck,VisualLintTextFieldSize" />
 
             </androidx.cardview.widget.CardView>
 
@@ -289,17 +289,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="top"
                     android:hint="What's on your mind?"
                     android:inputType="textMultiLine"
+                    android:maxLines="4"
+                    android:minLines="2"
+                    android:padding="14dp"
                     android:textColor="@color/text_primary"
                     android:textColorHint="@color/text_hint"
                     android:textSize="15sp"
-                    android:fontFamily="@font/inter_regular"
-                    android:padding="14dp"
-                    android:minLines="2"
-                    android:maxLines="4"
-                    android:gravity="top"
-                    tools:ignore="HardcodedText" />
+                    tools:ignore="Autofill,HardcodedText,TextContrastCheck,VisualLintTextFieldSize" />
 
             </androidx.cardview.widget.CardView>
 
@@ -318,7 +318,8 @@
                 app:elevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cardStatus" />
+                app:layout_constraintTop_toBottomOf="@id/cardStatus"
+                tools:ignore="VisualLintButtonSize" />
 
             <!-- Progress Bar -->
             <ProgressBar

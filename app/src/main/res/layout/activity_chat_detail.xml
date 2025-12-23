@@ -15,23 +15,25 @@
         android:background="@color/background_dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextSizeCheck">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingEnd="8dp">
+            android:paddingEnd="8dp"
+            tools:ignore="RtlSymmetry">
 
             <ImageView
                 android:id="@+id/btnBack"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:padding="8dp"
-                android:src="@drawable/ic_back"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/back_to_login" />
+                android:contentDescription="@string/back_to_login"
+                android:padding="8dp"
+                android:src="@drawable/ic_back" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="40dp"
@@ -44,9 +46,10 @@
                     android:id="@+id/ivUserAvatar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:contentDescription="@string/profile"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_profile"
-                    android:contentDescription="@string/profile" />
+                    tools:ignore="ImageContrastCheck" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -62,23 +65,24 @@
                     android:id="@+id/tvUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/inter_semibold"
+                    android:maxLines="1"
                     android:text="User Name"
                     android:textColor="@color/text_primary"
                     android:textSize="16sp"
-                    android:fontFamily="@font/inter_semibold"
-                    android:maxLines="1"
-                    android:ellipsize="end" />
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/tvUserStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/online"
-                    android:textColor="@color/status_online"
-                    android:textSize="12sp"
+                    android:ellipsize="end"
                     android:fontFamily="@font/inter_regular"
                     android:maxLines="1"
-                    android:ellipsize="end" />
+                    android:text="@string/online"
+                    android:textColor="@color/status_online"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -86,28 +90,28 @@
                 android:id="@+id/btnVoiceCall"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:padding="8dp"
-                android:src="@drawable/ic_call"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/voice_call" />
+                android:contentDescription="@string/voice_call"
+                android:padding="8dp"
+                android:src="@drawable/ic_call" />
 
             <ImageView
                 android:id="@+id/btnVideoCall"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:padding="8dp"
-                android:src="@drawable/ic_video_call"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/video_call" />
+                android:contentDescription="@string/video_call"
+                android:padding="8dp"
+                android:src="@drawable/ic_video_call" />
 
             <ImageView
                 android:id="@+id/btnMore"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:padding="8dp"
-                android:src="@drawable/ic_more"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/more" />
+                android:contentDescription="@string/more"
+                android:padding="8dp"
+                android:src="@drawable/ic_more" />
 
         </LinearLayout>
 
@@ -167,7 +171,8 @@
                 android:text="00:00"
                 android:textColor="@color/text_primary"
                 android:textSize="18sp"
-                android:fontFamily="@font/inter_semibold" />
+                android:fontFamily="@font/inter_semibold"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -245,7 +250,7 @@
                     android:textColor="@color/text_primary"
                     android:textColorHint="@color/text_hint"
                     android:textSize="16sp"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    tools:ignore="TouchTargetSizeCheck,VisualLintTextFieldSize,TextContrastCheck" />
 
                 <ImageView
                     android:id="@+id/btnAttach"

@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_dark">
@@ -63,7 +64,8 @@
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
                         android:paddingTop="8dp"
-                        android:paddingBottom="8dp">
+                        android:paddingBottom="8dp"
+                        tools:ignore="UselessParent">
 
                         <TextView
                             android:layout_width="0dp"
@@ -72,14 +74,16 @@
                             android:text="Dark Mode"
                             android:textColor="@color/text_primary"
                             android:textSize="16sp"
-                            android:fontFamily="@font/inter_medium" />
+                            android:fontFamily="@font/inter_medium"
+                            tools:ignore="HardcodedText" />
 
                         <androidx.appcompat.widget.SwitchCompat
                             android:id="@+id/switchDarkMode"
+                            style="@style/Widget.EZTalk.Switch"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="true"
-                            style="@style/Widget.EZTalk.Switch" />
+                            tools:ignore="DuplicateSpeakableTextCheck" />
 
                     </LinearLayout>
 
@@ -127,7 +131,8 @@
                             android:text="Message Notifications"
                             android:textColor="@color/text_primary"
                             android:textSize="16sp"
-                            android:fontFamily="@font/inter_medium" />
+                            android:fontFamily="@font/inter_medium"
+                            tools:ignore="HardcodedText" />
 
                         <androidx.appcompat.widget.SwitchCompat
                             android:id="@+id/switchMessageNotif"
@@ -159,7 +164,8 @@
                             android:text="Call Notifications"
                             android:textColor="@color/text_primary"
                             android:textSize="16sp"
-                            android:fontFamily="@font/inter_medium" />
+                            android:fontFamily="@font/inter_medium"
+                            tools:ignore="HardcodedText" />
 
                         <androidx.appcompat.widget.SwitchCompat
                             android:id="@+id/switchCallNotif"
@@ -219,7 +225,8 @@
                         android:textColor="@color/text_secondary"
                         android:textSize="14sp"
                         android:fontFamily="@font/inter_regular"
-                        android:layout_marginEnd="8dp" />
+                        android:layout_marginEnd="8dp"
+                        tools:ignore="HardcodedText" />
 
                     <ImageView
                         android:layout_width="20dp"

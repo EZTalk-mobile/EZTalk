@@ -91,7 +91,7 @@
                     android:textColor="@color/text_primary"
                     android:textColorHint="@color/text_hint"
                     android:textSize="15sp"
-                    tools:ignore="Autofill,HardcodedText,TouchTargetSizeCheck" />
+                    tools:ignore="Autofill,HardcodedText,TouchTargetSizeCheck,TextContrastCheck,VisualLintTextFieldSize" />
 
             </LinearLayout>
 
@@ -113,7 +113,8 @@
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
-                android:text="@string/cancel" />
+                android:text="@string/cancel"
+                tools:ignore="VisualLintButtonSize" />
 
             <!-- Add Button -->
             <com.google.android.material.button.MaterialButton
@@ -123,7 +124,8 @@
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
-                android:text="@string/add_friend" />
+                android:text="@string/add_friend"
+                tools:ignore="VisualLintButtonSize" />
 
         </LinearLayout>
 

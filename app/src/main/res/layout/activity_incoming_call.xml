@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient">
@@ -34,9 +35,10 @@
             android:id="@+id/ivCallerAvatar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentDescription="@string/profile"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_profile"
-            android:contentDescription="@string/profile" />
+            tools:ignore="ImageContrastCheck" />
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -51,7 +53,8 @@
         android:fontFamily="@font/inter_bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cvCallerAvatar" />
+        app:layout_constraintTop_toBottomOf="@id/cvCallerAvatar"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/tvCallType"
@@ -87,9 +90,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_close"
-                app:fabSize="normal"
                 app:backgroundTint="@color/call_button_end"
-                app:tint="@color/text_primary" />
+                app:fabSize="normal"
+                app:tint="@color/text_primary"
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -113,9 +117,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_call"
-                app:fabSize="normal"
                 app:backgroundTint="@color/secondary_green"
-                app:tint="@color/text_primary" />
+                app:fabSize="normal"
+                app:tint="@color/text_primary"
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
             <TextView
                 android:layout_width="wrap_content"

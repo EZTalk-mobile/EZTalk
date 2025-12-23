@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- ========================================= -->
+    <!-- BUTTON STYLES                              -->
+    <!-- ========================================= -->
 
     <!-- Outlined Button Style -->
-    <style name="Style.Widget.EZTalk.Button.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+    <style name="Widget.EZTalk.Button.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="strokeColor">@color/primary_purple</item>
         <item name="strokeWidth">2dp</item>
         <item name="android:textColor">@color/primary_purple</item>
@@ -26,7 +30,7 @@
     </style>
 
     <!-- Text Button Style -->
-    <style name="Style.Widget.EZTalk.Button.Text" parent="Widget.MaterialComponents.Button.TextButton">
+    <style name="Widget.EZTalk.Button.Text" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/primary_purple</item>
         <item name="rippleColor">@color/primary_purple_light</item>
         <item name="cornerRadius">16dp</item>
@@ -34,7 +38,7 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <!-- Tonal Button Style (Subtle filled) -->
+    <!-- Tonal Button Style -->
     <style name="Widget.EZTalk.Button.Tonal" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/background_card</item>
         <item name="android:textColor">@color/primary_purple</item>
@@ -45,7 +49,20 @@
         <item name="elevation">0dp</item>
     </style>
 
-    <!-- Dialog Cancel Button Style -->
+    <!-- Base Button Style -->
+    <style name="Widget.EZTalk.Button" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/primary_purple</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:fontFamily">@font/inter_semibold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+    <!-- ========================================= -->
+    <!-- DIALOG BUTTON STYLES                       -->
+    <!-- ========================================= -->
+
     <style name="Widget.EZTalk.Button.Dialog.Cancel" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textColor">#E0E0E0</item>
         <item name="backgroundTint">@color/background_dark</item>
@@ -57,7 +74,6 @@
         <item name="elevation">0dp</item>
     </style>
 
-    <!-- Dialog Action Button Style -->
     <style name="Widget.EZTalk.Button.Dialog.Action" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/primary_purple</item>
         <item name="android:textColor">#FFFFFF</item>
@@ -68,18 +84,102 @@
         <item name="elevation">0dp</item>
     </style>
 
+    <!-- ========================================= -->
+    <!-- DIALOG THEME                               -->
+    <!-- ========================================= -->
+
+    <style name="AlertDialogTheme" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="colorPrimary">@color/primary_purple</item>
+        <item name="colorAccent">@color/primary_purple</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:background">@color/background_card</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.EZTalk.Button.Dialog.Action</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.EZTalk.Button.Dialog.Cancel</item>
+    </style>
+
+    <!-- ========================================= -->
+    <!-- SWITCH STYLE (ONLY ONE DEFINITION!)        -->
+    <!-- ========================================= -->
+
+    <style name="Widget.EZTalk.Switch" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="thumbTint">@color/switch_thumb_color</item>
+        <item name="trackTint">@color/switch_track_color</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+
+    <!-- ========================================= -->
+    <!-- TEXT INPUT STYLES                          -->
+    <!-- ========================================= -->
+
+    <style name="Widget.EZTalk.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/primary_purple</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="hintTextColor">@color/primary_purple</item>
+        <item name="android:textColorHint">@color/primary_purple_light</item>
+        <item name="boxCornerRadiusTopStart">16dp</item>
+        <item name="boxCornerRadiusTopEnd">16dp</item>
+        <item name="boxCornerRadiusBottomStart">16dp</item>
+        <item name="boxCornerRadiusBottomEnd">16dp</item>
+    </style>
+
+    <style name="Widget.EZTalk.EditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/primary_purple</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="hintTextColor">@color/primary_purple</item>
+        <item name="android:textColorHint">@color/primary_purple_light</item>
+    </style>
+
+    <!-- ========================================= -->
+    <!-- IMAGE STYLES                               -->
+    <!-- ========================================= -->
+
     <style name="CircleImageStyle">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
 
-    !--this, i need to add this while debuging so i dont where it belong-->
-    <style name="TextAppearance.App.CollapsingToolbar.Expanded" parent="TextAppearance.MaterialComponents.Headline4">
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:shadowColor">#80000000</item>
-        <item name="android:shadowDx">0</item>
-        <item name="android:shadowDy">2</item>
-        <item name="android:shadowRadius">4</item>
+    <!-- ========================================= -->
+    <!-- NAVIGATION STYLES                          -->
+    <!-- ========================================= -->
+
+    <style name="Widget.EZTalk.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">@color/white</item>
+        <item name="itemIconTint">@color/primary_purple</item>
+        <item name="itemTextColor">@color/primary_purple</item>
+        <item name="elevation">8dp</item>
     </style>
+
+    <!-- ========================================= -->
+    <!-- TOOLBAR STYLES                             -->
+    <!-- ========================================= -->
+
+    <style name="TextAppearance.App.CollapsingToolbar.Expanded" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:fontFamily">@font/inter_bold</item>
+    </style>
+
+
+    <!-- ✅ FIXED: Remove the white indicator completely -->
+    <style name="InvisibleActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:width">0dp</item>
+        <item name="android:height">0dp</item>
+        <item name="android:color">@android:color/transparent</item>
+    </style>
+
+    <style name="BottomNavTextActive" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/inter_semibold</item>
+    </style>
+
+    <style name="BottomNavTextInactive" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="fontFamily">@font/inter_regular</item>
+    </style>
+
+
+
+
 
 </resources>

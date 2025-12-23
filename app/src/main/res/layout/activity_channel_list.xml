@@ -14,6 +14,7 @@
         app:title="@string/channels"
         app:titleTextColor="@color/text_primary"
         app:navigationIcon="@drawable/ic_back"
+        app:navigationIconTint="@color/text_primary"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.tabs.TabLayout

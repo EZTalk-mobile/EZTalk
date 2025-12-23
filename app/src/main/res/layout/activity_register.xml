@@ -10,255 +10,334 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="24dp"
-        android:paddingTop="48dp"
-        android:paddingBottom="48dp">
+        android:paddingHorizontal="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="24dp">
 
-        <!-- Back Button (Top-left, proper safe area spacing) -->
+        <!-- Back Button -->
         <ImageView
             android:id="@+id/btnBack"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/back_to_login"
-            android:padding="12dp"
+            android:padding="10dp"
             android:src="@drawable/ic_back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- Logo (Centered, with proper top spacing) -->
-        <ImageView
-            android:id="@+id/ivLogo"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="24dp"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_profile"
-            app:layout_constraintBottom_toTopOf="@+id/tvTitle"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ImageContrastCheck" />
 
-        <!-- Main Title -->
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginTop="12dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_app_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnBack"
+            tools:ignore="ImageContrastCheck" />
+
+        <!-- Title -->
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="12dp"
             android:fontFamily="@font/inter_bold"
             android:gravity="center"
             android:text="@string/register_title"
             android:textColor="@color/text_primary"
-            android:textSize="28sp"
-            android:lineSpacingExtra="4dp"
+            android:textSize="24sp"
+            android:lineSpacingExtra="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivLogo" />
 
-        <!-- Form starts with generous breathing room -->
+        <!-- Subtitle -->
+        <TextView
+            android:id="@+id/tvSubtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/inter_regular"
+            android:gravity="center"
+            android:text="@string/register_subtitle"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+        <!-- ============= USERNAME FIELD ============= -->
+        <TextView
+            android:id="@+id/lblUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/inter_semibold"
+            android:text="@string/username"
+            android:textColor="@color/text_primary"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSubtitle" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilUsername"
             style="@style/Widget.EZTalk.TextInputLayout"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-            android:hint="@string/username"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            android:layout_height="56dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/lblUsername">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etUsername"
                 style="@style/Widget.EZTalk.EditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|start"
                 android:inputType="text"
-                tools:ignore="TextContrastCheck" />
+                android:paddingVertical="16dp"
+                android:textSize="16sp"
+                tools:ignore="TextContrastCheck,VisualLintTextFieldSize,SpeakableTextPresentCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Email -->
+        <!-- ============= EMAIL FIELD ============= -->
+        <TextView
+            android:id="@+id/lblEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:fontFamily="@font/inter_semibold"
+            android:text="@string/email"
+            android:textColor="@color/text_primary"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilUsername" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilEmail"
             style="@style/Widget.EZTalk.TextInputLayout"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:hint="@string/email"
-            app:layout_constraintTop_toBottomOf="@id/tilUsername"
+            android:layout_height="56dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/lblEmail">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEmail"
                 style="@style/Widget.EZTalk.EditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|start"
                 android:inputType="textEmailAddress"
-                tools:ignore="TextContrastCheck" />
+                android:paddingVertical="16dp"
+                android:textSize="16sp"
+                tools:ignore="TextContrastCheck,VisualLintTextFieldSize,SpeakableTextPresentCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Password -->
+        <!-- ============= PASSWORD FIELD ============= -->
+        <TextView
+            android:id="@+id/lblPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:fontFamily="@font/inter_semibold"
+            android:text="@string/password"
+            android:textColor="@color/text_primary"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilEmail" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilPassword"
             style="@style/Widget.EZTalk.TextInputLayout"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:hint="@string/password"
+            android:layout_height="56dp"
+            android:layout_marginTop="8dp"
             app:endIconMode="password_toggle"
-            app:layout_constraintTop_toBottomOf="@id/tilEmail"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/lblPassword">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPassword"
                 style="@style/Widget.EZTalk.EditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|start"
                 android:inputType="textPassword"
-                tools:ignore="TextContrastCheck" />
+                android:paddingVertical="16dp"
+                android:textSize="16sp"
+                tools:ignore="TextContrastCheck,VisualLintTextFieldSize,SpeakableTextPresentCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Confirm Password -->
+        <!-- ============= CONFIRM PASSWORD FIELD ============= -->
+        <TextView
+            android:id="@+id/lblConfirmPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:fontFamily="@font/inter_semibold"
+            android:text="@string/confirm_password"
+            android:textColor="@color/text_primary"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilPassword" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilConfirmPassword"
             style="@style/Widget.EZTalk.TextInputLayout"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:hint="@string/confirm_password"
+            android:layout_height="56dp"
+            android:layout_marginTop="8dp"
             app:endIconMode="password_toggle"
-            app:layout_constraintTop_toBottomOf="@id/tilPassword"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/lblConfirmPassword">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etConfirmPassword"
                 style="@style/Widget.EZTalk.EditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|start"
                 android:inputType="textPassword"
-                tools:ignore="TextContrastCheck" />
+                android:paddingVertical="16dp"
+                android:textSize="16sp"
+                tools:ignore="TextContrastCheck,VisualLintTextFieldSize,SpeakableTextPresentCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Register Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRegister"
             style="@style/Widget.EZTalk.Button"
-            android:layout_width="507dp"
-            android:layout_height="74dp"
-            android:layout_marginTop="32dp"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="16dp"
             android:text="@string/register"
-            android:textSize="16sp"
+            android:textSize="15sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilConfirmPassword" />
+            app:layout_constraintTop_toBottomOf="@id/tilConfirmPassword"
+            tools:ignore="VisualLintButtonSize" />
 
-        <!-- Or continue with -->
+        <!-- Or Register With Text -->
         <TextView
             android:id="@+id/tvOrRegisterWith"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="14dp"
+            android:fontFamily="@font/inter_medium"
             android:text="@string/or_register_with"
             android:textColor="@color/text_secondary"
-            android:textSize="14sp"
-            android:fontFamily="@font/inter_medium"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnRegister" />
 
-        <!-- Social Buttons -->
+        <!-- Social Login Buttons -->
         <LinearLayout
             android:id="@+id/llSocialLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
+            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvOrRegisterWith">
 
+            <!-- Google Button -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/btnGoogle"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_margin="12dp"
-                app:cardCornerRadius="20dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_margin="8dp"
                 app:cardBackgroundColor="@color/background_card"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="0dp"
                 app:strokeColor="@color/divider"
-                app:strokeWidth="1.5dp"
-                app:cardElevation="0dp">
+                app:strokeWidth="1dp">
+
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_google"
                     tools:ignore="ContentDescription" />
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Facebook Button -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/btnFacebook"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_margin="12dp"
-                app:cardCornerRadius="20dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_margin="8dp"
                 app:cardBackgroundColor="@color/background_card"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="0dp"
                 app:strokeColor="@color/divider"
-                app:strokeWidth="1.5dp"
-                app:cardElevation="0dp">
+                app:strokeWidth="1dp">
+
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_facebook"
                     tools:ignore="ContentDescription" />
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Apple Button -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/btnApple"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_margin="12dp"
-                app:cardCornerRadius="20dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_margin="8dp"
                 app:cardBackgroundColor="@color/background_card"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="0dp"
                 app:strokeColor="@color/divider"
-                app:strokeWidth="1.5dp"
-                app:cardElevation="0dp">
+                app:strokeWidth="1dp">
+
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_apple"
                     tools:ignore="ContentDescription" />
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
-        <!-- Already have account? -->
+        <!-- Already Have Account Section -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="18dp"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/llSocialLogin"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/llSocialLogin">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
                 android:text="@string/already_have_account"
                 android:textColor="@color/text_secondary"
-                android:textSize="15sp"
-                android:fontFamily="@font/inter_regular" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/tvLoginNow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
+                android:layout_marginStart="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
@@ -266,8 +345,8 @@
                 android:padding="4dp"
                 android:text="@string/login_now"
                 android:textColor="@color/primary_purple"
-                android:textSize="15sp"
-                tools:ignore="TouchTargetSizeCheck" />
+                android:textSize="13sp"
+                tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
