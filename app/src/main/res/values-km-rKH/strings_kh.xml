@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+<!--trc-->
 
+    <string name="mic_button">mic_button</string>
+    <string name="someone_is_calling">someone is calling</string>
+    <string name="accpet_button">accpet button</string>
+    <string name="reject_button">reject button</string>
+    <string name="who_to_call">who to call ?</string>
+
+    <string name="image">image</string>
+    <string name="mute_unmute_mic" />
+
+    <string name="video_button">video button</string>
     <!-- Welcome & Auth -->
     <string name="welcome_title">សូមស្វាគមន៍! រីករាយដែលបានជួបអ្នកម្តងទៀត!</string>
     <string name="welcome_subtitle">ចូលរួមជជែកកំសាន្ត និងនិយាយជាមួយមិត្តភក្តិ និងគ្រួសាររបស់អ្នក</string>

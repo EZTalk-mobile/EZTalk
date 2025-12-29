@@ -29,6 +29,7 @@ import com.example.project_ez_talk.R;
 import com.example.project_ez_talk.adapter.MessageAdapter;
 import com.example.project_ez_talk.model.Message;
 import com.example.project_ez_talk.ui.BaseActivity;
+import com.example.project_ez_talk.webTRC.FirebaseClient;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,6 +42,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.permissionx.guolindev.PermissionX;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,6 +95,8 @@ public class ChatDetailActivity extends BaseActivity {
 
     // Media handling
     private Uri imageUri;
+    FirebaseClient firebaseClient = new FirebaseClient();
+
 
     private final ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -125,6 +129,8 @@ public class ChatDetailActivity extends BaseActivity {
                     Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
                 }
             });
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +168,27 @@ public class ChatDetailActivity extends BaseActivity {
         fetchCurrentUserInfo();
         setupMessageInput();
         setupClickListeners();
+
     }
+public void onClickVideoCall (){
+    PermissionX.init(this)
+            .permissions(android.Manifest.permission.CAMERA, android.Manifest.permission.RECORD_AUDIO)
+            .request((allGranted, grantedList, deniedList) -> {
+                if (allGranted) {
+                    //login to firebase here
+
+                    firebaseClient.setUpVideoCall(
+                            currentUserName.toString(),
+                            () -> {
+                                startActivity(Intent );
+                                // what to do after success
+                                Toast.makeText(this, "Ready for video call", Toast.LENGTH_SHORT).show();
+                            }
+                    );
+                }
+            });
+}
+
 
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
@@ -172,6 +198,7 @@ public class ChatDetailActivity extends BaseActivity {
         btnBack = findViewById(R.id.btnBack);
         btnVoiceCall = findViewById(R.id.btnVoiceCall);
         btnVideoCall = findViewById(R.id.btnVideoCall);
+        btnVideoCall.setOnClickListener(v -> onClickVideoCall());
         btnMore = findViewById(R.id.btnMore);
 
         rvMessages = findViewById(R.id.rvMessages);
@@ -386,7 +413,7 @@ public class ChatDetailActivity extends BaseActivity {
         btnAttach.setOnClickListener(v -> showAttachmentBottomSheet());
         btnEmoji.setOnClickListener(v -> Toast.makeText(this, "Emoji picker coming soon", Toast.LENGTH_SHORT).show());
         btnVoiceCall.setOnClickListener(v -> Toast.makeText(this, "Voice call coming soon", Toast.LENGTH_SHORT).show());
-        btnVideoCall.setOnClickListener(v -> Toast.makeText(this, "Video call coming soon", Toast.LENGTH_SHORT).show());
+
         btnMore.setOnClickListener(v -> Toast.makeText(this, "More options coming soon", Toast.LENGTH_SHORT).show());
     }
 

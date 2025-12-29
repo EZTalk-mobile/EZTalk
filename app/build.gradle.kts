@@ -34,13 +34,21 @@ android {
         sourceCompatibility = JavaVersion.VERSION_16
         targetCompatibility = JavaVersion.VERSION_16
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
     // Firebase BoM
-    implementation(platform("com.google.firebase:firebase-bom:34.6.0"))
+    implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
+    implementation("com.google.firebase:firebase-database-ktx:21.0.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.mesibo.api:webrtc:1.0.5")
+    implementation("com.guolindev.permissionx:permissionx:1.6.1")
+
     implementation("com.google.firebase:firebase-crashlytics")
 
     // Google Sign-In (kept — you may still be using it)

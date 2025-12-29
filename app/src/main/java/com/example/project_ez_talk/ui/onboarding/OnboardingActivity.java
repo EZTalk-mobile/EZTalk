@@ -3,6 +3,7 @@ package com.example.project_ez_talk.ui.onboarding;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,6 +15,10 @@ import com.example.project_ez_talk.adapter.OnboardingAdapter;
 import com.example.project_ez_talk.ui.BaseActivity;
 import com.example.project_ez_talk.ui.auth.welcome.WelcomeActivity;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class OnboardingActivity extends BaseActivity {
 
@@ -23,17 +28,20 @@ public class OnboardingActivity extends BaseActivity {
     private ImageView btnSkip;
     private OnboardingAdapter adapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
-
+        FirebaseDatabase.getInstance( "https://project-ez-talk-dccea-default-rtdb.europe-west1.firebasedatabase.app").getReference().child("test").setValue("nkdddddddd");
         initViews();
         setupViewPager();
         setupListeners();
+
     }
 
     private void initViews() {
+
         vpOnboarding = findViewById(R.id.vp_onboarding);
         indicatorLayout = findViewById(R.id.indicator_layout);
         btnNext = findViewById(R.id.btn_next);

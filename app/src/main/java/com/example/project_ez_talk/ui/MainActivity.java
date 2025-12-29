@@ -2,6 +2,7 @@ package com.example.project_ez_talk.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -17,7 +18,14 @@ import com.example.project_ez_talk.utils.Preferences;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import android.content.Context;
 
 public class MainActivity extends BaseActivity {
 
@@ -26,10 +34,16 @@ public class MainActivity extends BaseActivity {
     private FloatingActionButton fabCenter;
     private MaterialToolbar toolbar;
     private ImageView ivSearch, ivNotification;
-
+    private static final String DATABASE_URL =
+            "https://webtrc-d5e97-default-rtdb.asia-southeast1.firebasedatabase.app";
+   private DatabaseReference rootRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+          
+   
+        
 
         // Check if user is logged in
         if (FirebaseAuth.getInstance().getCurrentUser() == null || !Preferences.isLoggedIn(this)) {
@@ -46,12 +60,25 @@ public class MainActivity extends BaseActivity {
         setupFab();
     }
 
+
+
+
+
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
         bottomNav = findViewById(R.id.bottomNavigation);
         fabCenter = findViewById(R.id.fabCenter);
         ivSearch = findViewById(R.id.ivSearch);
         ivNotification = findViewById(R.id.ivNotification);
+        FirebaseDatabase.getInstance().getReference("testValue")
+                .setValue("hello world")
+                .addOnSuccessListener(v -> {
+                    Toast.makeText(this, "Write OK", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Write FAILED: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+        Log.d("CHANNEL_DEBUG", "Send button clicked");
     }
 
     private void setupNavigation() {

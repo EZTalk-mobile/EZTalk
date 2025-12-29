@@ -4,6 +4,7 @@
         <color name="primary_purple">#6C5CE7</color>
         <color name="primary_purple_dark">#5B4CD6</color>
         <color name="primary_purple_light">#8B7CE8</color>
+    <color name="black">#FF000000</color>
 
         <!-- Secondary Colors -->
         <color name="secondary_green">#00D9A3</color>
