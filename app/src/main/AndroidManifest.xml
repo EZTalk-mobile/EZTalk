@@ -18,6 +18,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
@@ -192,6 +193,15 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:launchMode="singleInstance" />
+
+        <!-- Video Call Activity -->
+        <activity
+            android:name=".ui.call.video.VideoCallActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:launchMode="singleInstance"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true" />
 
         <!-- Image Viewer Activity -->
         <activity

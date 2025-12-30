@@ -13,8 +13,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.project_ez_talk.R;
 import com.example.project_ez_talk.ui.auth.welcome.WelcomeActivity;
+import com.example.project_ez_talk.ui.call.incoming.IncomingCallActivity;
 import com.example.project_ez_talk.ui.profile.AddFriendDialog;
 import com.example.project_ez_talk.utils.Preferences;
+import com.example.project_ez_talk.webTRC.MainRepository;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -35,29 +37,118 @@ public class MainActivity extends BaseActivity {
     private MaterialToolbar toolbar;
     private ImageView ivSearch, ivNotification;
     private static final String DATABASE_URL =
-            "https://webtrc-d5e97-default-rtdb.asia-southeast1.firebasedatabase.app";
-   private DatabaseReference rootRef;
+            "https://project-ez-talk-dccea-default-rtdb.europe-west1.firebasedatabase.app";
+    private DatabaseReference rootRef;
+    private MainRepository mainRepository;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-          
-   
-        
+        Log.d("MainActivity", "======================================");
+        Log.d("MainActivity", "=== MainActivity onCreate() START ===");
+        Log.d("MainActivity", "======================================");
+
+        // Initialize Firebase Database with correct region URL
+        try {
+            FirebaseDatabase database = FirebaseDatabase.getInstance(DATABASE_URL);
+            Log.d("MainActivity", "✅ Firebase Database initialized: " + DATABASE_URL);
+        } catch (Exception e) {
+            Log.e("MainActivity", "❌ Error initializing Firebase Database: " + e.getMessage());
+        }
+
 
         // Check if user is logged in
+        Log.d("MainActivity", "Checking user authentication...");
         if (FirebaseAuth.getInstance().getCurrentUser() == null || !Preferences.isLoggedIn(this)) {
+            Log.d("MainActivity", "❌ User not logged in, redirecting to WelcomeActivity");
             startActivity(new Intent(this, WelcomeActivity.class));
             finish();
             return;
         }
 
+        Log.d("MainActivity", "✅ User is authenticated");
+
         setContentView(R.layout.activity_main);
 
+        Log.d("MainActivity", "Initializing views...");
         initViews();
+        Log.d("MainActivity", "Setting up navigation...");
         setupNavigation();
+        Log.d("MainActivity", "Setting up toolbar...");
         setupToolbar();
+        Log.d("MainActivity", "Setting up FAB...");
         setupFab();
+        Log.d("MainActivity", "Calling setupIncomingCallListener...");
+        setupIncomingCallListener();
+        Log.d("MainActivity", "✅ onCreate() COMPLETE");
+    }
+
+    private void setupIncomingCallListener() {
+        Log.d("MainActivity", "=== setupIncomingCallListener() ===");
+
+        // Get MainRepository instance
+        mainRepository = MainRepository.getInstance();
+
+        // Login to Firebase with current user ID
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser() != null
+                ? FirebaseAuth.getInstance().getCurrentUser().getUid()
+                : null;
+
+        Log.d("MainActivity", "Current User ID: " + currentUserId);
+
+        if (currentUserId != null) {
+            Log.d("MainActivity", "Attempting to login to WebRTC signaling...");
+            mainRepository.login(currentUserId, this, () -> {
+                Log.d("MainActivity", "✅ Logged in to WebRTC signaling successfully");
+                Log.d("MainActivity", "User should now be visible in database: " + currentUserId);
+
+                // Subscribe to incoming call events
+                Log.d("MainActivity", "Subscribing to incoming call events...");
+                mainRepository.subscribeForLatestEvent(model -> {
+                    Log.d("MainActivity", "📩 Event received - Type: " + model.getType() + ", Sender: " + model.getSender());
+                    if (model.getType() == com.example.project_ez_talk.webTRC.DataModelType.StartCall) {
+                        // Show incoming call screen
+                        Log.d("MainActivity", "🔔 Incoming call detected from: " + model.getSender());
+
+                        // Fetch caller info from Firestore
+                        com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                                .collection("users")
+                                .document(model.getSender())
+                                .get()
+                                .addOnSuccessListener(doc -> {
+                                    String callerName = doc.exists() ? doc.getString("name") : model.getSender();
+                                    String callerAvatar = doc.exists() ? doc.getString("avatarUrl") : "";
+
+                                    runOnUiThread(() -> {
+                                        Intent intent = new Intent(MainActivity.this, IncomingCallActivity.class);
+                                        intent.putExtra(IncomingCallActivity.EXTRA_CALLER_ID, model.getSender());
+                                        intent.putExtra(IncomingCallActivity.EXTRA_CALLER_NAME, callerName);
+                                        intent.putExtra(IncomingCallActivity.EXTRA_CALLER_AVATAR, callerAvatar);
+                                        intent.putExtra(IncomingCallActivity.EXTRA_CALL_TYPE, "video");
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+                                        Log.d("MainActivity", "✅ IncomingCallActivity launched");
+                                    });
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.e("MainActivity", "Failed to fetch caller info: " + e.getMessage());
+                                    runOnUiThread(() -> {
+                                        Intent intent = new Intent(MainActivity.this, IncomingCallActivity.class);
+                                        intent.putExtra(IncomingCallActivity.EXTRA_CALLER_ID, model.getSender());
+                                        intent.putExtra(IncomingCallActivity.EXTRA_CALLER_NAME, model.getSender());
+                                        intent.putExtra(IncomingCallActivity.EXTRA_CALL_TYPE, "video");
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+                                    });
+                                });
+                    }
+                });
+                Log.d("MainActivity", "✅ Subscribed to incoming call events");
+            });
+        } else {
+            Log.e("MainActivity", "❌ ERROR: Current user ID is null - cannot login to WebRTC");
+        }
     }
 
 

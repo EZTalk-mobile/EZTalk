@@ -94,16 +94,28 @@ public class MainRepository implements WebRTCClient.Listener {
     }
 
     public void initLocalView(SurfaceViewRenderer view){
-        webRTCClient.initLocalSurfaceView(view);
+        if (webRTCClient != null) {
+            webRTCClient.initLocalSurfaceView(view);
+        }
     }
 
     public void initRemoteView(SurfaceViewRenderer view){
-        webRTCClient.initRemoteSurfaceView(view);
-        this.remoteView = view;
+        if (webRTCClient != null) {
+            webRTCClient.initRemoteSurfaceView(view);
+            this.remoteView = view;
+        }
     }
 
     public void startCall(String target){
-        webRTCClient.call(target);
+        Log.d("MainRepository", "=== startCall() ===");
+        Log.d("MainRepository", "Target: " + target);
+        this.target = target;
+        if (webRTCClient != null) {
+            webRTCClient.call(target);
+            Log.d("MainRepository", "✅ WebRTC call initiated");
+        } else {
+            Log.e("MainRepository", "ERROR: webRTCClient is null!");
+        }
     }
 
     public void switchCamera() {
@@ -117,9 +129,27 @@ public class MainRepository implements WebRTCClient.Listener {
         webRTCClient.toggleVideo(shouldBeMuted);
     }
     public void sendCallRequest(String target, ErrorCallBack errorCallBack){
-        firebaseClient.sendMessageToOtherUser(
-                new DataModel(target,currentUsername,null, DataModelType.StartCall),errorCallBack
-        );
+        Log.d("MainRepository", "=== sendCallRequest() ===");
+        Log.d("MainRepository", "Target: " + target);
+        Log.d("MainRepository", "Current username: " + currentUsername);
+        
+        if (target == null || target.isEmpty()) {
+            Log.e("MainRepository", "ERROR: Target is null or empty");
+            errorCallBack.onError();
+            return;
+        }
+        
+        if (currentUsername == null || currentUsername.isEmpty()) {
+            Log.e("MainRepository", "ERROR: Current username is null or empty");
+            errorCallBack.onError();
+            return;
+        }
+        
+        DataModel dataModel = new DataModel(target, currentUsername, null, DataModelType.StartCall);
+        Log.d("MainRepository", "Created DataModel - Target: " + dataModel.getTarget() + ", Sender: " + dataModel.getSender() + ", Type: " + dataModel.getType());
+        
+        firebaseClient.sendMessageToOtherUser(dataModel, errorCallBack);
+        Log.d("MainRepository", "✅ Call request sent to FirebaseClient");
     }
 
     public void endCall(){

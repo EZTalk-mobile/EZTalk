@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
     <resources>
+    <!-- Video Call Colors -->
+    <color name="semi_transparent">#80000000</color>
+    <color name="red">#F44336</color>
+    <color name="call_overlay_gradient_start">#80000000</color>
+    <color name="call_overlay_gradient_end">#00000000</color>
         <!-- Primary Colors -->
         <color name="primary_purple">#6C5CE7</color>
         <color name="primary_purple_dark">#5B4CD6</color>

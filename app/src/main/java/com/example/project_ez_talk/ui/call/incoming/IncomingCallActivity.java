@@ -103,14 +103,17 @@ public class IncomingCallActivity extends BaseActivity {
         Intent intent;
         if ("video".equals(callType)) {
             intent = new Intent(this, VideoCallActivity.class);
+            intent.putExtra(VideoCallActivity.EXTRA_USER_ID, callerId);
+            intent.putExtra(VideoCallActivity.EXTRA_USER_NAME, callerName);
+            intent.putExtra(VideoCallActivity.EXTRA_USER_AVATAR, callerAvatar);
+            intent.putExtra(VideoCallActivity.EXTRA_IS_INCOMING, true);
         } else {
             intent = new Intent(this, CallActivity.class);
+            intent.putExtra(CallActivity.EXTRA_USER_ID, callerId);
+            intent.putExtra(CallActivity.EXTRA_USER_NAME, callerName);
+            intent.putExtra(CallActivity.EXTRA_USER_AVATAR, callerAvatar);
+            intent.putExtra(CallActivity.EXTRA_IS_INCOMING, true);
         }
-
-        intent.putExtra(CallActivity.EXTRA_USER_ID, callerId);
-        intent.putExtra(CallActivity.EXTRA_USER_NAME, callerName);
-        intent.putExtra(CallActivity.EXTRA_USER_AVATAR, callerAvatar);
-        intent.putExtra(CallActivity.EXTRA_IS_INCOMING, true);
 
         startActivity(intent);
         finish();

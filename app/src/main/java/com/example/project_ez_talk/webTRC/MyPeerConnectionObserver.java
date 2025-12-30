@@ -18,6 +18,11 @@ public class MyPeerConnectionObserver implements PeerConnection.Observer {
     }
 
     @Override
+    public void onConnectionChange(PeerConnection.PeerConnectionState newState) {
+        // Override this method in subclasses to handle connection state changes
+    }
+
+    @Override
     public void onIceConnectionReceivingChange(boolean b) {
 
     }
