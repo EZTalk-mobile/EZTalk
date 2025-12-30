@@ -34,12 +34,12 @@ public class FirebaseClient {
         android.util.Log.d("FirebaseClient", "=== login() ===");
         android.util.Log.d("FirebaseClient", "Username: " + username);
         android.util.Log.d("FirebaseClient", "Database URL: " + DATABASE_URL);
-
+        
         // Create a user presence node with timestamp
         java.util.HashMap<String, Object> userData = new java.util.HashMap<>();
         userData.put("status", "online");
         userData.put("timestamp", System.currentTimeMillis());
-
+        
         dbRef.child(username).setValue(userData).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 android.util.Log.d("FirebaseClient", "✅ Login successful - user node created in database: " + username);
@@ -57,12 +57,12 @@ public class FirebaseClient {
     public void setUpVideoCall(String username, SuccessCallBack callBack) {
         android.util.Log.d("FirebaseClient", "=== setUpVideoCall() ===");
         android.util.Log.d("FirebaseClient", "Username: " + username);
-
+        
         // Create a user presence node with timestamp
         java.util.HashMap<String, Object> userData = new java.util.HashMap<>();
         userData.put("status", "online");
         userData.put("timestamp", System.currentTimeMillis());
-
+        
         dbRef.child(username).setValue(userData).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 android.util.Log.d("FirebaseClient", "✅ SetUpVideoCall successful - user node created: " + username);
@@ -79,39 +79,39 @@ public class FirebaseClient {
 
     public void sendMessageToOtherUser(DataModel dataModel, ErrorCallBack errorCallBack){
         android.util.Log.d("FirebaseClient", "=== sendMessageToOtherUser() ===");
-
+        
         // Validate dataModel and target before proceeding
         if (dataModel == null) {
             android.util.Log.e("FirebaseClient", "ERROR: dataModel is null");
             errorCallBack.onError();
             return;
         }
-
+        
         android.util.Log.d("FirebaseClient", "DataModel - Target: " + dataModel.getTarget() + ", Sender: " + dataModel.getSender() + ", Type: " + dataModel.getType());
-
+        
         if (dataModel.getTarget() == null || dataModel.getTarget().isEmpty()) {
             android.util.Log.e("FirebaseClient", "ERROR: Target is null or empty");
             errorCallBack.onError();
             return;
         }
-
+        
         android.util.Log.d("FirebaseClient", "Checking if target user exists in database: " + dataModel.getTarget());
-
+        
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 android.util.Log.d("FirebaseClient", "Database snapshot received");
                 android.util.Log.d("FirebaseClient", "Checking child: " + dataModel.getTarget());
-
+                
                 if (snapshot.child(dataModel.getTarget()).exists()){
                     android.util.Log.d("FirebaseClient", "✅ Target user exists, sending signal...");
                     //send the signal to other user
                     String jsonData = gson.toJson(dataModel);
                     android.util.Log.d("FirebaseClient", "JSON data: " + jsonData);
-
+                    
                     String dbPath = dataModel.getTarget() + "/" + LATEST_EVENT_FIELD_NAME;
                     android.util.Log.d("FirebaseClient", "Writing to database path: " + dbPath);
-
+                    
                     dbRef.child(dataModel.getTarget()).child(LATEST_EVENT_FIELD_NAME)
                             .setValue(jsonData)
                             .addOnSuccessListener(aVoid -> {
@@ -142,7 +142,7 @@ public class FirebaseClient {
         if (currentUsername == null || currentUsername.isEmpty()) {
             return;
         }
-
+        
         dbRef.child(currentUsername).child(LATEST_EVENT_FIELD_NAME).addValueEventListener(
                 new ValueEventListener() {
                     @Override

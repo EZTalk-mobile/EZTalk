@@ -38,13 +38,13 @@ public class MainActivity extends BaseActivity {
     private ImageView ivSearch, ivNotification;
     private static final String DATABASE_URL =
             "https://project-ez-talk-dccea-default-rtdb.europe-west1.firebasedatabase.app";
-    private DatabaseReference rootRef;
-    private MainRepository mainRepository;
+   private DatabaseReference rootRef;
+   private MainRepository mainRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        
         Log.d("MainActivity", "======================================");
         Log.d("MainActivity", "=== MainActivity onCreate() START ===");
         Log.d("MainActivity", "======================================");
@@ -56,7 +56,7 @@ public class MainActivity extends BaseActivity {
         } catch (Exception e) {
             Log.e("MainActivity", "❌ Error initializing Firebase Database: " + e.getMessage());
         }
-
+        
 
         // Check if user is logged in
         Log.d("MainActivity", "Checking user authentication...");
@@ -66,7 +66,7 @@ public class MainActivity extends BaseActivity {
             finish();
             return;
         }
-
+        
         Log.d("MainActivity", "✅ User is authenticated");
 
         setContentView(R.layout.activity_main);
@@ -86,23 +86,23 @@ public class MainActivity extends BaseActivity {
 
     private void setupIncomingCallListener() {
         Log.d("MainActivity", "=== setupIncomingCallListener() ===");
-
+        
         // Get MainRepository instance
         mainRepository = MainRepository.getInstance();
-
+        
         // Login to Firebase with current user ID
-        String currentUserId = FirebaseAuth.getInstance().getCurrentUser() != null
-                ? FirebaseAuth.getInstance().getCurrentUser().getUid()
-                : null;
-
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser() != null 
+            ? FirebaseAuth.getInstance().getCurrentUser().getUid() 
+            : null;
+        
         Log.d("MainActivity", "Current User ID: " + currentUserId);
-
+            
         if (currentUserId != null) {
             Log.d("MainActivity", "Attempting to login to WebRTC signaling...");
             mainRepository.login(currentUserId, this, () -> {
                 Log.d("MainActivity", "✅ Logged in to WebRTC signaling successfully");
                 Log.d("MainActivity", "User should now be visible in database: " + currentUserId);
-
+                
                 // Subscribe to incoming call events
                 Log.d("MainActivity", "Subscribing to incoming call events...");
                 mainRepository.subscribeForLatestEvent(model -> {
@@ -110,7 +110,7 @@ public class MainActivity extends BaseActivity {
                     if (model.getType() == com.example.project_ez_talk.webTRC.DataModelType.StartCall) {
                         // Show incoming call screen
                         Log.d("MainActivity", "🔔 Incoming call detected from: " + model.getSender());
-
+                        
                         // Fetch caller info from Firestore
                         com.google.firebase.firestore.FirebaseFirestore.getInstance()
                                 .collection("users")
@@ -119,7 +119,7 @@ public class MainActivity extends BaseActivity {
                                 .addOnSuccessListener(doc -> {
                                     String callerName = doc.exists() ? doc.getString("name") : model.getSender();
                                     String callerAvatar = doc.exists() ? doc.getString("avatarUrl") : "";
-
+                                    
                                     runOnUiThread(() -> {
                                         Intent intent = new Intent(MainActivity.this, IncomingCallActivity.class);
                                         intent.putExtra(IncomingCallActivity.EXTRA_CALLER_ID, model.getSender());

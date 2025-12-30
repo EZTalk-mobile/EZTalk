@@ -63,6 +63,17 @@ public class VideoCallActivity extends BaseActivity implements MainRepository.Li
     private boolean isVideoOn = true;
     private boolean isCallConnected = false;
     private boolean isRinging = false;
+    private Handler connectionTimeoutHandler = new Handler(Looper.getMainLooper());
+    private Runnable connectionTimeoutRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (!isCallConnected && !isFinishing()) {
+                Log.e(TAG, "❌ Connection timeout - no response after 20 seconds");
+                Toast.makeText(VideoCallActivity.this, "Connection failed - user may be offline", Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }
+    };
 
     private final Runnable timerRunnable = new Runnable() {
         @Override
@@ -86,7 +97,6 @@ public class VideoCallActivity extends BaseActivity implements MainRepository.Li
 
         // Get MainRepository instance
         mainRepository = MainRepository.getInstance();
-        mainRepository.listener = this;
 
         // Get current user info
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
@@ -94,13 +104,18 @@ public class VideoCallActivity extends BaseActivity implements MainRepository.Li
         }
 
         initViews();
+
+        // YOUTUBE FLOW: Initialize everything in onCreate
+        mainRepository.initLocalView(findViewById(R.id.localView));
+        mainRepository.initRemoteView(findViewById(R.id.remoteView));
+        mainRepository.listener = this;
+
         setupClickListeners();
         loadUserInfo();
 
         // Check and request permissions
         if (checkPermissions()) {
             permissionsGranted = true;
-            // Don't setup WebRTC here - wait until after login
             initiateCall();
         } else {
             requestPermissions();
@@ -145,131 +160,33 @@ public class VideoCallActivity extends BaseActivity implements MainRepository.Li
     }
 
     private void initiateCall() {
-        Log.d(TAG, "=== initiateCall() started ===");
-        Log.d(TAG, "Current username: " + currentUsername);
-        Log.d(TAG, "Target userId: " + userId);
-        Log.d(TAG, "Is incoming: " + isIncoming);
-
-        // First, login to MainRepository with WebRTC setup
         if (currentUsername == null || currentUsername.isEmpty()) {
-            Log.e(TAG, "ERROR: User not authenticated");
             Toast.makeText(this, "User not authenticated", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        // Login to WebRTC signaling first
-        Log.d(TAG, "Attempting to login to WebRTC signaling...");
-        mainRepository.login(currentUsername, this, () -> {
-            Log.d(TAG, "✅ Logged in to WebRTC signaling successfully");
+        // Start foreground service
+        Intent serviceIntent = new Intent(VideoCallActivity.this, CallService.class);
+        serviceIntent.setAction("START_CALL");
+        serviceIntent.putExtra("caller_name", userName);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent);
+        } else {
+            startService(serviceIntent);
+        }
 
-            // Setup WebRTC views after login (when webRTCClient is created)
-            Log.d(TAG, "Setting up WebRTC views...");
-            setupWebRTC();
-            Log.d(TAG, "✅ WebRTC views setup complete");
-
-            // Start foreground service for call
-            Log.d(TAG, "Starting CallService...");
-            Intent serviceIntent = new Intent(VideoCallActivity.this, CallService.class);
-            serviceIntent.setAction("START_CALL");
-            serviceIntent.putExtra("caller_name", userName);
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                startForegroundService(serviceIntent);
-            } else {
-                startService(serviceIntent);
-            }
-            Log.d(TAG, "✅ CallService started");
-
-            // Now subscribe to incoming events (after login)
-            Log.d(TAG, "Subscribing to latest events...");
-            mainRepository.subscribeForLatestEvent(model -> {
-                Log.d(TAG, "📩 Incoming call event: " + model.getType() + " from: " + model.getSender());
-
-                // For outgoing calls, when we receive ANY WebRTC signal from receiver,
-                // it means they accepted - start our WebRTC connection
-                if (!isIncoming && model.getSender() != null && model.getSender().equals(userId)) {
-                    Log.d(TAG, "🔍 Checking signal from receiver...");
-                    Log.d(TAG, "Signal type: " + model.getType());
-                    Log.d(TAG, "Is ringing: " + isRinging);
-
-                    // If we receive Offer, Answer, or IceCandidate from the receiver, they accepted
-                    if (model.getType() == com.example.project_ez_talk.webTRC.DataModelType.Offer ||
-                            model.getType() == com.example.project_ez_talk.webTRC.DataModelType.Answer ||
-                            model.getType() == com.example.project_ez_talk.webTRC.DataModelType.IceCandidate) {
-                        Log.d(TAG, "🎉 Receiver sent WebRTC signal! Starting connection on caller side...");
-
-                        // Only start once
-                        if (isRinging) {
-                            isRinging = false;
-                            tvCallStatus.setText("Connecting...");
-                            Log.d(TAG, "Calling mainRepository.startCall() for user: " + userId);
-                            mainRepository.startCall(userId);
-                            Log.d(TAG, "✅ WebRTC connection started on caller side");
-                        } else {
-                            Log.d(TAG, "⚠️ Already started WebRTC, skipping...");
-                        }
-                    }
-                }
-
-                // If this is a new incoming StartCall event and we're in an outgoing call
-                // Don't handle it here - this should go to HomeActivity's listener
-                if (model.getType() == com.example.project_ez_talk.webTRC.DataModelType.StartCall) {
-                    Log.d(TAG, "⚠️ StartCall event received while VideoCallActivity is active - ignoring");
-                }
+        if (!isIncoming) {
+            // CALLER: Just send request (YouTube flow)
+            tvCallStatus.setText("Calling...");
+            mainRepository.sendCallRequest(userId, () -> {
+                Toast.makeText(VideoCallActivity.this, "Failed to send call request", Toast.LENGTH_SHORT).show();
+                finish();
             });
-            Log.d(TAG, "✅ Subscribed to events");
-
-            // If not incoming call, initiate the call
-            if (!isIncoming) {
-                Log.d(TAG, "📞 Initiating outgoing call to: " + userId);
-                isRinging = true;
-                tvCallStatus.setText("Calling...");
-
-                new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                    Log.d(TAG, "Sending call request to userId: " + userId);
-                    mainRepository.sendCallRequest(userId, () -> {
-                        Log.e(TAG, "❌ ERROR: Failed to send call request to " + userId);
-                        Toast.makeText(VideoCallActivity.this, "Failed to send call request", Toast.LENGTH_SHORT).show();
-                        finish();
-                    });
-                    Log.d(TAG, "✅ Call request sent, waiting for receiver to accept...");
-                    // DON'T start WebRTC yet - wait for receiver to accept
-                    // The receiver will accept and send back WebRTC signals
-                    // Our event listener will detect those signals and establish connection
-                }, 1000);
-            } else {
-                Log.d(TAG, "📲 Answering incoming call from: " + userId);
-                // Answer incoming call - receiver starts the WebRTC connection
-                tvCallStatus.setText("Connecting...");
-                new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                    Log.d(TAG, "===== RECEIVER STARTING WEBRTC =====");
-                    Log.d(TAG, "Receiver user: " + currentUsername);
-                    Log.d(TAG, "Calling user (target): " + userId);
-                    Log.d(TAG, "This will create an OFFER and send to: " + userId);
-                    mainRepository.startCall(userId);
-                    Log.d(TAG, "✅ WebRTC answer call started - offer should be sent now");
-                }, 500);
-            }
-        });
-    }
-
-    private void setupWebRTC() {
-        // Note: localView and remoteView should be SurfaceViewRenderer from your layout
-        // If they don't exist in your layout, you'll need to add them
-        // For now, we'll try to find them by ID (you may need to add these to your XML)
-        try {
-            localView = findViewById(R.id.localView);
-            remoteView = findViewById(R.id.remoteView);
-
-            if (localView != null && remoteView != null) {
-                mainRepository.initLocalView(localView);
-                mainRepository.initRemoteView(remoteView);
-            } else {
-                Log.e(TAG, "SurfaceViewRenderers not found in layout. Please add them to activity_video_call.xml");
-                Toast.makeText(this, "Video views not properly configured", Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Error setting up WebRTC views: " + e.getMessage());
+        } else {
+            // CALLEE: Create offer (YouTube flow)
+            tvCallStatus.setText("Connecting...");
+            mainRepository.startCall(userId);
         }
     }
 
@@ -318,6 +235,10 @@ public class VideoCallActivity extends BaseActivity implements MainRepository.Li
     private void onCallConnected() {
         isCallConnected = true;
         isRinging = false;
+
+        // Cancel connection timeout
+        connectionTimeoutHandler.removeCallbacks(connectionTimeoutRunnable);
+        Log.d(TAG, "✅ Call connected successfully!");
 
         // Stop ringing sound
         if (ringingPlayer != null) {
@@ -395,6 +316,7 @@ public class VideoCallActivity extends BaseActivity implements MainRepository.Li
     protected void onDestroy() {
         super.onDestroy();
         timerHandler.removeCallbacks(timerRunnable);
+        connectionTimeoutHandler.removeCallbacks(connectionTimeoutRunnable);
 
         // Clean up WebRTC resources
         try {

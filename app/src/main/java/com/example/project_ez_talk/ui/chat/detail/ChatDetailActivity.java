@@ -171,24 +171,24 @@ public class ChatDetailActivity extends BaseActivity {
         setupClickListeners();
 
     }
-    public void onClickVideoCall (){
-        PermissionX.init(this)
-                .permissions(android.Manifest.permission.CAMERA, android.Manifest.permission.RECORD_AUDIO)
-                .request((allGranted, grantedList, deniedList) -> {
-                    if (allGranted) {
-                        // Navigate to VideoCallActivity (it will handle the login)
-                        Intent intent = new Intent(ChatDetailActivity.this, VideoCallActivity.class);
-                        intent.putExtra(VideoCallActivity.EXTRA_USER_ID, receiverId);
-                        intent.putExtra(VideoCallActivity.EXTRA_USER_NAME, receiverName);
-                        intent.putExtra(VideoCallActivity.EXTRA_USER_AVATAR, receiverAvatar);
-                        intent.putExtra(VideoCallActivity.EXTRA_IS_INCOMING, false);
-                        startActivity(intent);
-                        Toast.makeText(this, "Starting video call...", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(this, "Camera and microphone permissions are required for video calls", Toast.LENGTH_LONG).show();
-                    }
-                });
-    }
+public void onClickVideoCall (){
+    PermissionX.init(this)
+            .permissions(android.Manifest.permission.CAMERA, android.Manifest.permission.RECORD_AUDIO)
+            .request((allGranted, grantedList, deniedList) -> {
+                if (allGranted) {
+                    // Navigate to VideoCallActivity (it will handle the login)
+                    Intent intent = new Intent(ChatDetailActivity.this, VideoCallActivity.class);
+                    intent.putExtra(VideoCallActivity.EXTRA_USER_ID, receiverId);
+                    intent.putExtra(VideoCallActivity.EXTRA_USER_NAME, receiverName);
+                    intent.putExtra(VideoCallActivity.EXTRA_USER_AVATAR, receiverAvatar);
+                    intent.putExtra(VideoCallActivity.EXTRA_IS_INCOMING, false);
+                    startActivity(intent);
+                    Toast.makeText(this, "Starting video call...", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Camera and microphone permissions are required for video calls", Toast.LENGTH_LONG).show();
+                }
+            });
+}
 
 
     private void initViews() {

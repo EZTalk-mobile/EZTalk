@@ -3,18 +3,7 @@ package com.example.project_ez_talk.webTRC;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.project_ez_talk.webTRC.FirebaseClient;
 
-import com.example.project_ez_talk.webTRC.DataModelType;
-
-
-
-import com.example.project_ez_talk.webTRC.MyPeerConnectionObserver;
-import com.example.project_ez_talk.webTRC.DataModel;
-import com.example.project_ez_talk.webTRC.NewEventCallBack;
-import com.example.project_ez_talk.webTRC.SuccessCallBack;
-import com.example.project_ez_talk.webTRC.ErrorCallBack;
-import com.example.project_ez_talk.webTRC.WebRTCClient;
 import com.google.gson.Gson;
 
 import org.webrtc.IceCandidate;
@@ -85,6 +74,7 @@ public class MainRepository implements WebRTCClient.Listener {
                 @Override
                 public void onIceCandidate(IceCandidate iceCandidate) {
                     super.onIceCandidate(iceCandidate);
+                    Log.d("MainRepository", "🧊 ICE Candidate discovered, sending to: " + target);
                     webRTCClient.sendIceCandidate(iceCandidate,target);
                 }
             },username);
@@ -94,28 +84,16 @@ public class MainRepository implements WebRTCClient.Listener {
     }
 
     public void initLocalView(SurfaceViewRenderer view){
-        if (webRTCClient != null) {
-            webRTCClient.initLocalSurfaceView(view);
-        }
+        webRTCClient.initLocalSurfaceView(view);
     }
 
     public void initRemoteView(SurfaceViewRenderer view){
-        if (webRTCClient != null) {
-            webRTCClient.initRemoteSurfaceView(view);
-            this.remoteView = view;
-        }
+        webRTCClient.initRemoteSurfaceView(view);
+        this.remoteView = view;
     }
 
     public void startCall(String target){
-        Log.d("MainRepository", "=== startCall() ===");
-        Log.d("MainRepository", "Target: " + target);
-        this.target = target;
-        if (webRTCClient != null) {
-            webRTCClient.call(target);
-            Log.d("MainRepository", "✅ WebRTC call initiated");
-        } else {
-            Log.e("MainRepository", "ERROR: webRTCClient is null!");
-        }
+        webRTCClient.call(target);
     }
 
     public void switchCamera() {
@@ -129,27 +107,9 @@ public class MainRepository implements WebRTCClient.Listener {
         webRTCClient.toggleVideo(shouldBeMuted);
     }
     public void sendCallRequest(String target, ErrorCallBack errorCallBack){
-        Log.d("MainRepository", "=== sendCallRequest() ===");
-        Log.d("MainRepository", "Target: " + target);
-        Log.d("MainRepository", "Current username: " + currentUsername);
-        
-        if (target == null || target.isEmpty()) {
-            Log.e("MainRepository", "ERROR: Target is null or empty");
-            errorCallBack.onError();
-            return;
-        }
-        
-        if (currentUsername == null || currentUsername.isEmpty()) {
-            Log.e("MainRepository", "ERROR: Current username is null or empty");
-            errorCallBack.onError();
-            return;
-        }
-        
-        DataModel dataModel = new DataModel(target, currentUsername, null, DataModelType.StartCall);
-        Log.d("MainRepository", "Created DataModel - Target: " + dataModel.getTarget() + ", Sender: " + dataModel.getSender() + ", Type: " + dataModel.getType());
-        
-        firebaseClient.sendMessageToOtherUser(dataModel, errorCallBack);
-        Log.d("MainRepository", "✅ Call request sent to FirebaseClient");
+        firebaseClient.sendMessageToOtherUser(
+                new DataModel(target,currentUsername,null, DataModelType.StartCall),errorCallBack
+        );
     }
 
     public void endCall(){

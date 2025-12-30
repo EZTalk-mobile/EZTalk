@@ -256,6 +256,8 @@ public class HomeActivity extends BaseActivity {
             Log.d(TAG, "Sender: " + model.getSender());
             Log.d(TAG, "Target: " + model.getTarget());
 
+            // Only launch IncomingCallActivity for StartCall events
+            // Other events (Offer/Answer/IceCandidate) are handled by MainRepository automatically
             if (model.getType() == DataModelType.StartCall) {
                 Log.d(TAG, "🔔 Incoming call detected from: " + model.getSender());
 
@@ -301,9 +303,9 @@ public class HomeActivity extends BaseActivity {
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                         });
-            } else {
-                Log.d(TAG, "Event is not StartCall, ignoring...");
             }
+            // Note: Offer/Answer/IceCandidate events are automatically handled inside
+            // MainRepository.subscribeForLatestEvent() - no need to handle them here
         });
 
         Log.d(TAG, "✅ Subscribed to latest events successfully");

@@ -91,10 +91,16 @@ public class WebRTCClient {
 
     public void initLocalSurfaceView(SurfaceViewRenderer view){
         initSurfaceViewRendere(view);
+        // Don't start camera yet - will start when call begins
         startLocalVideoStreaming(view);
     }
 
     private void startLocalVideoStreaming(SurfaceViewRenderer view) {
+        // Prevent duplicate initialization
+        if (localVideoTrack != null) {
+            return;
+        }
+        
         SurfaceTextureHelper helper= SurfaceTextureHelper.create(
                 Thread.currentThread().getName(), eglBaseContext
         );
