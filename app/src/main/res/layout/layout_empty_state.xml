@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -33,7 +34,8 @@
         android:textSize="@dimen/text_size_body"
         android:textColor="@color/text_secondary"
         android:gravity="center"
-        android:layout_marginTop="@dimen/spacing_small" />
+        android:layout_marginTop="@dimen/spacing_small"
+        tools:ignore="MissingClass" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_action"
@@ -45,6 +47,7 @@
         android:visibility="gone"
         android:layout_marginTop="@dimen/spacing_large"
         app:cornerRadius="@dimen/corner_radius_medium"
-        xmlns:app="http://schemas.android.com/apk/res-auto" />
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:ignore="MissingClass" />
 
 </LinearLayout>

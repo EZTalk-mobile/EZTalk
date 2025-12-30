@@ -82,25 +82,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/inter_regular"
+                    android:maxLines="2"
                     android:text="123 Main St, City"
                     android:textColor="@color/text_secondary"
                     android:textSize="12sp"
-                    android:fontFamily="@font/inter_regular"
-                    android:maxLines="2"
-                    android:ellipsize="end"
-                    tools:ignore="HardcodedText" />
+                    tools:ignore="HardcodedText,TextContrastCheck" />
 
                 <TextView
                     android:id="@+id/tvTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="end"
                     android:layout_marginTop="4dp"
+                    android:fontFamily="@font/inter_regular"
                     android:text="12:30 PM"
                     android:textColor="@color/text_tertiary"
                     android:textSize="12sp"
-                    android:fontFamily="@font/inter_regular"
-                    android:layout_gravity="end"
-                    tools:ignore="HardcodedText" />
+                    tools:ignore="HardcodedText,TextContrastCheck" />
 
             </LinearLayout>
 

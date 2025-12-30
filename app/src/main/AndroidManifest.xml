@@ -1,34 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--suppress ALL -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
-
-    <!-- Permissions -->
+    xmlns:tools="http://schemas.android.com/tools">
+    <!-- Internet Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!-- Camera & Audio Permissions -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+    <!-- Storage Permissions for Android 12 and below -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29"
+        tools:ignore="ScopedStorage" />
+
+    <!-- Media Permissions for Android 13+ (API 33+) -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+
+    <!-- Visual Media Picker for Android 14+ (API 34+) -->
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+
+    <!-- Location Permissions -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- Other Permissions -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-    <!-- Features -->
+    <!-- Hardware Features (optional) -->
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
     <uses-feature android:name="android.hardware.microphone" android:required="false" />
-
-
+    <uses-feature android:name="android.hardware.location" android:required="false" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
+        android:name=".MainApplication"
         android:allowBackup="true"
+        android:enableOnBackInvokedCallback="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/ic_app_logo"
@@ -36,23 +60,42 @@
         android:roundIcon="@drawable/ic_app_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.EZTalk"
-        android:usesCleartextTraffic="false"
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
-        tools:targetApi="31"
-        tools:ignore="MissingClass">
-        <!--android:name=".MainApplication" we dont have the class rn-->
+        android:extractNativeLibs="true"
+        tools:targetApi="34">
+
+
+    <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <!-- Splash Activity -->
         <activity
-            android:name=".activity.SplashActivity"
+            android:name=".ui.auth.Splash.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.EZTalk.Splash"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            tools:ignore="DiscouragedApi">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Main Activity -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
+
+        <!-- Onboarding Activity -->
+        <activity
+            android:name=".ui.onboarding.OnboardingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <!-- Welcome Activity -->
         <activity
@@ -95,12 +138,21 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
 
+        <!-- Search Activity -->
+        <activity
+            android:name=".ui.SearchActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".ui.home.HomeActivity" />
+
         <!-- Home Activity -->
         <activity
             android:name=".ui.home.HomeActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            tools:ignore="Instantiatable" />
 
         <!-- Chat Detail Activity -->
         <activity
@@ -115,27 +167,44 @@
             android:name=".ui.chat.group.GroupChatActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="Instantiatable" />
 
         <!-- Create Group Activity -->
         <activity
             android:name=".ui.chat.group.CreateGroupActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+
+        <!-- Group Details Activity -->
+        <activity
+            android:name=".ui.chat.group.GroupDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".ui.chat.group.GroupChatActivity" />
+
+        <!-- Group List Activity -->
+        <activity
+            android:name=".ui.chat.group.Grouplistactivity"
+            android:exported="false" />
 
         <!-- Profile Activity -->
         <activity
             android:name=".ui.profile.ProfileActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="Instantiatable" />
 
         <!-- Settings Activity -->
         <activity
             android:name=".ui.profile.SettingsActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:parentActivityName=".ui.home.HomeActivity" />
+            android:parentActivityName=".ui.home.HomeActivity"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
 
         <!-- Edit Profile Activity -->
         <activity
@@ -144,7 +213,9 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
 
-        <!-- Incoming Call Activity -->
+        <!-- ========== CALL ACTIVITIES (LEGACY) ========== -->
+
+        <!-- Incoming Call Activity (Legacy) -->
         <activity
             android:name=".ui.call.incoming.IncomingCallActivity"
             android:exported="false"
@@ -152,18 +223,63 @@
             android:showWhenLocked="true"
             android:turnScreenOn="true"
             android:theme="@style/Theme.EZTalk.Transparent"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance"
+            android:attributionTags="call_handling" />
 
-        <!-- Call Activity -->
+        <!-- Call Activity (Legacy Voice Call) -->
         <activity
             android:name=".ui.call.ongoing.CallActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance"
+            android:attributionTags="call_handling" />
 
-        <!-- Image Preview Activity -->
+        <!-- Video Call Activity (Legacy) -->
         <activity
-            android:name=".ui.media.ImagePreviewActivity"
+            android:name=".ui.call.video.VideoCallActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:launchMode="singleInstance"
+            android:attributionTags="call_handling" />
+
+        <!-- ========== INTEGRATED VIDEO CALL ACTIVITIES (NEW) ========== -->
+
+        <!-- Integrated Incoming Call Activity -->
+        <activity
+            android:name=".ui.call.incoming.IntegratedIncomingCallActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            android:theme="@style/Theme.EZTalk.Transparent"
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="false"
+            android:attributionTags="call_handling" />
+
+        <!-- Voice Call Activity -->
+        <activity
+            android:name=".ui.call.voice.VoiceCallActivity"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:attributionTags="call_handling"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+
+        <!-- Integrated Video Call Activity -->
+        <activity
+            android:name=".ui.call.video.IntegratedVideoCallActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="false"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:attributionTags="call_handling" />
+
+        <!-- ========== MEDIA ACTIVITIES ========== -->
+
+        <!-- Image Viewer Activity -->
+        <activity
+            android:name=".ui.media.ImageViewerActivity"
             android:exported="false"
             android:theme="@style/Theme.EZTalk.Transparent" />
 
@@ -172,14 +288,34 @@
             android:name=".ui.media.VideoPlayerActivity"
             android:exported="false"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.EZTalk.Transparent" />
+            android:theme="@style/Theme.EZTalk.Transparent"
+            tools:ignore="DiscouragedApi,Instantiatable" />
 
-        <!-- Services -->
+        <!-- ========== CHANNEL ACTIVITIES ========== -->
+
+        <!-- Channel Activities -->
+        <activity
+            android:name=".ui.channel.CreateChannelActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.channel.ChannelListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.channel.ChannelDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <!-- ========== SERVICES ========== -->
 
         <!-- FCM Service -->
         <service
             android:name=".service.FCMService"
-            android:exported="false">
+            android:exported="false"
+            tools:ignore="Instantiatable">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -190,13 +326,17 @@
             android:name=".service.CallService"
             android:enabled="true"
             android:exported="false"
-            android:foregroundServiceType="phoneCall" />
+            android:foregroundServiceType="phoneCall"
+            tools:ignore="ForegroundServicePermission,Instantiatable" />
 
         <!-- Message Service -->
         <service
             android:name=".service.MessageService"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="Instantiatable" />
+
+        <!-- ========== FIREBASE METADATA ========== -->
 
         <!-- Firebase Messaging Default Values -->
         <meta-data
@@ -210,6 +350,11 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
+
+        <service
+            android:name="com.example.project_ez_talk.service.IncomingCallListenerService"
+            android:enabled="true"
+            android:exported="false" />
 
         <!-- File Provider -->
         <provider

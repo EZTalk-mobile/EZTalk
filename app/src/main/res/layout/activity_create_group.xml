@@ -12,54 +12,38 @@
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
+        android:layout_marginTop="16dp"
         android:background="@color/background_dark"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationContentDescription="@string/back"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/create_group"
+        app:titleTextColor="@color/text_primary">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingEnd="16dp"
-            tools:ignore="RtlSymmetry">
-
-            <ImageView
-                android:id="@+id/btnBack"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:padding="8dp"
-                android:src="@drawable/ic_back"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/back" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/create_group"
-                android:textColor="@color/text_primary"
-                android:textSize="18sp"
-                android:fontFamily="@font/inter_semibold"
-                android:paddingStart="8dp" />
-
-            <TextView
-                android:id="@+id/btnCreate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/create"
-                android:textColor="@color/primary_purple"
-                android:textSize="16sp"
-                android:fontFamily="@font/inter_semibold"
-                android:padding="8dp"
-                android:background="?attr/selectableItemBackgroundBorderless" />
-
-        </LinearLayout>
+        <!-- Create button -->
+        <TextView
+            android:id="@+id/btnCreate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/inter_semibold"
+            android:padding="8dp"
+            android:text="@string/create"
+            android:textColor="@color/primary_purple"
+            android:textSize="16sp"
+            tools:ignore="TouchTargetSizeCheck" />
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ScrollView
+    <!-- ✅ FIXED: Use NestedScrollView instead of ScrollView -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -77,18 +61,18 @@
             <!-- Group Icon Section -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_height="153dp"
                 android:gravity="center"
+                android:orientation="vertical"
                 android:paddingBottom="24dp">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cvGroupIcon"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
+                    app:cardBackgroundColor="@color/background_card"
                     app:cardCornerRadius="50dp"
-                    app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/background_card">
+                    app:cardElevation="0dp">
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -98,18 +82,18 @@
                             android:id="@+id/ivGroupIcon"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:contentDescription="@string/group_icon"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/bg_circle"
-                            android:contentDescription="@string/group_icon" />
+                            android:src="@drawable/bg_circle" />
 
                         <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_gravity="center"
+                            android:contentDescription="@string/add_photo"
                             android:src="@drawable/ic_camera"
                             android:tint="@color/text_hint"
-                            android:contentDescription="@string/add_photo"
-                            tools:ignore="UseAppTint" />
+                            tools:ignore="UseAppTint,ImageContrastCheck" />
 
                     </FrameLayout>
 
@@ -119,10 +103,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:fontFamily="@font/inter_regular"
                     android:text="@string/add_group_icon"
                     android:textColor="@color/text_secondary"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/inter_regular" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -150,18 +134,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:background="@null"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center_vertical"
                     android:hint="Enter group name"
+                    android:importantForAutofill="no"
+                    android:inputType="textCapSentences"
+                    android:maxLines="1"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
                     android:textColor="@color/text_primary"
                     android:textColorHint="@color/text_hint"
                     android:textSize="16sp"
-                    android:fontFamily="@font/inter_regular"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:gravity="center_vertical"
-                    android:maxLines="1"
-                    android:inputType="textCapSentences"
-                    android:importantForAutofill="no"
-                    tools:ignore="HardcodedText" />
+                    tools:ignore="HardcodedText,TextContrastCheck,VisualLintTextFieldSize" />
 
             </androidx.cardview.widget.CardView>
 
@@ -189,17 +173,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:background="@null"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="top|start"
                     android:hint="Enter group description"
+                    android:importantForAutofill="no"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:maxLines="3"
+                    android:padding="16dp"
                     android:textColor="@color/text_primary"
                     android:textColorHint="@color/text_hint"
                     android:textSize="16sp"
-                    android:fontFamily="@font/inter_regular"
-                    android:padding="16dp"
-                    android:maxLines="3"
-                    android:inputType="textCapSentences|textMultiLine"
-                    android:gravity="top|start"
-                    android:importantForAutofill="no"
-                    tools:ignore="HardcodedText" />
+                    tools:ignore="HardcodedText,TextContrastCheck,VisualLintTextFieldSize" />
 
             </androidx.cardview.widget.CardView>
 
@@ -253,55 +237,58 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
+                        android:contentDescription="@string/search"
                         android:src="@drawable/ic_search"
                         android:tint="@color/text_hint"
-                        android:contentDescription="@string/search"
-                        tools:ignore="UseAppTint" />
+                        tools:ignore="UseAppTint,ImageContrastCheck" />
 
                     <EditText
                         android:id="@+id/etSearchMembers"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:layout_marginStart="12dp"
+                        android:layout_weight="1"
                         android:background="@null"
+                        android:fontFamily="@font/inter_regular"
                         android:hint="Search contacts"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:maxLines="1"
                         android:textColor="@color/text_primary"
                         android:textColorHint="@color/text_hint"
                         android:textSize="16sp"
-                        android:fontFamily="@font/inter_regular"
-                        android:maxLines="1"
-                        android:inputType="text"
-                        android:importantForAutofill="no"
-                        tools:ignore="HardcodedText" />
+                        tools:ignore="HardcodedText,VisualLintTextFieldSize,TextContrastCheck" />
 
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Selected Members Horizontal List -->
+            <!-- ✅ FIXED: Selected Members Horizontal List with adapter -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSelectedMembers"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginBottom="16dp"
-                android:visibility="gone"
                 android:orientation="horizontal"
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_selected_member"
                 tools:visibility="visible" />
 
-            <!-- Available Contacts List -->
+            <!-- ✅ FIXED: Available Contacts List with fixed height and nestedScrollingDisabled -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvContacts"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="300dp"
                 android:nestedScrollingEnabled="false"
+                android:clipToPadding="false"
+                android:paddingBottom="24dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_member_selection" />
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

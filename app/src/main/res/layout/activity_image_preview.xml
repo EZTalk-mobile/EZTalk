@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <!-- Photo View for zoom/pan -->
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/photoView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Close Button (Top Right) -->
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_close"
+        android:padding="12dp"
+        android:background="@drawable/bg_circle"
+        android:backgroundTint="#80000000"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:elevation="8dp"
+        app:tint="@android:color/white"
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/close" />
+
+    <!-- Sender Info (Top Left) -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@drawable/bg_gradient_top"
+        android:elevation="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tvSenderName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sender Name"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif-medium"
+            android:shadowColor="#80000000"
+            android:shadowRadius="4"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/tvTimestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12:30 PM"
+            android:textColor="#CCFFFFFF"
+            android:textSize="12sp"
+            android:layout_marginTop="2dp"
+            android:shadowColor="#80000000"
+            android:shadowRadius="4" />
+
+    </LinearLayout>
+
+    <!-- Bottom Action Bar -->
+    <LinearLayout
+        android:id="@+id/layoutActions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="16dp"
+        android:background="@drawable/bg_gradient_bottom"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/btnDownload"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/ic_download"
+            android:padding="14dp"
+            android:background="@drawable/bg_circle"
+            android:backgroundTint="#80000000"
+            android:layout_marginEnd="16dp"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            app:tint="@android:color/white"
+            android:contentDescription="@string/download" />
+
+        <ImageView
+            android:id="@+id/btnShare"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/ic_share"
+            android:padding="14dp"
+            android:background="@drawable/bg_circle"
+            android:backgroundTint="#80000000"
+            android:layout_marginStart="16dp"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            app:tint="@android:color/white"
+            android:contentDescription="@string/share" />
+
+    </LinearLayout>
+
+    <!-- Caption (if exists) -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvCaption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="100dp"
+        android:visibility="gone"
+        app:cardBackgroundColor="#99000000"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/tvCaption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:lineSpacingExtra="4dp" />
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- Loading Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:visibility="gone"
+        android:indeterminateTint="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

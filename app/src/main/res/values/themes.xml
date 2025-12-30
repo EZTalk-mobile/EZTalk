@@ -1,41 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress ALL -->
 <resources>
-    <!-- Base Application Theme -->
+
+    <!-- Base Theme -->
     <style name="Base.Theme.EZTalk" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary Colors -->
         <item name="colorPrimary">@color/primary_purple</item>
         <item name="colorPrimaryVariant">@color/primary_purple_dark</item>
         <item name="colorOnPrimary">@color/text_primary</item>
 
-        <!-- Secondary Colors -->
         <item name="colorSecondary">@color/secondary_green</item>
         <item name="colorSecondaryVariant">@color/secondary_green_dark</item>
         <item name="colorOnSecondary">@color/text_primary</item>
 
-        <!-- Background Colors -->
         <item name="android:colorBackground">@color/background_dark</item>
         <item name="colorSurface">@color/background_card</item>
         <item name="colorOnBackground">@color/text_primary</item>
         <item name="colorOnSurface">@color/text_primary</item>
 
-        <!-- Status Bar -->
+        <!-- Add Material3 compatibility colors -->
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+        <item name="colorSurfaceVariant">@color/background_card</item>
+
         <item name="android:statusBarColor">@color/background_dark</item>
         <item name="android:windowLightStatusBar">false</item>
-
-        <!-- Navigation Bar -->
         <item name="android:navigationBarColor">@color/nav_bar_background</item>
 
-        <!-- Text Appearance -->
         <item name="android:textColorPrimary">@color/text_primary</item>
         <item name="android:textColorSecondary">@color/text_secondary</item>
         <item name="android:textColorHint">@color/text_hint</item>
 
-        <!-- Material Components -->
-        <item name="materialButtonStyle">@style/Widget.EZTalk.Button</item>
+        <item name="materialButtonStyle">@style/Widget.EZTalk.Button.Filled</item>
         <item name="textInputStyle">@style/Widget.EZTalk.TextInputLayout</item>
         <item name="bottomNavigationStyle">@style/Widget.EZTalk.BottomNavigationView</item>
 
-        <!-- Shape Appearance -->
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.EZTalk.SmallComponent</item>
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.EZTalk.MediumComponent</item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.EZTalk.LargeComponent</item>
@@ -43,97 +40,17 @@
 
     <style name="Theme.EZTalk" parent="Base.Theme.EZTalk" />
 
-    <!-- Splash Screen Theme -->
+    <!-- Splash & Transparent -->
     <style name="Theme.EZTalk.Splash" parent="Theme.EZTalk">
         <item name="android:windowBackground">@drawable/splash_background</item>
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <!-- Transparent Activity Theme -->
     <style name="Theme.EZTalk.Transparent" parent="Theme.EZTalk">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:backgroundDimEnabled">true</item>
-    </style>
-
-    <!-- Button Styles -->
-    <style name="Widget.EZTalk.Button" parent="Widget.MaterialComponents.Button">
-        <item name="android:textColor">@color/button_text</item>
-        <item name="backgroundTint">@color/button_enabled</item>
-        <item name="cornerRadius">12dp</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:fontFamily">@font/inter_semibold</item>
-        <item name="android:paddingTop">16dp</item>
-        <item name="android:paddingBottom">16dp</item>
-        <item name="elevation">0dp</item>
-    </style>
-
-    <style name="Widget.EZTalk.Button.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="android:textColor">@color/primary_purple</item>
-        <item name="strokeColor">@color/primary_purple</item>
-        <item name="strokeWidth">2dp</item>
-        <item name="cornerRadius">12dp</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:fontFamily">@font/inter_semibold</item>
-        <item name="android:paddingTop">16dp</item>
-        <item name="android:paddingBottom">16dp</item>
-    </style>
-
-    <style name="Widget.EZTalk.Button.Text" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">@color/primary_purple</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:fontFamily">@font/inter_medium</item>
-    </style>
-
-    <style name="Widget.EZTalk.Button.Icon" parent="Widget.MaterialComponents.Button.Icon">
-        <item name="iconTint">@color/text_primary</item>
-        <item name="backgroundTint">@color/background_card</item>
-        <item name="cornerRadius">12dp</item>
-    </style>
-
-    <!-- TextInputLayout Styles -->
-    <style name="Widget.EZTalk.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/primary_purple</item>
-        <item name="boxStrokeWidth">2dp</item>
-        <item name="boxCornerRadiusTopStart">12dp</item>
-        <item name="boxCornerRadiusTopEnd">12dp</item>
-        <item name="boxCornerRadiusBottomStart">12dp</item>
-        <item name="boxCornerRadiusBottomEnd">12dp</item>
-        <item name="hintTextColor">@color/text_hint</item>
-        <item name="android:textColorHint">@color/text_hint</item>
-    </style>
-
-    <!-- EditText Styles -->
-    <style name="Widget.EZTalk.EditText" parent="Widget.AppCompat.EditText">
-        <item name="android:textColor">@color/text_primary</item>
-        <item name="android:textColorHint">@color/text_hint</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:fontFamily">@font/inter_regular</item>
-        <item name="android:paddingStart">16dp</item>
-        <item name="android:paddingEnd">16dp</item>
-        <item name="android:paddingTop">16dp</item>
-        <item name="android:paddingBottom">16dp</item>
-    </style>
-
-    <!-- Bottom Navigation Style -->
-    <style name="Widget.EZTalk.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
-        <item name="itemIconTint">@color/bottom_nav_color</item>
-        <item name="itemTextColor">@color/bottom_nav_color</item>
-        <item name="android:background">@color/nav_bar_background</item>
-        <item name="elevation">8dp</item>
-        <item name="labelVisibilityMode">unlabeled</item>
-    </style>
-
-    <!-- Card Styles -->
-    <style name="Widget.EZTalk.CardView" parent="Widget.MaterialComponents.CardView">
-        <item name="cardBackgroundColor">@color/background_card</item>
-        <item name="cardCornerRadius">16dp</item>
-        <item name="cardElevation">0dp</item>
-        <item name="contentPadding">16dp</item>
     </style>
 
     <!-- Text Appearances -->
@@ -189,65 +106,6 @@
         <item name="cornerSize">16dp</item>
     </style>
 
-    <!-- Toolbar Style -->
-    <style name="Widget.EZTalk.Toolbar" parent="Widget.MaterialComponents.Toolbar">
-        <item name="android:background">@color/background_dark</item>
-        <item name="titleTextColor">@color/text_primary</item>
-        <item name="android:elevation">0dp</item>
-    </style>
 
-    <!-- Dialog Styles -->
-    <style name="Theme.EZTalk.Dialog" parent="Theme.MaterialComponents.Dialog">
-        <item name="android:background">@color/background_card</item>
-        <item name="colorPrimary">@color/primary_purple</item>
-        <item name="android:textColorPrimary">@color/text_primary</item>
-    </style>
 
-    <style name="Theme.EZTalk.BottomSheetDialog" parent="Theme.MaterialComponents.BottomSheetDialog">
-        <item name="android:background">@color/background_card</item>
-        <item name="bottomSheetStyle">@style/Widget.EZTalk.BottomSheet</item>
-    </style>
-
-    <style name="Widget.EZTalk.BottomSheet" parent="Widget.MaterialComponents.BottomSheet">
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.EZTalk.BottomSheet</item>
-    </style>
-
-    <style name="ShapeAppearance.EZTalk.BottomSheet" parent="ShapeAppearance.MaterialComponents.LargeComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">24dp</item>
-        <item name="cornerSizeTopRight">24dp</item>
-        <item name="cornerSizeBottomLeft">0dp</item>
-        <item name="cornerSizeBottomRight">0dp</item>
-    </style>
-
-    <!-- Chip Styles -->
-    <style name="Widget.EZTalk.Chip" parent="Widget.MaterialComponents.Chip.Choice">
-        <item name="chipBackgroundColor">@color/chip_background</item>
-        <item name="chipStrokeColor">@color/primary_purple</item>
-        <item name="chipStrokeWidth">1dp</item>
-        <item name="android:textColor">@color/text_primary</item>
-        <item name="chipCornerRadius">20dp</item>
-    </style>
-
-    <!-- TabLayout Style -->
-    <style name="Widget.EZTalk.TabLayout" parent="Widget.MaterialComponents.TabLayout">
-        <item name="tabIndicatorColor">@color/primary_purple</item>
-        <item name="tabIndicatorHeight">3dp</item>
-        <item name="tabSelectedTextColor">@color/primary_purple</item>
-        <item name="tabTextColor">@color/text_secondary</item>
-        <item name="android:background">@color/background_dark</item>
-    </style>
-
-    <!-- Switch Style -->
-    <style name="Widget.EZTalk.Switch" parent="Widget.MaterialComponents.CompoundButton.Switch">
-        <item name="thumbTint">@color/text_primary</item>
-        <item name="trackTint">@color/primary_purple</item>
-    </style>
-
-    <!-- FloatingActionButton Style -->
-    <style name="Widget.EZTalk.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
-        <item name="backgroundTint">@color/primary_purple</item>
-        <item name="tint">@color/text_primary</item>
-        <item name="elevation">6dp</item>
-    </style>
 </resources>

@@ -3,6 +3,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
@@ -74,9 +75,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/time"
-        android:textSize="@dimen/text_size_caption"
         android:textColor="@color/text_hint"
+        android:textSize="@dimen/text_size_caption"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/iv_avatar"
-        app:layout_constraintEnd_toEndOf="parent" />
+        tools:ignore="TextContrastCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient"
@@ -60,13 +61,14 @@
             android:layout_height="56dp"
             android:layout_marginEnd="12dp"
             android:background="@drawable/selector_otp_background"
+            android:fontFamily="@font/inter_bold"
             android:gravity="center"
+            android:importantForAutofill="no"
             android:inputType="number"
             android:maxLength="1"
             android:textColor="@color/text_primary"
             android:textSize="24sp"
-            android:fontFamily="@font/inter_bold"
-            android:importantForAutofill="no" />
+            tools:ignore="LabelFor,SpeakableTextPresentCheck" />
 
         <EditText
             android:id="@+id/etOtp2"
@@ -74,13 +76,14 @@
             android:layout_height="56dp"
             android:layout_marginEnd="12dp"
             android:background="@drawable/selector_otp_background"
+            android:fontFamily="@font/inter_bold"
             android:gravity="center"
+            android:importantForAutofill="no"
             android:inputType="number"
             android:maxLength="1"
             android:textColor="@color/text_primary"
             android:textSize="24sp"
-            android:fontFamily="@font/inter_bold"
-            android:importantForAutofill="no" />
+            tools:ignore="LabelFor,SpeakableTextPresentCheck" />
 
         <EditText
             android:id="@+id/etOtp3"
@@ -88,26 +91,28 @@
             android:layout_height="56dp"
             android:layout_marginEnd="12dp"
             android:background="@drawable/selector_otp_background"
+            android:fontFamily="@font/inter_bold"
             android:gravity="center"
+            android:importantForAutofill="no"
             android:inputType="number"
             android:maxLength="1"
             android:textColor="@color/text_primary"
             android:textSize="24sp"
-            android:fontFamily="@font/inter_bold"
-            android:importantForAutofill="no" />
+            tools:ignore="LabelFor,SpeakableTextPresentCheck" />
 
         <EditText
             android:id="@+id/etOtp4"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:background="@drawable/selector_otp_background"
+            android:fontFamily="@font/inter_bold"
             android:gravity="center"
+            android:importantForAutofill="no"
             android:inputType="number"
             android:maxLength="1"
             android:textColor="@color/text_primary"
             android:textSize="24sp"
-            android:fontFamily="@font/inter_bold"
-            android:importantForAutofill="no" />
+            tools:ignore="LabelFor,SpeakableTextPresentCheck" />
 
     </LinearLayout>
 
@@ -120,7 +125,8 @@
         android:text="@string/verify"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llOtpInputs" />
+        app:layout_constraintTop_toBottomOf="@id/llOtpInputs"
+        tools:ignore="VisualLintButtonSize" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -144,11 +150,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
+            android:fontFamily="@font/inter_semibold"
+            android:padding="4dp"
             android:text="@string/resend"
             android:textColor="@color/primary_purple"
             android:textSize="14sp"
-            android:fontFamily="@font/inter_semibold"
-            android:padding="4dp" />
+            tools:ignore="TextContrastCheck" />
 
     </LinearLayout>
 

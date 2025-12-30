@@ -34,9 +34,10 @@
                 <ImageView
                     android:layout_width="@dimen/icon_size_small"
                     android:layout_height="@dimen/icon_size_small"
+                    android:contentDescription="@string/search"
                     android:src="@drawable/ic_search"
                     app:tint="@color/text_hint"
-                    android:contentDescription="@string/search" />
+                    tools:ignore="ImageContrastCheck" />
 
                 <EditText
                     android:id="@+id/et_search"
@@ -51,7 +52,7 @@
                     android:textColor="@color/text_primary"
                     android:textColorHint="@color/text_hint"
                     android:textSize="@dimen/text_size_body"
-                    tools:ignore="Autofill,TouchTargetSizeCheck" />
+                    tools:ignore="Autofill,TouchTargetSizeCheck,TextContrastCheck,VisualLintTextFieldSize" />
 
                 <ImageView
                     android:id="@+id/btn_clear"
@@ -78,13 +79,14 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_all"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/all"
             android:checked="true"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:text="@string/all"
             app:chipBackgroundColor="@color/chip_background_selector"
-            app:chipStrokeColor="@color/primary_purple" />
+            app:chipStrokeColor="@color/primary_purple"
+            tools:ignore="TextContrastCheck" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_chats"

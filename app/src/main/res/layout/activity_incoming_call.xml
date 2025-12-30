@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient">
@@ -34,9 +35,10 @@
             android:id="@+id/ivCallerAvatar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentDescription="@string/profile"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_profile"
-            android:contentDescription="@string/profile" />
+            tools:ignore="ImageContrastCheck" />
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -51,7 +53,8 @@
         android:fontFamily="@font/inter_bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cvCallerAvatar" />
+        app:layout_constraintTop_toBottomOf="@id/cvCallerAvatar"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/tvCallType"
@@ -66,6 +69,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvCallerName" />
 
+    <!-- ✅ FIX: Made buttons properly clickable -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -75,21 +79,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <!-- Decline Button -->
         <LinearLayout
             android:id="@+id/btnDecline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="40dp"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_close"
-                app:fabSize="normal"
+                android:clickable="false"
+                android:focusable="false"
                 app:backgroundTint="@color/call_button_end"
-                app:tint="@color/text_primary" />
+                app:fabSize="normal"
+                app:tint="@color/text_primary"
+                android:contentDescription="@string/decline" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -102,20 +114,28 @@
 
         </LinearLayout>
 
+        <!-- Accept Button -->
         <LinearLayout
             android:id="@+id/btnAccept"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_call"
-                app:fabSize="normal"
+                android:clickable="false"
+                android:focusable="false"
                 app:backgroundTint="@color/secondary_green"
-                app:tint="@color/text_primary" />
+                app:fabSize="normal"
+                app:tint="@color/text_primary"
+                android:contentDescription="@string/accept" />
 
             <TextView
                 android:layout_width="wrap_content"

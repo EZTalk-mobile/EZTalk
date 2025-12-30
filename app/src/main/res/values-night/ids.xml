@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="tvLastMessage" type="id" />
+    <item name="tvBadgeCount" type="id" />
+    <item name="cvBadge" type="id" />
+    <item name="tvMembers" type="id" />
+    <item name="tv_role" type="id" />
+    <item name="action_edit_group" type="id" />
+    <item name="btnDownload" type="id" />
+    <item name="videoView" type="id" />
+    <item name="surfaceViewRenderer" type="id" />
+</resources>

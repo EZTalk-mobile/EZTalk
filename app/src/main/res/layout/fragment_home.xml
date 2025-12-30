@@ -61,7 +61,8 @@
                     android:text="Welcome back!"
                     android:textColor="@color/text_secondary"
                     android:textSize="13sp"
-                    android:fontFamily="@font/inter_regular" />
+                    android:fontFamily="@font/inter_regular"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/tvUserName"
@@ -71,7 +72,8 @@
                     android:text="User Name"
                     android:textColor="@color/text_primary"
                     android:textSize="18sp"
-                    android:fontFamily="@font/inter_bold" />
+                    android:fontFamily="@font/inter_bold"
+                    tools:ignore="HardcodedText" />
 
             </LinearLayout>
 
@@ -101,7 +103,8 @@
         android:textSize="16sp"
         android:fontFamily="@font/inter_semibold"
         app:layout_constraintTop_toBottomOf="@id/cardWelcome"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="HardcodedText" />
 
     <LinearLayout
         android:id="@+id/layoutQuickActions"
@@ -110,14 +113,14 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="12dp"
         android:orientation="horizontal"
-        android:weightSum="3"
+        android:weightSum="2"
         app:layout_constraintTop_toBottomOf="@id/tvQuickActions"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- New Chat -->
+        <!-- Create Group -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardNewChat"
+            android:id="@+id/cardCreateGroup"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -133,73 +136,53 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:padding="16dp"
+                android:padding="20dp"
                 tools:ignore="UseCompoundDrawables">
 
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_chat"
-                    app:tint="@color/primary_purple"
-                    tools:ignore="ContentDescription,ImageContrastCheck" />
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    app:cardCornerRadius="28dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="#1A66BB6A">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_group"
+                        android:padding="14dp"
+                        app:tint="#66BB6A"
+                        tools:ignore="ContentDescription" />
+
+                </com.google.android.material.card.MaterialCardView>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="New Chat"
+                    android:layout_marginTop="12dp"
+                    android:text="Create Group"
                     android:textColor="@color/text_primary"
-                    android:textSize="13sp"
-                    android:fontFamily="@font/inter_medium" />
+                    android:textSize="14sp"
+                    android:fontFamily="@font/inter_semibold"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="Start a new group"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="12sp"
+                    tools:ignore="HardcodedText,TextContrastCheck" />
 
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Voice Call -->
+        <!-- Create Channel -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardVoiceCall"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginHorizontal="4dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/background_card"
-            app:strokeColor="@color/divider"
-            app:strokeWidth="1dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="16dp"
-                tools:ignore="UseCompoundDrawables">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_phone"
-                    app:tint="@color/secondary_green"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Voice Call"
-                    android:textColor="@color/text_primary"
-                    android:textSize="13sp"
-                    android:fontFamily="@font/inter_medium" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <!-- Video Call -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardVideoCall"
+            android:id="@+id/cardCreateChannel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -215,24 +198,45 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:padding="16dp"
+                android:padding="20dp"
                 tools:ignore="UseCompoundDrawables">
 
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_video"
-                    app:tint="@color/accent_blue"
-                    tools:ignore="ContentDescription" />
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    app:cardCornerRadius="28dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="#1AFF7043">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_channel"
+                        android:padding="14dp"
+                        app:tint="#FF7043"
+                        tools:ignore="ContentDescription" />
+
+                </com.google.android.material.card.MaterialCardView>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Video Call"
+                    android:layout_marginTop="12dp"
+                    android:text="Create Channel"
                     android:textColor="@color/text_primary"
-                    android:textSize="13sp"
-                    android:fontFamily="@font/inter_medium" />
+                    android:textSize="14sp"
+                    android:fontFamily="@font/inter_semibold"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="Broadcast messages"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="12sp"
+                    tools:ignore="HardcodedText,TextContrastCheck" />
 
             </LinearLayout>
 
@@ -274,7 +278,7 @@
             android:text="See All"
             android:textColor="@color/primary_purple"
             android:textSize="13sp"
-            tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+            tools:ignore="HardcodedText,TextContrastCheck,TouchTargetSizeCheck" />
 
     </LinearLayout>
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Spacing -->
     <dimen name="spacing_tiny">4dp</dimen>
     <dimen name="spacing_small">8dp</dimen>
@@ -16,74 +16,45 @@
     <dimen name="text_size_subtitle">18sp</dimen>
     <dimen name="text_size_title">20sp</dimen>
     <dimen name="text_size_headline">24sp</dimen>
-    <dimen name="text_size_display">28sp</dimen>
-    <dimen name="text_size_display_large">32sp</dimen>
+    <dimen name="text_size_display">32sp</dimen>
 
-    <!-- Corner Radius -->
+    <!-- Corner Radius & Elevation -->
     <dimen name="corner_radius_small">8dp</dimen>
     <dimen name="corner_radius_medium">12dp</dimen>
     <dimen name="corner_radius_large">16dp</dimen>
-    <dimen name="corner_radius_xlarge">20dp</dimen>
     <dimen name="corner_radius_round">999dp</dimen>
+    <dimen name="elevation_low">4dp</dimen>
+    <dimen name="elevation_medium">8dp</dimen>
+    <dimen name="elevation_high">12dp</dimen>
 
-    <!-- Elevation -->
-    <dimen name="elevation_none">0dp</dimen>
-    <dimen name="elevation_low">2dp</dimen>
-    <dimen name="elevation_medium">4dp</dimen>
-    <dimen name="elevation_high">8dp</dimen>
-    <dimen name="elevation_xlarge">16dp</dimen>
-
-    <!-- Avatar Sizes -->
-    <dimen name="avatar_size_tiny">24dp</dimen>
+    <!-- Avatar & Icons -->
     <dimen name="avatar_size_small">32dp</dimen>
     <dimen name="avatar_size_medium">40dp</dimen>
-    <dimen name="avatar_size_normal">48dp</dimen>
-    <dimen name="avatar_size_large">56dp</dimen>
-    <dimen name="avatar_size_xlarge">80dp</dimen>
-    <dimen name="avatar_size_xxlarge">120dp</dimen>
-
-    <!-- Button Heights -->
-    <dimen name="button_height_small">40dp</dimen>
-    <dimen name="button_height_medium">48dp</dimen>
-    <dimen name="button_height_large">56dp</dimen>
-
-    <!-- Icon Sizes -->
-    <dimen name="icon_size_tiny">16dp</dimen>
+    <dimen name="avatar_size_normal">56dp</dimen>
+    <dimen name="avatar_size_large">80dp</dimen>
     <dimen name="icon_size_small">20dp</dimen>
     <dimen name="icon_size_medium">24dp</dimen>
     <dimen name="icon_size_large">32dp</dimen>
-    <dimen name="icon_size_xlarge">48dp</dimen>
 
-    <!-- Card -->
-    <dimen name="card_padding">16dp</dimen>
-    <dimen name="card_margin">12dp</dimen>
-
-    <!-- Input -->
+    <!-- Common UI -->
+    <dimen name="button_height">48dp</dimen>
     <dimen name="input_height">56dp</dimen>
-    <dimen name="input_padding_horizontal">16dp</dimen>
-    <dimen name="input_padding_vertical">16dp</dimen>
-
-    <!-- Bottom Navigation -->
-    <dimen name="bottom_nav_height">64dp</dimen>
-    <dimen name="bottom_nav_icon_size">24dp</dimen>
-
-    <!-- Toolbar -->
-    <dimen name="toolbar_height">56dp</dimen>
-
-    <!-- Message Bubble -->
-    <dimen name="message_bubble_padding">12dp</dimen>
-    <dimen name="message_bubble_max_width">260dp</dimen>
-    <dimen name="message_bubble_margin">4dp</dimen>
-
-    <!-- Badge -->
-    <dimen name="badge_size">20dp</dimen>
-    <dimen name="badge_padding">6dp</dimen>
-
-    <!-- Status Indicator -->
+    <dimen name="card_padding">16dp</dimen>
+    <dimen name="message_bubble_max_width">280dp</dimen>
     <dimen name="status_indicator_size">12dp</dimen>
+    <dimen name="text_size_display_large" />
+    <!-- Elevations -->
+    <dimen name="elevation_none">0dp</dimen>
 
+    <!-- Icon Sizes -->
+    <dimen name="icon_size_xlarge">64dp</dimen>
+    <dimen name="icon_size_tiny">16dp</dimen>>
 
-
-
+    <!-- ✅ ADD THESE FOR BOTTOM NAVIGATION FIX -->
+    <dimen name="design_bottom_navigation_height" tools:override="true">64dp</dimen>
+    <dimen name="design_bottom_navigation_icon_size" tools:override="true">24dp</dimen>
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">11sp</dimen>
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">11sp</dimen>
+    <dimen name="design_bottom_navigation_margin" tools:override="true">4dp</dimen>
 
 </resources>

@@ -46,9 +46,10 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_gravity="center"
+                        android:contentDescription="@string/file_attachment"
                         android:src="@drawable/ic_document"
                         app:tint="@color/primary_purple"
-                        android:contentDescription="@string/file_attachment" />
+                        tools:ignore="ImageContrastCheck" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -100,13 +101,13 @@
                 android:id="@+id/tvTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
                 android:layout_marginTop="8dp"
+                android:fontFamily="@font/inter_regular"
                 android:text="12:30 PM"
                 android:textColor="@color/text_tertiary"
                 android:textSize="12sp"
-                android:fontFamily="@font/inter_regular"
-                android:layout_gravity="end"
-                tools:ignore="HardcodedText" />
+                tools:ignore="HardcodedText,TextContrastCheck" />
 
         </LinearLayout>
 

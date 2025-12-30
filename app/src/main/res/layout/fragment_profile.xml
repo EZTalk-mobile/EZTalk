@@ -88,7 +88,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvUserEmail"
-            tools:ignore="TextContrastCheck" />
+            tools:ignore="TextContrastCheck,VisualLintButtonSize" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvProfileOptions"
@@ -248,7 +248,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cvProfileOptions" />
+            app:layout_constraintTop_toBottomOf="@id/cvProfileOptions"
+            tools:ignore="VisualLintButtonSize" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

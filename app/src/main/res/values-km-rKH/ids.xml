@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="main" type="id" />
+    <item name="tvPhone" type="id" />
+    <item name="tvAdmin" type="id" />
+    <item name="tvChatName" type="id" />
+    <item name="tvUnreadCount" type="id" />
+    <item name="ivProfilePhoto" type="id" />
+    <item name="cardEditProfile" type="id" />
+    <item name="cardSettings" type="id" />
+    <item name="cardLogout" type="id" />
+    <item name="tilNewPassword" type="id" />
+    <item name="tvDarkMode" type="id" />
+    <item name="tvNotifications" type="id" />
+    <item name="tvMessageNotif" type="id" />
+    <item name="tvLanguage" type="id" />
+    <item name="tvCallNotif" type="id" />
+    <item name="tvEmptyState" type="id" />
+    <item name="tvLastMessage" type="id" />
+    <item name="tvBadgeCount" type="id" />
+    <item name="cvBadge" type="id" />
+    <item name="tvMembers" type="id" />
+    <item name="tv_role" type="id" />
+    <item name="cv_group_icon" type="id" />
+    <item name="et_group_description" type="id" />
+    <item name="tv_group_description" type="id" />
+    <item name="btn_edit_group" type="id" />
+    <item name="btn_voice_call" type="id" />
+    <item name="btn_video_call" type="id" />
+    <item name="btn_search" type="id" />
+    <item name="btn_media" type="id" />
+    <item name="rv_members" type="id" />
+    <item name="btn_mute_notifications" type="id" />
+    <item name="switch_mute" type="id" />
+    <item name="btn_report_group" type="id" />
+    <item name="btn_exit_group" type="id" />
+    <item name="tv_timestamp" type="id" />
+    <item name="tv_last_message" type="id" />
+    <item name="action_edit_group" type="id" />
+    <item name="btnDownload" type="id" />
+    <item name="videoView" type="id" />
+    <item name="surfaceViewRenderer" type="id" />
+    <item name="fabMute" type="id" />
+    <item name="fabSpeaker" type="id" />
+</resources>
