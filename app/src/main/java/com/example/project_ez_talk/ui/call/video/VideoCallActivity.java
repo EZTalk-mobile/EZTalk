@@ -105,18 +105,20 @@ public class VideoCallActivity extends BaseActivity implements MainRepository.Li
 
         initViews();
 
-        // YOUTUBE FLOW: Initialize everything in onCreate
-        mainRepository.initLocalView(findViewById(R.id.localView));
-        mainRepository.initRemoteView(findViewById(R.id.remoteView));
-        mainRepository.listener = this;
-
         setupClickListeners();
         loadUserInfo();
 
         // Check and request permissions
         if (checkPermissions()) {
             permissionsGranted = true;
-            initiateCall();
+            // Login to create fresh WebRTCClient for this call
+            mainRepository.login(currentUsername, this, () -> {
+                // Initialize views after login
+                mainRepository.initLocalView(findViewById(R.id.localView));
+                mainRepository.initRemoteView(findViewById(R.id.remoteView));
+                mainRepository.listener = this;
+                initiateCall();
+            });
         } else {
             requestPermissions();
         }
@@ -150,8 +152,13 @@ public class VideoCallActivity extends BaseActivity implements MainRepository.Li
 
             if (allGranted) {
                 permissionsGranted = true;
-                // Don't setup WebRTC here - wait until after login
-                initiateCall();
+                // Login to create fresh WebRTCClient
+                mainRepository.login(currentUsername, this, () -> {
+                    mainRepository.initLocalView(findViewById(R.id.localView));
+                    mainRepository.initRemoteView(findViewById(R.id.remoteView));
+                    mainRepository.listener = this;
+                    initiateCall();
+                });
             } else {
                 Toast.makeText(this, "Camera and microphone permissions are required for video calls", Toast.LENGTH_LONG).show();
                 finish();
