@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("ALL")
 public class CreateGroupActivity extends BaseActivity {
 
     private static final int PICK_IMAGE_REQUEST = 100;
@@ -45,10 +46,12 @@ public class CreateGroupActivity extends BaseActivity {
     private EditText etGroupName, etGroupDescription, etSearchMembers;
     private RecyclerView rvSelectedMembers, rvContacts;
 
-    private List<Contact> selectedMembers = new ArrayList<>();
-    private List<Contact> allContacts = new ArrayList<>();
-    private List<Contact> filteredContacts = new ArrayList<>();
+    private final List<Contact> selectedMembers = new ArrayList<>();
+    private final List<Contact> allContacts = new ArrayList<>();
+    private final List<Contact> filteredContacts = new ArrayList<>();
+
     private ContactSelectionAdapter contactAdapter;
+    private ContactSelectionAdapter selectedMembersAdapter;  // ✅ NEW: Adapter for selected members
     private Uri groupImageUri;
 
     private FirebaseAuth auth;
@@ -73,7 +76,6 @@ public class CreateGroupActivity extends BaseActivity {
         storageRef = FirebaseStorage.getInstance().getReference("group_images");
     }
 
-    // ✅ FIXED: Setup toolbar properly
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
         cvGroupIcon = findViewById(R.id.cvGroupIcon);
@@ -85,7 +87,6 @@ public class CreateGroupActivity extends BaseActivity {
         rvSelectedMembers = findViewById(R.id.rvSelectedMembers);
         rvContacts = findViewById(R.id.rvContacts);
 
-        // ✅ CRITICAL: Set the toolbar as the action bar
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -97,7 +98,9 @@ public class CreateGroupActivity extends BaseActivity {
 
     @SuppressLint("NotifyDataSetChanged")
     private void setupRecyclerViews() {
+        // ✅ FIXED: Setup contacts list properly
         rvContacts.setLayoutManager(new LinearLayoutManager(this));
+        rvContacts.setNestedScrollingEnabled(false);  // ✅ Allow parent scroll
 
         contactAdapter = new ContactSelectionAdapter(filteredContacts, contact -> {
             if (contact.isSelected()) {
@@ -107,19 +110,35 @@ public class CreateGroupActivity extends BaseActivity {
             }
             contact.setSelected(!contact.isSelected());
             contactAdapter.notifyDataSetChanged();
+            selectedMembersAdapter.notifyDataSetChanged();  // ✅ Update selected list
             updateMemberCount();
         });
 
         rvContacts.setAdapter(contactAdapter);
+
+        // ✅ FIXED: Setup selected members list with adapter
         rvSelectedMembers.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rvSelectedMembers.setNestedScrollingEnabled(false);
+
+        selectedMembersAdapter = new ContactSelectionAdapter(selectedMembers, contact -> {
+            // Remove from selected
+            selectedMembers.remove(contact);
+            contact.setSelected(false);
+
+            // Update both adapters
+            contactAdapter.notifyDataSetChanged();
+            selectedMembersAdapter.notifyDataSetChanged();
+            updateMemberCount();
+        });
+
+        rvSelectedMembers.setAdapter(selectedMembersAdapter);
     }
 
-    // ✅ FIXED: Use toolbar navigation listener
     private void setupListeners() {
-        // ✅ Back button - use toolbar's navigation click
+        // Back button
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        // ✅ Create button - find it directly
+        // Create button
         TextView btnCreate = findViewById(R.id.btnCreate);
         if (btnCreate != null) {
             btnCreate.setOnClickListener(v -> createGroup());
@@ -340,7 +359,6 @@ public class CreateGroupActivity extends BaseActivity {
         }
     }
 
-    // ✅ CRITICAL: This makes the back arrow work!
     @Override
     public boolean onSupportNavigateUp() {
         finish();

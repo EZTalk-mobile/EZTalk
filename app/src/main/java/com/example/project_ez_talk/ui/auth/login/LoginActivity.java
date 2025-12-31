@@ -3,10 +3,11 @@ package com.example.project_ez_talk.ui.auth.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.widget.ImageView;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.project_ez_talk.R;
+import com.example.project_ez_talk.service.IncomingCallListenerService;
 import com.example.project_ez_talk.ui.BaseActivity;
 import com.example.project_ez_talk.ui.auth.forgot.ForgotPasswordActivity;
 import com.example.project_ez_talk.ui.auth.signup.RegisterActivity;
@@ -35,6 +36,7 @@ import java.util.Map;
 @SuppressWarnings("ALL")
 public class LoginActivity extends BaseActivity {
 
+    private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 9001;
 
     private FirebaseAuth mAuth;
@@ -145,6 +147,10 @@ public class LoginActivity extends BaseActivity {
                         Preferences.setLoggedIn(this, true);
                         Preferences.setUserEmail(this, email);
                         Toast.makeText(this, getString(R.string.login_successful), Toast.LENGTH_SHORT).show();
+
+                        // ✅ START INCOMING CALL LISTENER SERVICE
+                        startIncomingCallListenerService();
+
                         goToHome();
                     } else {
                         String msg = task.getException() != null ?
@@ -256,7 +262,29 @@ public class LoginActivity extends BaseActivity {
         Preferences.setLoggedIn(this, true);
         Preferences.setUserEmail(this, email);
         Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show();
+
+        // ✅ START INCOMING CALL LISTENER SERVICE
+        startIncomingCallListenerService();
+
         goToHome();
+    }
+
+    /**
+     * ✅ START INCOMING CALL LISTENER SERVICE
+     * This is the critical method - starts the service that listens for incoming calls
+     */
+    private void startIncomingCallListenerService() {
+        Log.d(TAG, "════════════════════════════════════════");
+        Log.d(TAG, "📱 Starting IncomingCallListenerService");
+        Log.d(TAG, "════════════════════════════════════════");
+
+        try {
+            Intent serviceIntent = new Intent(LoginActivity.this, IncomingCallListenerService.class);
+            startService(serviceIntent);
+            Log.d(TAG, "✅ IncomingCallListenerService started successfully!");
+        } catch (Exception e) {
+            Log.e(TAG, "❌ Error starting IncomingCallListenerService: " + e.getMessage());
+        }
     }
 
     private void goToHome() {

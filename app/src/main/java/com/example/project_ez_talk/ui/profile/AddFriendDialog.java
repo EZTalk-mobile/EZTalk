@@ -13,11 +13,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import com.example.project_ez_talk.R;
+import com.example.project_ez_talk.R;  // ✅ This is the correct R
 import com.example.project_ez_talk.model.FriendRequest;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 public class AddFriendDialog extends DialogFragment {
     private static final String TAG = "AddFriendDialog";
 
@@ -34,7 +33,7 @@ public class AddFriendDialog extends DialogFragment {
         Log.d(TAG, "onCreateView: Dialog created");
 
         try {
-            View view = inflater.inflate(R.layout.dialog_add_friend, container, false);
+            View view = inflater.inflate(R.layout.dialog_add_friend,container, false);
 
             auth = FirebaseAuth.getInstance();
             db = FirebaseFirestore.getInstance();

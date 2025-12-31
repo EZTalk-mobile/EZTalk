@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--suppress ALL -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -13,49 +12,53 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@drawable/bg_gradient_appbar"
-        app:navigationIcon="@drawable/ic_back"
-        app:navigationIconTint="@color/text_primary"
+        app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/menu_channel_options"
-        app:layout_constraintTop_toTopOf="parent">
+        app:navigationIcon="@drawable/ic_back"
+        app:navigationIconTint="@color/text_primary">
 
         <LinearLayout
+            android:id="@+id/layout_channel_header"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
+            android:layout_marginEnd="@dimen/spacing_normal"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center_vertical"
-            android:layout_marginEnd="@dimen/spacing_normal">
+            android:orientation="horizontal">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_channel_avatar"
                 android:layout_width="@dimen/avatar_size_medium"
                 android:layout_height="@dimen/avatar_size_medium"
-                android:src="@drawable/ic_person"
-                android:scaleType="center"
                 android:background="@color/primary_purple"
+                android:contentDescription="@string/channel_avatar"
                 android:padding="8dp"
-                app:tint="@color/text_primary"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_channel"
+                app:shapeAppearanceOverlay="@style/CircleImageStyle"
                 app:strokeColor="@color/primary_purple"
                 app:strokeWidth="2dp"
-                app:shapeAppearanceOverlay="@style/CircleImageStyle"
-                android:contentDescription="@string/channel_avatar" />
+                app:tint="@color/text_primary" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_normal"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginStart="@dimen/spacing_normal">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_channel_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/channel_name"
-                    android:textSize="@dimen/text_size_body_large"
-                    android:textColor="@color/text_primary"
+                    android:ellipsize="end"
                     android:fontFamily="sans-serif-medium"
                     android:maxLines="1"
-                    android:ellipsize="end" />
+                    android:text="@string/channel_name"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_size_body_large" />
 
                 <TextView
                     android:id="@+id/tv_subscriber_count"
@@ -85,24 +88,25 @@
 
     <LinearLayout
         android:id="@+id/layout_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="411dp"
+        android:layout_height="86dp"
+        android:background="@color/background_card"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="@dimen/spacing_small"
-        android:background="@color/background_card"
-        android:gravity="center_vertical"
-        android:elevation="4dp"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints">
 
         <ImageView
             android:id="@+id/btn_emoji"
-            android:layout_width="@dimen/icon_size_large"
-            android:layout_height="@dimen/icon_size_large"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:contentDescription="@string/emoji"
             android:focusable="true"
-            android:padding="@dimen/spacing_tiny"
+            android:padding="8dp"
             android:src="@drawable/ic_emoji"
             app:tint="@color/text_primary"
             tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
@@ -111,33 +115,36 @@
             android:id="@+id/et_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_small"
-            android:layout_marginEnd="@dimen/spacing_small"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:background="@drawable/bg_message_input"
             android:hint="@string/type_message"
             android:importantForAutofill="no"
             android:inputType="textCapSentences|textMultiLine"
             android:maxLines="4"
-            android:padding="@dimen/spacing_normal"
+            android:minHeight="48dp"
+            android:padding="12dp"
             android:textColor="@color/text_primary"
             android:textColorHint="@color/text_hint"
             android:textSize="@dimen/text_size_body"
             tools:ignore="TouchTargetSizeCheck,TextContrastCheck,VisualLintTextFieldSize" />
 
+        <!-- ✅ FIXED: Smaller send button -->
         <ImageView
             android:id="@+id/btn_send"
-            android:layout_width="@dimen/icon_size_xlarge"
-            android:layout_height="@dimen/icon_size_xlarge"
-            android:src="@drawable/ic_send"
-            android:padding="@dimen/spacing_small"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@drawable/bg_button_round"
             android:backgroundTint="@color/primary_purple"
             android:clickable="true"
+            android:contentDescription="@string/send"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:padding="10dp"
+            android:src="@drawable/ic_send"
             app:tint="@color/text_primary"
-            android:contentDescription="@string/send" />
+            tools:ignore="TouchTargetSizeCheck" />
 
     </LinearLayout>
 

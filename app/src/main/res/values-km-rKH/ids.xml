@@ -36,4 +36,13 @@
     <item name="btn_exit_group" type="id" />
     <item name="tv_timestamp" type="id" />
     <item name="tv_last_message" type="id" />
+<<<<<<< HEAD
+=======
+    <item name="action_edit_group" type="id" />
+    <item name="btnDownload" type="id" />
+    <item name="videoView" type="id" />
+    <item name="surfaceViewRenderer" type="id" />
+    <item name="fabMute" type="id" />
+    <item name="fabSpeaker" type="id" />
+>>>>>>> origin/NEWS
 </resources>

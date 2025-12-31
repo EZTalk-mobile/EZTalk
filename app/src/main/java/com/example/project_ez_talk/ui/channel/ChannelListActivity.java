@@ -3,9 +3,9 @@ package com.example.project_ez_talk.ui.channel;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,16 +17,16 @@ import com.example.project_ez_talk.ui.BaseActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ChannelListActivity extends BaseActivity {
+
+    private static final String TAG = "ChannelListActivity";
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -38,8 +38,7 @@ public class ChannelListActivity extends BaseActivity {
     private List<Channel> myChannels = new ArrayList<>();
     private List<Channel> displayedChannels = new ArrayList<>();
 
-    private DatabaseReference channelsRef;
-    private DatabaseReference userChannelsRef;
+    private FirebaseFirestore db;
     private String currentUserId;
     private boolean showingMyChannels = false;
 
@@ -55,11 +54,9 @@ public class ChannelListActivity extends BaseActivity {
     }
 
     private void initFirebase() {
+        db = FirebaseFirestore.getInstance();
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        channelsRef = FirebaseDatabase.getInstance().getReference("channels");
-        userChannelsRef = FirebaseDatabase.getInstance().getReference("user-channels").child(currentUserId);
     }
-
 
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
@@ -72,12 +69,9 @@ public class ChannelListActivity extends BaseActivity {
         // Setup RecyclerView
         rvChannels.setLayoutManager(new LinearLayoutManager(this));
         channelAdapter = new ChannelAdapter(displayedChannels, new ChannelAdapter.OnChannelClickListener() {
-            /**
-             * @param channel
-             */
             @Override
             public void onChannelClick(Channel channel) {
-
+                openChannelDetail(channel);
             }
 
             @Override
@@ -89,36 +83,31 @@ public class ChannelListActivity extends BaseActivity {
     }
 
     private void setupListeners() {
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> finish());
 
-        fabCreateChannel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ChannelListActivity.this, CreateChannelActivity.class);
-                startActivity(intent);
-            }
+        fabCreateChannel.setOnClickListener(v -> {
+            Intent intent = new Intent(ChannelListActivity.this, CreateChannelActivity.class);
+            startActivity(intent);
         });
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0) {
-                    // Discover tab
+                    // Discover tab - show all public channels
                     showingMyChannels = false;
                     displayedChannels.clear();
                     displayedChannels.addAll(allChannels);
                     channelAdapter.notifyDataSetChanged();
+                    Log.d(TAG, "✅ Showing all channels: " + allChannels.size());
                 } else {
-                    // My Channels tab
+                    // My Channels tab - show user's subscribed channels
                     showingMyChannels = true;
                     displayedChannels.clear();
                     displayedChannels.addAll(myChannels);
                     channelAdapter.notifyDataSetChanged();
+                    Log.d(TAG, "✅ Showing my channels: " + myChannels.size());
                 }
             }
 
@@ -130,68 +119,103 @@ public class ChannelListActivity extends BaseActivity {
         });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void loadChannels() {
-        // Load all public channels
-        channelsRef.orderByChild("isPublic").equalTo(true)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+        // ✅ Load all public channels from Firestore
+        db.collection("channels")
+                .whereEqualTo("isPublic", true)
+                .addSnapshotListener((querySnapshot, error) -> {
+                    if (error != null) {
+                        Log.e(TAG, "❌ Error loading channels: " + error.getMessage());
+                        return;
+                    }
+
+                    if (querySnapshot != null) {
                         allChannels.clear();
-                        for (DataSnapshot channelSnapshot : snapshot.getChildren()) {
-                            Channel channel = channelSnapshot.getValue(Channel.class);
-                            if (channel != null) {
-                                allChannels.add(channel);
+                        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                            try {
+                                Channel channel = document.toObject(Channel.class);
+                                if (channel != null) {
+                                    channel.setId(document.getId());
+                                    allChannels.add(channel);
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error parsing channel: " + e.getMessage());
                             }
                         }
+
+                        Log.d(TAG, "✅ Loaded " + allChannels.size() + " public channels");
+
                         if (!showingMyChannels) {
                             displayedChannels.clear();
                             displayedChannels.addAll(allChannels);
                             channelAdapter.notifyDataSetChanged();
                         }
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                    }
                 });
 
-        // Load user's channels
-        userChannelsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                myChannels.clear();
-                for (DataSnapshot channelSnapshot : snapshot.getChildren()) {
-                    String channelId = channelSnapshot.getKey();
-                    loadChannelDetails(channelId);
-                }
-            }
+        // ✅ Load user's subscribed channels from Firestore
+        db.collection("users")
+                .document(currentUserId)
+                .collection("channels")
+                .addSnapshotListener((querySnapshot, error) -> {
+                    if (error != null) {
+                        Log.e(TAG, "❌ Error loading user channels: " + error.getMessage());
+                        return;
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+                    if (querySnapshot != null) {
+                        myChannels.clear();
+                        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                            String channelId = document.getId();
+                            loadChannelDetails(channelId);
+                        }
+
+                        Log.d(TAG, "✅ Found " + querySnapshot.size() + " subscribed channels");
+                    }
+                });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void loadChannelDetails(String channelId) {
-        channelsRef.child(channelId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Channel channel = snapshot.getValue(Channel.class);
-                if (channel != null) {
-                    myChannels.add(channel);
-                    if (showingMyChannels) {
-                        displayedChannels.clear();
-                        displayedChannels.addAll(myChannels);
-                        channelAdapter.notifyDataSetChanged();
-                    }
-                }
-            }
+        db.collection("channels")
+                .document(channelId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        try {
+                            Channel channel = documentSnapshot.toObject(Channel.class);
+                            if (channel != null) {
+                                channel.setId(documentSnapshot.getId());
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+                                // Check if channel already exists in myChannels
+                                boolean exists = false;
+                                for (Channel existingChannel : myChannels) {
+                                    if (existingChannel.getId().equals(channel.getId())) {
+                                        exists = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!exists) {
+                                    myChannels.add(channel);
+                                    Log.d(TAG, "✅ Added channel to myChannels: " + channel.getName());
+                                }
+
+                                if (showingMyChannels) {
+                                    displayedChannels.clear();
+                                    displayedChannels.addAll(myChannels);
+                                    channelAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e(TAG, "Error parsing channel details: " + e.getMessage());
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "❌ Failed to load channel details: " + e.getMessage());
+                });
     }
 
     private void openChannelDetail(Channel channel) {
@@ -199,5 +223,6 @@ public class ChannelListActivity extends BaseActivity {
         intent.putExtra("channelId", channel.getId());
         intent.putExtra("channelName", channel.getName());
         startActivity(intent);
+        Log.d(TAG, "✅ Opening channel: " + channel.getName());
     }
 }

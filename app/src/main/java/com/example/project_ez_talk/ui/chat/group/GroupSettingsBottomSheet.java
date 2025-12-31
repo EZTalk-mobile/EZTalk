@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,6 +29,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("ALL")
 public class GroupSettingsBottomSheet extends BottomSheetDialogFragment {
 
     private static final String ARG_GROUP_ID = "groupId";
@@ -38,6 +40,7 @@ public class GroupSettingsBottomSheet extends BottomSheetDialogFragment {
     private MaterialCardView cvGroupIcon;
     private EditText etGroupName, etGroupDescription;
     private MaterialButton btnSave, btnCancel;
+    private ImageView btnClose, btnChangeIcon;
     private Uri newImageUri;
 
     private FirebaseAuth auth;
@@ -67,7 +70,12 @@ public class GroupSettingsBottomSheet extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.bottom_sheet_group_settings, container, false);
+        View view = inflater.inflate(R.layout.bottom_sheet_group_settings, container, false);
+        if (view == null) {
+            Toast.makeText(getContext(), "Failed to load layout", Toast.LENGTH_SHORT).show();
+            dismiss();
+        }
+        return view;
     }
 
     @Override
@@ -75,40 +83,80 @@ public class GroupSettingsBottomSheet extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         initViews(view);
-        loadGroupData();
-        setupListeners();
+
+        if (allViewsInitialized()) {
+            loadGroupData();
+            setupListeners();
+        } else {
+            Toast.makeText(getContext(),
+                    "Layout error: Some views not found. Check XML IDs match Java code.",
+                    Toast.LENGTH_LONG).show();
+            dismiss();
+        }
     }
 
     private void initViews(View view) {
-        ivGroupIcon = view.findViewById(R.id.iv_group_icon);
-        cvGroupIcon = view.findViewById(R.id.cv_group_icon);
-        etGroupName = view.findViewById(R.id.et_group_name);
-        etGroupDescription = view.findViewById(R.id.et_group_description);
-        btnSave = view.findViewById(R.id.btn_save);
-        btnCancel = view.findViewById(R.id.btn_cancel);
+        try {
+            ivGroupIcon = view.findViewById(R.id.iv_group_icon);
+            cvGroupIcon = view.findViewById(R.id.cv_group_icon);
+            etGroupName = view.findViewById(R.id.et_group_name);
+            etGroupDescription = view.findViewById(R.id.et_group_description);
+            btnSave = view.findViewById(R.id.btn_save);
+            btnCancel = view.findViewById(R.id.btn_cancel);
+            btnClose = view.findViewById(R.id.btn_close);
+            btnChangeIcon = view.findViewById(R.id.btn_change_icon);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Error initializing views: " + e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean allViewsInitialized() {
+        return ivGroupIcon != null && cvGroupIcon != null &&
+                etGroupName != null && etGroupDescription != null &&
+                btnSave != null && btnCancel != null;
     }
 
     private void loadGroupData() {
-        // Load current group data in real-time
+        if (groupId == null || groupId.isEmpty()) {
+            Toast.makeText(getContext(), "Invalid group ID", Toast.LENGTH_SHORT).show();
+            dismiss();
+            return;
+        }
+
         db.collection("groups")
                 .document(groupId)
                 .addSnapshotListener((doc, error) -> {
                     if (error != null) {
-                        Toast.makeText(getContext(), "Failed to load group data", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Failed to load group data: " + error.getMessage(),
+                                Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     if (doc != null && doc.exists()) {
-                        etGroupName.setText(doc.getString("name"));
-                        etGroupDescription.setText(doc.getString("description"));
+                        try {
+                            String name = doc.getString("name");
+                            String description = doc.getString("description");
+                            String iconUrl = doc.getString("icon");
 
-                        String iconUrl = doc.getString("icon");
-                        if (iconUrl != null && !iconUrl.isEmpty()) {
-                            Glide.with(this)
-                                    .load(iconUrl)
-                                    .centerCrop()
-                                    .placeholder(R.drawable.ic_group)
-                                    .into(ivGroupIcon);
+                            if (name != null && !name.isEmpty() && etGroupName != null) {
+                                etGroupName.setText(name);
+                            }
+
+                            if (description != null && !description.isEmpty() && etGroupDescription != null) {
+                                etGroupDescription.setText(description);
+                            }
+
+                            if (iconUrl != null && !iconUrl.isEmpty() && ivGroupIcon != null) {
+                                Glide.with(GroupSettingsBottomSheet.this)
+                                        .load(iconUrl)
+                                        .centerCrop()
+                                        .placeholder(R.drawable.ic_group)
+                                        .into(ivGroupIcon);
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(getContext(), "Error loading group data: " + e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -116,11 +164,25 @@ public class GroupSettingsBottomSheet extends BottomSheetDialogFragment {
 
     private void setupListeners() {
         // Change group icon
-        cvGroupIcon.setOnClickListener(v -> selectGroupImage());
-        ivGroupIcon.setOnClickListener(v -> selectGroupImage());
+        if (cvGroupIcon != null) {
+            cvGroupIcon.setOnClickListener(v -> selectGroupImage());
+        }
+        if (ivGroupIcon != null) {
+            ivGroupIcon.setOnClickListener(v -> selectGroupImage());
+        }
+        if (btnChangeIcon != null) {
+            btnChangeIcon.setOnClickListener(v -> selectGroupImage());
+        }
+
+        // Close button
+        if (btnClose != null) {
+            btnClose.setOnClickListener(v -> dismiss());
+        }
 
         // Save changes
-        btnSave.setOnClickListener(v -> saveChanges());
+        if (btnSave != null) {
+            btnSave.setOnClickListener(v -> saveChanges());
+        }
 
         // Cancel
         if (btnCancel != null) {
@@ -129,12 +191,22 @@ public class GroupSettingsBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void selectGroupImage() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        try {
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Cannot open image picker: " + e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void saveChanges() {
+        if (etGroupName == null || etGroupDescription == null || btnSave == null) {
+            Toast.makeText(getContext(), "Form not initialized properly", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String name = etGroupName.getText().toString().trim();
         String desc = etGroupDescription.getText().toString().trim();
 
@@ -148,32 +220,41 @@ public class GroupSettingsBottomSheet extends BottomSheetDialogFragment {
         btnSave.setText("Saving...");
 
         if (newImageUri != null) {
-            // Upload new image first
             uploadImageAndSave(name, desc);
         } else {
-            // Just update text fields
             updateGroupInfo(name, desc, null);
         }
     }
 
     private void uploadImageAndSave(String name, String desc) {
-        StorageReference imageRef = storageRef.child(groupId + "_" + System.currentTimeMillis() + ".jpg");
+        try {
+            StorageReference imageRef = storageRef.child(groupId + "_" + System.currentTimeMillis() + ".jpg");
 
-        imageRef.putFile(newImageUri)
-                .addOnSuccessListener(taskSnapshot ->
-                        imageRef.getDownloadUrl().addOnSuccessListener(uri ->
-                                updateGroupInfo(name, desc, uri.toString())
-                        )
-                )
-                .addOnFailureListener(e -> {
-                    btnSave.setEnabled(true);
-                    btnSave.setText("Save");
-                    Toast.makeText(getContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
-                });
+            imageRef.putFile(newImageUri)
+                    .addOnSuccessListener(taskSnapshot ->
+                            imageRef.getDownloadUrl().addOnSuccessListener(uri ->
+                                    updateGroupInfo(name, desc, uri.toString())
+                            )
+                    )
+                    .addOnFailureListener(e -> {
+                        resetSaveButton();
+                        Toast.makeText(getContext(), "Failed to upload image: " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    });
+        } catch (Exception e) {
+            resetSaveButton();
+            Toast.makeText(getContext(), "Error uploading image: " + e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void updateGroupInfo(String name, String desc, String imageUrl) {
-        // Prepare update data
+        if (groupId == null || groupId.isEmpty()) {
+            Toast.makeText(getContext(), "Invalid group ID", Toast.LENGTH_SHORT).show();
+            resetSaveButton();
+            return;
+        }
+
         Map<String, Object> updates = new HashMap<>();
         updates.put("name", name);
         updates.put("description", desc);
@@ -181,26 +262,26 @@ public class GroupSettingsBottomSheet extends BottomSheetDialogFragment {
             updates.put("icon", imageUrl);
         }
 
-        // Update group document - this will trigger real-time update in GroupDetailsActivity
         db.collection("groups")
                 .document(groupId)
                 .update(updates)
                 .addOnSuccessListener(unused -> {
-                    // Also update in all members' chat lists for real-time sync
                     updateMembersChats(name, imageUrl);
-
                     Toast.makeText(getContext(), "Group updated successfully", Toast.LENGTH_SHORT).show();
                     dismiss();
                 })
                 .addOnFailureListener(e -> {
-                    btnSave.setEnabled(true);
-                    btnSave.setText("Save");
-                    Toast.makeText(getContext(), "Failed to update group", Toast.LENGTH_SHORT).show();
+                    resetSaveButton();
+                    Toast.makeText(getContext(), "Failed to update group: " + e.getMessage(),
+                            Toast.LENGTH_SHORT).show();
                 });
     }
 
     private void updateMembersChats(String name, String imageUrl) {
-        // Get all members
+        if (groupId == null || groupId.isEmpty()) {
+            return;
+        }
+
         db.collection("groups")
                 .document(groupId)
                 .get()
@@ -208,7 +289,6 @@ public class GroupSettingsBottomSheet extends BottomSheetDialogFragment {
                     if (doc.exists()) {
                         Map<String, Boolean> members = (Map<String, Boolean>) doc.get("members");
                         if (members != null) {
-                            // Update each member's chat list with new group info
                             for (String userId : members.keySet()) {
                                 Map<String, Object> chatUpdates = new HashMap<>();
                                 chatUpdates.put("name", name);
@@ -220,11 +300,25 @@ public class GroupSettingsBottomSheet extends BottomSheetDialogFragment {
                                         .document(userId)
                                         .collection("chats")
                                         .document(groupId)
-                                        .update(chatUpdates);
+                                        .update(chatUpdates)
+                                        .addOnFailureListener(e -> {
+                                            // Log but don't crash
+                                            android.util.Log.e("GroupSettings", "Failed to update member chat: " + e.getMessage());
+                                        });
                             }
                         }
                     }
+                })
+                .addOnFailureListener(e -> {
+                    android.util.Log.e("GroupSettings", "Failed to get group members: " + e.getMessage());
                 });
+    }
+
+    private void resetSaveButton() {
+        if (btnSave != null) {
+            btnSave.setEnabled(true);
+            btnSave.setText("Save");
+        }
     }
 
     @Override
@@ -233,13 +327,19 @@ public class GroupSettingsBottomSheet extends BottomSheetDialogFragment {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK
                 && data != null && data.getData() != null) {
-            newImageUri = data.getData();
+            try {
+                newImageUri = data.getData();
 
-            // Display selected image immediately
-            Glide.with(this)
-                    .load(newImageUri)
-                    .centerCrop()
-                    .into(ivGroupIcon);
+                if (ivGroupIcon != null) {
+                    Glide.with(this)
+                            .load(newImageUri)
+                            .centerCrop()
+                            .into(ivGroupIcon);
+                }
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "Error loading image: " + e.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

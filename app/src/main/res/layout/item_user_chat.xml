@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="72dp"
     android:orientation="horizontal"
@@ -21,7 +22,8 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_profile"
             app:shapeAppearanceOverlay="@style/CircleImageStyle"
-            android:contentDescription="@string/profile" />
+            android:contentDescription="@string/profile"
+            tools:ignore="MissingClass" />
 
         <!-- Online status dot -->
         <View

@@ -1,5 +1,9 @@
 package com.example.project_ez_talk.model;
 
+import android.annotation.SuppressLint;
+
+import com.google.firebase.firestore.Exclude;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -7,204 +11,245 @@ import java.util.Locale;
 public class Message {
 
     public enum MessageType {
-        TEXT("text"),
-        IMAGE("image"),
-        VIDEO("video"),
-        AUDIO("audio"),
-        FILE("file"),
-        LOCATION("location");
-
-        private final String value;
-
-        MessageType(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        // Convert string from Firestore to enum
-        public static MessageType fromString(String value) {
-            if (value == null || value.isEmpty()) {
-                return TEXT; // Default
-            }
-            for (MessageType type : MessageType.values()) {
-                if (type.value.equalsIgnoreCase(value)) {
-                    return type;
-                }
-            }
-            return TEXT; // Fallback
-        }
+        TEXT, IMAGE, FILE, AUDIO, VIDEO, LOCATION, CONTACT
     }
 
     private String messageId;
     private String senderId;
-    private String receiverId;
-    private String senderName;         // Added for received messages
-    private String senderAvatarUrl;    // Added for received messages
+    private String groupId;
     private String content;
-    private String text;               // For compatibility with Firestore
-    private String type;               // Store as String for Firestore
-    private long timestamp;
+    private String text; // Alternative field for content
     private String fileUrl;
-    private String thumbnailUrl;
-    private String status;             // sent, delivered, read
-    private String messageType;        // Alternative field name from Firestore
+    private String messageType = "TEXT";
+    private long timestamp;
+    private String senderName;
+    private String senderAvatarUrl;
+    private boolean isDeleted = false;
 
-    public Message() {}
-
-    public Message(String senderId, String receiverId, String content, MessageType messageType) {
-        this.senderId = senderId;
-        this.receiverId = receiverId;
-        this.content = content;
-        this.text = content;           // Also set text field
-        this.type = messageType.getValue();  // Store as string
-        this.timestamp = System.currentTimeMillis();
-        this.status = "sent";
+    // Required empty constructor for Firestore
+    public Message() {
     }
 
-    // Getters & Setters
+    public Message(String senderId, String groupId, String content, MessageType type) {
+        this.senderId = senderId;
+        this.groupId = groupId;
+        this.content = content;
+        this.text = content;
+        this.messageType = type.name();
+        this.timestamp = System.currentTimeMillis();
+    }
+
+    // ==================== GETTERS ====================
+
     public String getMessageId() {
         return messageId;
-    }
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
     }
 
     public String getSenderId() {
         return senderId;
     }
-    public void setSenderId(String senderId) {
-        this.senderId = senderId;
-    }
 
-    public String getReceiverId() {
-        return receiverId;
-    }
-    public void setReceiverId(String receiverId) {
-        this.receiverId = receiverId;
-    }
-
-    public String getSenderName() {
-        return senderName;
-    }
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
-    }
-
-    public String getSenderAvatarUrl() {
-        return senderAvatarUrl;
-    }
-    public void setSenderAvatarUrl(String senderAvatarUrl) {
-        this.senderAvatarUrl = senderAvatarUrl;
+    public String getGroupId() {
+        return groupId;
     }
 
     public String getContent() {
         return content != null ? content : text;
     }
-    public void setContent(String content) {
-        this.content = content;
-        this.text = content;  // Keep both in sync
-    }
 
     public String getText() {
         return text != null ? text : content;
-    }
-    public void setText(String text) {
-        this.text = text;
-        this.content = text;  // Keep both in sync
-    }
-
-    // Type handling - store as String, convert to Enum when needed
-    public String getType() {
-        if (type != null) return type;
-        if (messageType != null) return messageType;
-        return MessageType.TEXT.getValue();
-    }
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getMessageType() {
-        return getType();
-    }
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-        this.type = messageType;
-    }
-
-    // Get as Enum
-    public MessageType getTypeEnum() {
-        String typeStr = getType();
-        return MessageType.fromString(typeStr);
-    }
-
-    public void setTypeEnum(MessageType messageType) {
-        this.type = messageType.getValue();
-        this.messageType = messageType.getValue();
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
     }
 
     public String getFileUrl() {
         return fileUrl;
     }
+
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public String getSenderName() {
+        return senderName != null ? senderName : "Unknown";
+    }
+
+    public String getSenderAvatarUrl() {
+        return senderAvatarUrl;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    // ==================== SETTERS ====================
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+        this.text = content;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+        this.content = text;
+    }
+
     public void setFileUrl(String fileUrl) {
         this.fileUrl = fileUrl;
     }
 
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
     }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    public void setSenderAvatarUrl(String senderAvatarUrl) {
+        this.senderAvatarUrl = senderAvatarUrl;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    // ==================== ✅ ADD THESE TO SUPPRESS WARNINGS ====================
+
+    // Firestore might have these fields - add dummy setters to suppress warnings
+    public void setTextMessage(String textMessage) {
+        // Ignore - this is just to suppress Firestore warnings
+    }
+
+    public void setVideoMessage(String videoMessage) {
+        // Ignore - this is just to suppress Firestore warnings
+    }
+
+    public void setAudioMessage(String audioMessage) {
+        // Ignore - this is just to suppress Firestore warnings
+    }
+
+    public void setImageMessage(String imageMessage) {
+        // Ignore - this is just to suppress Firestore warnings
+    }
+
+    public void setLocationMessage(String locationMessage) {
+        // Ignore - this is just to suppress Firestore warnings
+    }
+
+    public void setFileMessage(String fileMessage) {
+        // Ignore - this is just to suppress Firestore warnings
+    }
+
+    public void setType(String type) {
+        // Ignore - we use messageType instead
+    }
+
+    public void setReceiverId(String receiverId) {
+        // Ignore - we use groupId instead
+    }
+
     public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
+        // Ignore - optional field
     }
 
-    public String getStatus() {
-        return status != null ? status : "sent";
-    }
     public void setStatus(String status) {
-        this.status = status;
+        // Ignore - optional field
     }
 
-    public String getFormattedTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.getDefault());
-        return sdf.format(new Date(timestamp));
-    }
+    // ==================== UTILITY METHODS ====================
 
+    /**
+     * Check if message was sent by the current user
+     */
     public boolean isSentByMe(String currentUserId) {
-        return senderId != null && senderId.equals(currentUserId);
+        return currentUserId != null && currentUserId.equals(this.senderId);
     }
 
-    // Helper methods for message type checking
-    public boolean isTextMessage() {
-        return getTypeEnum() == MessageType.TEXT;
+    /**
+     * Get formatted time string
+     */
+    @SuppressLint("SimpleDateFormat")
+    @Exclude
+    public String getFormattedTime() {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            Date date = new Date(timestamp);
+            return dateFormat.format(date);
+        } catch (Exception e) {
+            return "";
+        }
     }
 
-    public boolean isImageMessage() {
-        return getTypeEnum() == MessageType.IMAGE;
+    /**
+     * Get formatted date string
+     */
+    @SuppressLint("SimpleDateFormat")
+    @Exclude
+    public String getFormattedDate() {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            Date date = new Date(timestamp);
+            return dateFormat.format(date);
+        } catch (Exception e) {
+            return "";
+        }
     }
 
-    public boolean isVideoMessage() {
-        return getTypeEnum() == MessageType.VIDEO;
+    /**
+     * Get the message type as enum
+     */
+    @Exclude
+    public MessageType getTypeEnum() {
+        try {
+            if (messageType == null) {
+                return MessageType.TEXT;
+            }
+            return MessageType.valueOf(messageType);
+        } catch (Exception e) {
+            return MessageType.TEXT;
+        }
     }
 
-    public boolean isAudioMessage() {
-        return getTypeEnum() == MessageType.AUDIO;
-    }
-
-    public boolean isFileMessage() {
-        return getTypeEnum() == MessageType.FILE;
-    }
-
-    public boolean isLocationMessage() {
-        return getTypeEnum() == MessageType.LOCATION;
+    /**
+     * Get message type display name
+     */
+    @Exclude
+    public String getTypeDisplayName() {
+        switch (getTypeEnum()) {
+            case IMAGE:
+                return "Image";
+            case AUDIO:
+                return "Audio";
+            case FILE:
+                return "File";
+            case LOCATION:
+                return "Location";
+            case VIDEO:
+                return "Video";
+            case TEXT:
+            default:
+                return "Text";
+        }
     }
 
     @Override
@@ -212,9 +257,11 @@ public class Message {
         return "Message{" +
                 "messageId='" + messageId + '\'' +
                 ", senderId='" + senderId + '\'' +
+                ", groupId='" + groupId + '\'' +
                 ", content='" + content + '\'' +
-                ", type='" + type + '\'' +
+                ", messageType='" + messageType + '\'' +
                 ", timestamp=" + timestamp +
+                ", senderName='" + senderName + '\'' +
                 '}';
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,8 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.project_ez_talk.R;
 import com.example.project_ez_talk.adapter.SearchResultAdapter;
 import com.example.project_ez_talk.model.SearchResult;
+import com.example.project_ez_talk.ui.channel.ChannelDetailActivity;
 import com.example.project_ez_talk.ui.chat.detail.ChatDetailActivity;
+import com.example.project_ez_talk.ui.chat.group.GroupChatActivity;
+import com.example.project_ez_talk.ui.dialog.UserProfileDialog;  // ✅ ADDED
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,8 +31,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SearchActivity extends BaseActivity {
+
+    private static final String TAG = "SearchActivity";
 
     private MaterialToolbar toolbar;
     private EditText etSearch;
@@ -41,6 +49,9 @@ public class SearchActivity extends BaseActivity {
     private FirebaseFirestore db;
     private String currentUserId;
 
+    // Filter state
+    private String currentFilter = "all"; // "all", "users", "groups", "channels"
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +62,7 @@ public class SearchActivity extends BaseActivity {
 
         initViews();
         setupRecyclerView();
+        setupFilters();
         setupListeners();
 
         etSearch.requestFocus();
@@ -75,8 +87,49 @@ public class SearchActivity extends BaseActivity {
         rvSearchResults.setLayoutManager(new LinearLayoutManager(this));
         rvSearchResults.setAdapter(adapter);
 
-        // Click user → Show options dialog
-        adapter.setOnItemClickListener(result -> showUserOptionsDialog(result));
+        // ✅ UPDATED: Show UserProfileDialog for users
+        adapter.setOnItemClickListener(result -> {
+            switch (result.getType()) {
+                case "user":
+                    showUserProfileDialog(result);  // ✅ CHANGED
+                    break;
+                case "group":
+                    openGroup(result);
+                    break;
+                case "channel":
+                    openChannel(result);
+                    break;
+            }
+        });
+    }
+
+    private void setupFilters() {
+        chipGroupFilter.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            if (checkedIds.isEmpty()) {
+                currentFilter = "all";
+            } else {
+                int checkedId = checkedIds.get(0);
+                Chip selectedChip = findViewById(checkedId);
+                if (selectedChip != null) {
+                    String chipText = selectedChip.getText().toString().toLowerCase();
+                    if (chipText.contains("user")) {
+                        currentFilter = "users";
+                    } else if (chipText.contains("group")) {
+                        currentFilter = "groups";
+                    } else if (chipText.contains("channel")) {
+                        currentFilter = "channels";
+                    } else {
+                        currentFilter = "all";
+                    }
+                }
+            }
+
+            // Re-run search with new filter
+            String query = etSearch.getText().toString().trim();
+            if (!query.isEmpty()) {
+                performSearch(query);
+            }
+        });
     }
 
     private void setupListeners() {
@@ -113,19 +166,25 @@ public class SearchActivity extends BaseActivity {
 
     private void performSearch(String query) {
         String lowerQuery = query.toLowerCase();
+        searchResults.clear();
 
-        if (lowerQuery.contains("@")) {
-            searchByEmail(lowerQuery);
-        } else {
-            searchByName(lowerQuery);
+        // Search based on filter
+        if ("all".equals(currentFilter) || "users".equals(currentFilter)) {
+            searchUsers(lowerQuery);
+        }
+        if ("all".equals(currentFilter) || "groups".equals(currentFilter)) {
+            searchGroups(lowerQuery);
+        }
+        if ("all".equals(currentFilter) || "channels".equals(currentFilter)) {
+            searchChannels(lowerQuery);
         }
     }
 
-    private void searchByName(String nameQuery) {
+    // ==================== SEARCH USERS ====================
+    private void searchUsers(String query) {
         db.collection("users")
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
-                    searchResults.clear();
                     for (var doc : querySnapshot.getDocuments()) {
                         String userId = doc.getId();
 
@@ -135,62 +194,134 @@ public class SearchActivity extends BaseActivity {
                         String name = doc.getString("name");
                         String email = doc.getString("email");
                         String profilePic = doc.getString("profilePicture");
+                        String bio = doc.getString("bio");  // ✅ ADDED
+                        Boolean isOnline = doc.getBoolean("isOnline");  // ✅ ADDED
 
-                        if (name != null && name.toLowerCase().contains(nameQuery)) {
-                            SearchResult result = new SearchResult();
-                            result.setUserId(userId);
-                            result.setTitle(name);
-                            result.setSubtitle(email != null ? email : "");
-                            result.setAvatarUrl(profilePic);
-                            result.setType("contact");
-                            result.setTime("");
-                            searchResults.add(result);
-                        }
-                    }
-                    updateResultsUI();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Search failed", Toast.LENGTH_SHORT).show();
-                    showEmptyState();
-                });
-    }
+                        // Search by name OR email
+                        boolean matchesName = name != null && name.toLowerCase().contains(query);
+                        boolean matchesEmail = email != null && email.toLowerCase().contains(query);
 
-    private void searchByEmail(String emailQuery) {
-        db.collection("users")
-                .get()
-                .addOnSuccessListener(querySnapshot -> {
-                    searchResults.clear();
-                    for (var doc : querySnapshot.getDocuments()) {
-                        String userId = doc.getId();
-
-                        // Don't show current user
-                        if (userId.equals(currentUserId)) continue;
-
-                        String email = doc.getString("email");
-                        String name = doc.getString("name");
-                        String profilePic = doc.getString("profilePicture");
-
-                        if (email != null && email.toLowerCase().equals(emailQuery)) {
+                        if (matchesName || matchesEmail) {
                             SearchResult result = new SearchResult();
                             result.setUserId(userId);
                             result.setTitle(name != null ? name : "Unknown");
-                            result.setSubtitle(email);
+                            result.setSubtitle(email != null ? email : "");
                             result.setAvatarUrl(profilePic);
-                            result.setType("contact");
+                            result.setType("user");
+                            result.setTime("");
+                            result.setBio(bio != null ? bio : "Hey there! I'm using EZ Talk");  // ✅ ADDED
+                            result.setOnline(isOnline != null && isOnline);  // ✅ ADDED
+                            searchResults.add(result);
+                        }
+                    }
+                    updateResultsUI();
+                    Log.d(TAG, "✅ Found " + searchResults.size() + " users");
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "❌ User search failed: " + e.getMessage());
+                });
+    }
+
+    // ==================== SEARCH GROUPS ====================
+    private void searchGroups(String query) {
+        db.collection("groups")
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    for (var doc : querySnapshot.getDocuments()) {
+                        String groupId = doc.getId();
+                        String name = doc.getString("name");
+                        String icon = doc.getString("icon");
+                        String description = doc.getString("description");
+
+                        List<String> memberIds = (List<String>) doc.get("memberIds");
+                        int memberCount = memberIds != null ? memberIds.size() : 0;
+
+                        // Search by group name or description
+                        boolean matchesName = name != null && name.toLowerCase().contains(query);
+                        boolean matchesDesc = description != null && description.toLowerCase().contains(query);
+
+                        if (matchesName || matchesDesc) {
+                            SearchResult result = new SearchResult();
+                            result.setUserId(groupId);
+                            result.setTitle(name != null ? name : "Group");
+                            result.setSubtitle(memberCount + " members");
+                            result.setAvatarUrl(icon);
+                            result.setType("group");
                             result.setTime("");
                             searchResults.add(result);
                         }
                     }
                     updateResultsUI();
+                    Log.d(TAG, "✅ Found " + searchResults.size() + " results (with groups)");
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Search failed", Toast.LENGTH_SHORT).show();
-                    showEmptyState();
+                    Log.e(TAG, "❌ Group search failed: " + e.getMessage());
                 });
     }
 
+    // ==================== SEARCH CHANNELS ====================
+    private void searchChannels(String query) {
+        db.collection("channels")
+                .whereEqualTo("isPublic", true)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    for (var doc : querySnapshot.getDocuments()) {
+                        String channelId = doc.getId();
+                        String name = doc.getString("name");
+                        String description = doc.getString("description");
+                        String avatarUrl = doc.getString("avatarUrl");
+                        Long subscriberCount = doc.getLong("subscriberCount");
+
+                        // Search by channel name or description
+                        boolean matchesName = name != null && name.toLowerCase().contains(query);
+                        boolean matchesDesc = description != null && description.toLowerCase().contains(query);
+
+                        if (matchesName || matchesDesc) {
+                            SearchResult result = new SearchResult();
+                            result.setUserId(channelId);
+                            result.setTitle(name != null ? name : "Channel");
+                            result.setSubtitle((subscriberCount != null ? subscriberCount : 0) + " subscribers");
+                            result.setAvatarUrl(avatarUrl);
+                            result.setType("channel");
+                            result.setTime("");
+                            searchResults.add(result);
+                        }
+                    }
+                    updateResultsUI();
+                    Log.d(TAG, "✅ Found " + searchResults.size() + " total results");
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "❌ Channel search failed: " + e.getMessage());
+                });
+    }
+
+    // ==================== RESULT HANDLERS ====================
+
     /**
-     * Show options when user is clicked
+     * ✅ NEW: Show beautiful user profile dialog
+     */
+    private void showUserProfileDialog(SearchResult user) {
+        // Extract username from email
+        String username = user.getSubtitle();
+        if (username != null && username.contains("@")) {
+            username = username.split("@")[0];
+        }
+
+        UserProfileDialog dialog = UserProfileDialog.newInstance(
+                user.getUserId(),
+                user.getTitle(),
+                username,
+                user.getAvatarUrl(),
+                user.getBio(),
+                user.isOnline()
+        );
+
+        dialog.show(getSupportFragmentManager(), "UserProfileDialog");
+        Log.d(TAG, "✅ Showing profile dialog for: " + user.getTitle());
+    }
+
+    /**
+     * KEPT: Old options dialog (not used anymore but kept for reference)
      */
     private void showUserOptionsDialog(SearchResult user) {
         String[] options = {"Send Message", "View Profile", "Add Friend"};
@@ -213,21 +344,30 @@ public class SearchActivity extends BaseActivity {
                 .show();
     }
 
-    /**
-     * Open ChatDetailActivity for private messaging
-     */
     private void openChat(SearchResult user) {
         Intent intent = new Intent(this, ChatDetailActivity.class);
         intent.putExtra("user_id", user.getUserId());
         intent.putExtra("user_name", user.getTitle());
         intent.putExtra("user_avatar", user.getAvatarUrl());
         startActivity(intent);
-        finish(); // Close search activity
     }
 
-    /**
-     * Add user as friend in Firestore
-     */
+    private void openGroup(SearchResult group) {
+        Intent intent = new Intent(this, GroupChatActivity.class);
+        intent.putExtra("groupId", group.getUserId());
+        intent.putExtra("groupName", group.getTitle());
+        startActivity(intent);
+        Log.d(TAG, "✅ Opening group: " + group.getTitle());
+    }
+
+    private void openChannel(SearchResult channel) {
+        Intent intent = new Intent(this, ChannelDetailActivity.class);
+        intent.putExtra("channelId", channel.getUserId());
+        intent.putExtra("channelName", channel.getTitle());
+        startActivity(intent);
+        Log.d(TAG, "✅ Opening channel: " + channel.getTitle());
+    }
+
     private void addFriend(SearchResult user) {
         // Add to current user's friends collection
         db.collection("users")
@@ -289,13 +429,5 @@ public class SearchActivity extends BaseActivity {
     private void hideEmptyState() {
         layoutEmpty.setVisibility(View.GONE);
         rvSearchResults.setVisibility(View.VISIBLE);
-    }
-
-    public ChipGroup getChipGroupFilter() {
-        return chipGroupFilter;
-    }
-
-    public void setChipGroupFilter(ChipGroup chipGroupFilter) {
-        this.chipGroupFilter = chipGroupFilter;
     }
 }

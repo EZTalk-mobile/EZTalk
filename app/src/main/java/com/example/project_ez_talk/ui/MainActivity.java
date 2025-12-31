@@ -12,166 +12,226 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.project_ez_talk.R;
+import com.example.project_ez_talk.model.CallData;
 import com.example.project_ez_talk.ui.auth.welcome.WelcomeActivity;
-import com.example.project_ez_talk.ui.call.incoming.IncomingCallActivity;
+import com.example.project_ez_talk.ui.call.incoming.IntegratedIncomingCallActivity;
 import com.example.project_ez_talk.ui.profile.AddFriendDialog;
 import com.example.project_ez_talk.utils.Preferences;
-import com.example.project_ez_talk.webTRC.MainRepository;
+import com.example.project_ez_talk.webrtc.FirebaseSignaling;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import android.content.Context;
+import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * ✅ COMPLETE MainActivity with FIXED incoming call listener
+ * Uses singleton FirebaseSignaling to ensure only ONE listener is active
+ */
 public class MainActivity extends BaseActivity {
+
+    private static final String TAG = "MainActivity";
 
     private NavController navController;
     private BottomNavigationView bottomNav;
     private FloatingActionButton fabCenter;
     private MaterialToolbar toolbar;
     private ImageView ivSearch, ivNotification;
-    private static final String DATABASE_URL =
-            "https://project-ez-talk-dccea-default-rtdb.europe-west1.firebasedatabase.app";
-   private DatabaseReference rootRef;
-   private MainRepository mainRepository;
+
+    // ✅ CRITICAL: Firebase Signaling for incoming calls (SINGLETON)
+    private FirebaseSignaling firebaseSignaling;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        Log.d("MainActivity", "======================================");
-        Log.d("MainActivity", "=== MainActivity onCreate() START ===");
-        Log.d("MainActivity", "======================================");
 
-        // Initialize Firebase Database with correct region URL
-        try {
-            FirebaseDatabase database = FirebaseDatabase.getInstance(DATABASE_URL);
-            Log.d("MainActivity", "✅ Firebase Database initialized: " + DATABASE_URL);
-        } catch (Exception e) {
-            Log.e("MainActivity", "❌ Error initializing Firebase Database: " + e.getMessage());
-        }
-        
+        Log.d(TAG, "════════════════════════════════════════");
+        Log.d(TAG, "   📱 MAIN ACTIVITY CREATED");
+        Log.d(TAG, "════════════════════════════════════════");
 
         // Check if user is logged in
-        Log.d("MainActivity", "Checking user authentication...");
         if (FirebaseAuth.getInstance().getCurrentUser() == null || !Preferences.isLoggedIn(this)) {
-            Log.d("MainActivity", "❌ User not logged in, redirecting to WelcomeActivity");
+            Log.d(TAG, "❌ User not logged in - redirecting to WelcomeActivity");
             startActivity(new Intent(this, WelcomeActivity.class));
             finish();
             return;
         }
-        
-        Log.d("MainActivity", "✅ User is authenticated");
 
         setContentView(R.layout.activity_main);
 
-        Log.d("MainActivity", "Initializing views...");
         initViews();
-        Log.d("MainActivity", "Setting up navigation...");
         setupNavigation();
-        Log.d("MainActivity", "Setting up toolbar...");
         setupToolbar();
-        Log.d("MainActivity", "Setting up FAB...");
         setupFab();
-        Log.d("MainActivity", "Calling setupIncomingCallListener...");
-        setupIncomingCallListener();
-        Log.d("MainActivity", "✅ onCreate() COMPLETE");
+
+        // ✅ CRITICAL: Initialize Firebase Signaling for incoming calls
+        initializeIncomingCallListener();
     }
 
-    private void setupIncomingCallListener() {
-        Log.d("MainActivity", "=== setupIncomingCallListener() ===");
-        
-        // Get MainRepository instance
-        mainRepository = MainRepository.getInstance();
-        
-        // Login to Firebase with current user ID
-        String currentUserId = FirebaseAuth.getInstance().getCurrentUser() != null 
-            ? FirebaseAuth.getInstance().getCurrentUser().getUid() 
-            : null;
-        
-        Log.d("MainActivity", "Current User ID: " + currentUserId);
-            
-        if (currentUserId != null) {
-            Log.d("MainActivity", "Attempting to login to WebRTC signaling...");
-            mainRepository.login(currentUserId, this, () -> {
-                Log.d("MainActivity", "✅ Logged in to WebRTC signaling successfully");
-                Log.d("MainActivity", "User should now be visible in database: " + currentUserId);
-                
-                // Subscribe to incoming call events
-                Log.d("MainActivity", "Subscribing to incoming call events...");
-                mainRepository.subscribeForLatestEvent(model -> {
-                    Log.d("MainActivity", "📩 Event received - Type: " + model.getType() + ", Sender: " + model.getSender());
-                    if (model.getType() == com.example.project_ez_talk.webTRC.DataModelType.StartCall) {
-                        // Show incoming call screen
-                        Log.d("MainActivity", "🔔 Incoming call detected from: " + model.getSender());
-                        
-                        // Fetch caller info from Firestore
-                        com.google.firebase.firestore.FirebaseFirestore.getInstance()
-                                .collection("users")
-                                .document(model.getSender())
-                                .get()
-                                .addOnSuccessListener(doc -> {
-                                    String callerName = doc.exists() ? doc.getString("name") : model.getSender();
-                                    String callerAvatar = doc.exists() ? doc.getString("avatarUrl") : "";
-                                    
-                                    runOnUiThread(() -> {
-                                        Intent intent = new Intent(MainActivity.this, IncomingCallActivity.class);
-                                        intent.putExtra(IncomingCallActivity.EXTRA_CALLER_ID, model.getSender());
-                                        intent.putExtra(IncomingCallActivity.EXTRA_CALLER_NAME, callerName);
-                                        intent.putExtra(IncomingCallActivity.EXTRA_CALLER_AVATAR, callerAvatar);
-                                        intent.putExtra(IncomingCallActivity.EXTRA_CALL_TYPE, "video");
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        startActivity(intent);
-                                        Log.d("MainActivity", "✅ IncomingCallActivity launched");
-                                    });
-                                })
-                                .addOnFailureListener(e -> {
-                                    Log.e("MainActivity", "Failed to fetch caller info: " + e.getMessage());
-                                    runOnUiThread(() -> {
-                                        Intent intent = new Intent(MainActivity.this, IncomingCallActivity.class);
-                                        intent.putExtra(IncomingCallActivity.EXTRA_CALLER_ID, model.getSender());
-                                        intent.putExtra(IncomingCallActivity.EXTRA_CALLER_NAME, model.getSender());
-                                        intent.putExtra(IncomingCallActivity.EXTRA_CALL_TYPE, "video");
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        startActivity(intent);
-                                    });
-                                });
-                    }
-                });
-                Log.d("MainActivity", "✅ Subscribed to incoming call events");
-            });
-        } else {
-            Log.e("MainActivity", "❌ ERROR: Current user ID is null - cannot login to WebRTC");
+    /**
+     * ✅ Initialize incoming call listener
+     * This runs ONCE when MainActivity is created
+     * It listens for incoming calls and shows the notification screen
+     */
+    private void initializeIncomingCallListener() {
+        Log.d(TAG, "🔔 Initializing incoming call listener...");
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            Log.e(TAG, "❌ User not authenticated");
+            return;
         }
+
+        String currentUserId = currentUser.getUid();
+        String currentUserName = currentUser.getDisplayName() != null ?
+                currentUser.getDisplayName() :
+                (currentUser.getEmail() != null ? currentUser.getEmail() : "User");
+
+        Log.d(TAG, "👤 Current User: " + currentUserName + " (" + currentUserId + ")");
+
+        // ✅ FIXED: Use SINGLETON instance instead of creating new
+        firebaseSignaling = FirebaseSignaling.getInstance();
+
+        // Initialize Firebase Signaling
+        firebaseSignaling.init(currentUserId, new FirebaseSignaling.OnSuccessListener() {
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "✅ Firebase Signaling initialized successfully");
+
+                // Start listening for incoming calls
+                listenForIncomingCalls(currentUserId, currentUserName);
+            }
+
+            @Override
+            public void onError() {
+                Log.e(TAG, "❌ Failed to initialize Firebase Signaling");
+                Toast.makeText(MainActivity.this,
+                        "Failed to initialize call listener",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
+    /**
+     * ✅ Listen for incoming calls
+     * When someone calls this user, show the incoming call screen
+     * FIXED: Only show incoming screen for OFFER signals
+     */
+    private void listenForIncomingCalls(String currentUserId, String currentUserName) {
+        Log.d(TAG, "👂 Setting up incoming call listener...");
 
+        firebaseSignaling.observeIncomingCalls(new FirebaseSignaling.OnCallDataListener() {
+            @Override
+            public void onCallDataReceived(CallData callData) {
+                Log.d(TAG, "════════════════════════════════════════");
+                Log.d(TAG, "   📨 SIGNAL RECEIVED");
+                Log.d(TAG, "════════════════════════════════════════");
+                Log.d(TAG, "Type: " + callData.getType());
+                Log.d(TAG, "From: " + callData.getSenderId());
 
+                // ✅ FIXED: Only process OFFER signals (actual incoming calls)
+                // Ignore ACCEPT, REJECT, END - those are handled in VoiceCallActivity
+                if (callData.getType() != CallData.Type.OFFER) {
+                    Log.d(TAG, "⚠️ Ignoring " + callData.getType() + " signal");
+                    return;
+                }
 
+                String callerId = callData.getSenderId();
+                String callerName = callData.getData() != null ? callData.getData() : "Unknown";
+                String callType = callData.getCallType() != null ? callData.getCallType() : "voice";
 
+                Log.d(TAG, "📱 Incoming from: " + callerName + " (" + callerId + ")");
+                Log.d(TAG, "🎤 Type: " + callType);
+
+                // Show incoming call screen
+                showIncomingCallScreen(callerId, callerName, callType, currentUserId);
+            }
+
+            /**
+             * @param callData
+             */
+            @Override
+            public void onOffer(CallData callData) {
+
+            }
+
+            /**
+             * @param callData
+             */
+            @Override
+            public void onAnswer(CallData callData) {
+
+            }
+
+            /**
+             * @param callData
+             */
+            @Override
+            public void onIceCandidate(CallData callData) {
+
+            }
+
+            /**
+             * @param callData
+             */
+            @Override
+            public void onAccept(CallData callData) {
+
+            }
+
+            /**
+             * @param callData
+             */
+            @Override
+            public void onReject(CallData callData) {
+
+            }
+
+            @Override
+            public void onError() {
+                Log.e(TAG, "❌ Error listening for incoming calls");
+            }
+        });
+
+        Log.d(TAG, "✅ Incoming call listener started");
+    }
+
+    /**
+     * ✅ Show incoming call screen
+     */
+    private void showIncomingCallScreen(String callerId, String callerName,
+                                        String callType, String currentUserId) {
+        Log.d(TAG, "🔔 Opening incoming call screen for: " + callerName);
+
+        Intent intent = new Intent(this, IntegratedIncomingCallActivity.class);
+        intent.putExtra(IntegratedIncomingCallActivity.EXTRA_CALLER_ID, callerId);
+        intent.putExtra(IntegratedIncomingCallActivity.EXTRA_CALLER_NAME, callerName);
+        intent.putExtra(IntegratedIncomingCallActivity.EXTRA_CALLER_AVATAR, "");
+        intent.putExtra(IntegratedIncomingCallActivity.EXTRA_CALL_TYPE, callType);
+        intent.putExtra(IntegratedIncomingCallActivity.EXTRA_CURRENT_USER_ID, currentUserId);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        startActivity(intent);
+
+        Log.d(TAG, "✅ Incoming call screen launched");
+    }
+
+    /**
+     * Initialize UI views
+     */
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
         bottomNav = findViewById(R.id.bottomNavigation);
         fabCenter = findViewById(R.id.fabCenter);
         ivSearch = findViewById(R.id.ivSearch);
         ivNotification = findViewById(R.id.ivNotification);
-        FirebaseDatabase.getInstance().getReference("testValue")
-                .setValue("hello world")
-                .addOnSuccessListener(v -> {
-                    Toast.makeText(this, "Write OK", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Write FAILED: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                });
-        Log.d("CHANNEL_DEBUG", "Send button clicked");
+
+        Log.d(TAG, "✅ Views initialized");
     }
 
+    /**
+     * Setup navigation between fragments
+     */
     private void setupNavigation() {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment);
@@ -207,9 +267,14 @@ public class MainActivity extends BaseActivity {
                 bottomNav.setVisibility(showBottomNav ? View.VISIBLE : View.GONE);
                 fabCenter.setVisibility(showBottomNav ? View.VISIBLE : View.GONE);
             });
+
+            Log.d(TAG, "✅ Navigation setup complete");
         }
     }
 
+    /**
+     * Setup toolbar buttons and actions
+     */
     private void setupToolbar() {
         setSupportActionBar(toolbar);
 
@@ -217,26 +282,102 @@ public class MainActivity extends BaseActivity {
         ivSearch.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, SearchActivity.class);
             startActivity(intent);
+            Log.d(TAG, "🔍 Search button clicked");
         });
 
         // Notification button click
         ivNotification.setOnClickListener(v -> {
             Toast.makeText(this, "Notifications clicked", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "🔔 Notification button clicked");
             // TODO: Show notifications or navigate to NotificationActivity
         });
+
+        Log.d(TAG, "✅ Toolbar setup complete");
     }
 
+    /**
+     * Setup FAB (Floating Action Button)
+     */
     private void setupFab() {
-        fabCenter.setOnClickListener(v -> openAddFriendDialog());
+        fabCenter.setOnClickListener(v -> {
+            Log.d(TAG, "➕ FAB clicked - opening add friend dialog");
+            openAddFriendDialog();
+        });
+
+        Log.d(TAG, "✅ FAB setup complete");
     }
 
+    /**
+     * Open add friend dialog
+     */
     private void openAddFriendDialog() {
         AddFriendDialog dialog = new AddFriendDialog();
         dialog.show(getSupportFragmentManager(), "add_friend_dialog");
     }
 
+    /**
+     * Handle back navigation
+     */
     @Override
     public boolean onSupportNavigateUp() {
         return navController.navigateUp() || super.onSupportNavigateUp();
+    }
+
+    /**
+     * Cleanup when activity is destroyed
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "🔌 MainActivity.onDestroy called");
+
+        // ✅ IMPORTANT: KEEP LISTENING EVEN IF ACTIVITY IS DESTROYED
+        // The singleton will continue listening in the background
+        // Only cleanup if app is truly closing (isChangingConfigurations checks for config changes)
+
+        if (isChangingConfigurations()) {
+            Log.d(TAG, "Configuration changing, keeping Firebase Signaling active");
+        } else {
+            Log.d(TAG, "Activity destroyed, but Firebase Signaling listener stays active (singleton)");
+        }
+
+        // ✅ DO NOT CALL CLEANUP - let singleton handle it
+        // The listener must stay active even if MainActivity is destroyed
+    }
+
+    /**
+     * Activity lifecycle - when app comes to foreground
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "▶️ MainActivity.onResume - App is now visible");
+    }
+
+    /**
+     * Activity lifecycle - when app goes to background
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "⏸️ MainActivity.onPause - App is now hidden");
+    }
+
+    /**
+     * Activity lifecycle - when activity regains focus
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "▶️ MainActivity.onStart");
+    }
+
+    /**
+     * Activity lifecycle - when activity loses focus
+     */
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "⏹️ MainActivity.onStop");
     }
 }

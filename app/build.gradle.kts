@@ -10,6 +10,13 @@ android {
     compileSdk = 36  // ✅ CHANGED
 
     defaultConfig {
+        ndk {
+            abiFilters
+            "arm64-v8a"
+            "armeabi-v7a"
+            "x86"
+            "x86_64"
+        }
         applicationId = "com.example.project_ez_talk"
         minSdk = 24
         //noinspection OldTargetApi
@@ -18,6 +25,18 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    packagingOptions {
+        resources {
+            pickFirst("lib/arm64-v8a/libc++_shared.so")
+            pickFirst("lib/armeabi-v7a/libc++_shared.so")
+            pickFirst("lib/x86/libc++_shared.so")
+            pickFirst("lib/x86_64/libc++_shared.so")
+        }
+
+        jniLibs {
+            useLegacyPackaging = false
+        }
     }
 
     buildTypes {
@@ -36,7 +55,20 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        dataBinding = true
+        buildConfig = true
     }
+    packaging {
+        jniLibs {
+            pickFirsts.add("lib/arm64-v8a/libc++_shared.so")
+            pickFirsts.add("lib/armeabi-v7a/libc++_shared.so")
+            pickFirsts.add("lib/x86/libc++_shared.so")
+            pickFirsts.add("lib/x86_64/libc++_shared.so")
+
+            useLegacyPackaging = false
+        }
+    }
+
 }
 
 dependencies {

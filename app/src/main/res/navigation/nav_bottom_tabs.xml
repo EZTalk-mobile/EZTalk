@@ -109,7 +109,7 @@
         android:id="@+id/callActivity"
         android:name="com.example.project_ez_talk.ui.call.ongoing.CallActivity"
         android:label="@string/call"
-        tools:layout="@layout/activity_call" />
+        tools:layout="@layout/activity_voice_call" />
 
     <activity
         android:id="@+id/incomingCallActivity"

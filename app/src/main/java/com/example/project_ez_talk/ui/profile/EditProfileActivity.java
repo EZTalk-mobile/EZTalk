@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,7 +15,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.cardview.widget.CardView;
 
+import com.bumptech.glide.Glide;
 import com.example.project_ez_talk.R;
+import com.example.project_ez_talk.helper.SupabaseStorageManager;
 import com.example.project_ez_talk.ui.BaseActivity;
 import com.example.project_ez_talk.utils.Preferences;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -23,9 +26,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 @SuppressWarnings("ALL")
 public class EditProfileActivity extends BaseActivity {
+
+    private static final String TAG = "EditProfileActivity";
 
     private MaterialToolbar toolbar;
     private CardView cvProfilePicture;
@@ -37,6 +44,7 @@ public class EditProfileActivity extends BaseActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
+    private DatabaseReference usersRef;
     private Uri selectedImageUri;
     private ActivityResultLauncher<String> imagePickerLauncher;
 
@@ -47,6 +55,7 @@ public class EditProfileActivity extends BaseActivity {
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+        usersRef = FirebaseDatabase.getInstance().getReference("users");
 
         initViews();
         setupImagePicker();
@@ -98,16 +107,9 @@ public class EditProfileActivity extends BaseActivity {
             // Load from Firebase
             String displayName = currentUser.getDisplayName();
             String email = currentUser.getEmail();
-            Uri photoUrl = currentUser.getPhotoUrl();
 
             etFullName.setText(displayName != null ? displayName : "");
             etEmail.setText(email != null ? email : "");
-
-            // Load photo if available
-            if (photoUrl != null) {
-                // TODO: Use Glide to load image
-                // Glide.with(this).load(photoUrl).into(ivProfilePicture);
-            }
         }
 
         // Load from preferences
@@ -160,82 +162,118 @@ public class EditProfileActivity extends BaseActivity {
 
         showLoading(true);
 
-        // Update Firebase profile
-        if (currentUser != null) {
-            UserProfileChangeRequest.Builder profileUpdatesBuilder = new UserProfileChangeRequest.Builder()
-                    .setDisplayName(fullName);
-
-            // Add photo if selected
-            if (selectedImageUri != null) {
-                profileUpdatesBuilder.setPhotoUri(selectedImageUri);
-            }
-
-            UserProfileChangeRequest profileUpdates = profileUpdatesBuilder.build();
-
-            currentUser.updateProfile(profileUpdates)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            // Update email if changed
-                            String currentEmail = currentUser.getEmail();
-                            if (!email.equals(currentEmail)) {
-                                updateEmail(email, fullName, username, phone, status);
-                            } else {
-                                saveToPreferences(fullName, username, email, phone, status);
-                            }
-                        } else {
-                            showLoading(false);
-                            Toast.makeText(this,
-                                    "Failed to update profile: " + task.getException().getMessage(),
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });
-        } else {
-            // No Firebase user, just save locally
-            saveToPreferences(fullName, username, email, phone, status);
-        }
-    }
-
-    private void updateEmail(String newEmail, String fullName, String username, String phone, String status) {
-        if (currentUser != null) {
-            currentUser.updateEmail(newEmail)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            saveToPreferences(fullName, username, newEmail, phone, status);
-                        } else {
-                            showLoading(false);
-                            String error = task.getException() != null ?
-                                    task.getException().getMessage() : "Unknown error";
-
-                            if (error.toLowerCase().contains("requires-recent-login")) {
-                                Toast.makeText(this,
-                                        "Please log in again to change your email",
-                                        Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(this,
-                                        "Failed to update email: " + error,
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-        }
-    }
-
-    private void saveToPreferences(String fullName, String username, String email, String phone, String status) {
-        // Save to SharedPreferences
-        Preferences.setUsername(this, username);
-        Preferences.setUserEmail(this, email);
-        Preferences.setUserPhone(this, phone);
-
+        // Check if image was selected
         if (selectedImageUri != null) {
-            Preferences.setUserPhotoUrl(this, selectedImageUri.toString());
+            // Upload image to Supabase first
+            uploadImageAndSaveProfile(fullName, username, email, phone, status);
+        } else {
+            // No image selected, just update profile
+            updateProfileWithoutImage(fullName, username, email, phone, status);
+        }
+    }
+
+    /**
+     * Upload image to Supabase, then save profile
+     */
+    private void uploadImageAndSaveProfile(String fullName, String username,
+                                           String email, String phone, String status) {
+        if (currentUser == null) {
+            showLoading(false);
+            Toast.makeText(this, "User not authenticated", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        showLoading(false);
-        Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+        String userId = currentUser.getUid();
 
-        // Return result
-        setResult(RESULT_OK);
-        finish();
+        SupabaseStorageManager.uploadProfileImage(
+                selectedImageUri,
+                userId,
+                new SupabaseStorageManager.UploadCallback() {
+                    @Override
+                    public void onSuccess(String publicUrl) {
+                        Log.d(TAG, "Image uploaded: " + publicUrl);
+                        // ✅ Skip Firebase Auth update, go straight to saving
+                        saveProfileData(fullName, username, email, phone, status, publicUrl);
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Log.e(TAG, "Image upload failed: " + error);
+                        showLoading(false);
+                        Toast.makeText(EditProfileActivity.this,
+                                "Failed to upload image: " + error,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
+
+    /**
+     * Save all profile data (simplified version)
+     */
+    private void saveProfileData(String fullName, String username,
+                                 String email, String phone, String status, String imageUrl) {
+        if (currentUser == null) {
+            showLoading(false);
+            return;
+        }
+
+        String userId = currentUser.getUid();
+
+        // Update Firebase Auth display name only (skip photo URI)
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(fullName)
+                .build();
+
+        currentUser.updateProfile(profileUpdates)
+                .addOnCompleteListener(task -> {
+                    // Continue regardless of success/failure
+                    // Save to Firebase Realtime Database
+                    if (imageUrl != null) {
+                        usersRef.child(userId).child("profileImageUrl").setValue(imageUrl);
+                    }
+
+                    // Save to SharedPreferences
+                    Preferences.setUsername(this, username);
+                    Preferences.setUserEmail(this, email);
+                    Preferences.setUserPhone(this, phone);
+                    if (imageUrl != null) {
+                        Preferences.setUserPhotoUrl(this, imageUrl);
+                    }
+
+                    showLoading(false);
+                    Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
+                    finish();
+                });
+    }
+
+    /**
+     * Update profile without image
+     */
+    private void updateProfileWithoutImage(String fullName, String username,
+                                           String email, String phone, String status) {
+        if (currentUser == null) {
+            showLoading(false);
+            return;
+        }
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(fullName)
+                .build();
+
+        currentUser.updateProfile(profileUpdates)
+                .addOnCompleteListener(task -> {
+                    // Save to SharedPreferences
+                    Preferences.setUsername(this, username);
+                    Preferences.setUserEmail(this, email);
+                    Preferences.setUserPhone(this, phone);
+
+                    showLoading(false);
+                    Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
+                    finish();
+                });
     }
 
     private void showLoading(boolean loading) {

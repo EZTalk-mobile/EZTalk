@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <resources>
+    <resources xmlns:tools="http://schemas.android.com/tools">
+
     <!-- Video Call Colors -->
     <color name="semi_transparent">#80000000</color>
     <color name="red">#F44336</color>
@@ -96,6 +97,10 @@
     <color name="switch_thumb">@color/primary_purple</color>
     <color name="switch_track">#4D7986CB</color>
     <color name="primary" />
+    <color name="background_secondary">#1E1E2E</color>
+    <color name="background_tertiary">#2A2D4A</color>
+
+
 
 
 </resources>

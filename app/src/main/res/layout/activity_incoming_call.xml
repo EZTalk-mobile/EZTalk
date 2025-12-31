@@ -69,6 +69,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvCallerName" />
 
+    <!-- ✅ FIX: Made buttons properly clickable -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -78,22 +79,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <!-- Decline Button -->
         <LinearLayout
             android:id="@+id/btnDecline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="40dp"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_close"
+                android:clickable="false"
+                android:focusable="false"
                 app:backgroundTint="@color/call_button_end"
                 app:fabSize="normal"
                 app:tint="@color/text_primary"
-                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+                android:contentDescription="@string/decline" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -106,21 +114,28 @@
 
         </LinearLayout>
 
+        <!-- Accept Button -->
         <LinearLayout
             android:id="@+id/btnAccept"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_call"
+                android:clickable="false"
+                android:focusable="false"
                 app:backgroundTint="@color/secondary_green"
                 app:fabSize="normal"
                 app:tint="@color/text_primary"
-                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+                android:contentDescription="@string/accept" />
 
             <TextView
                 android:layout_width="wrap_content"
