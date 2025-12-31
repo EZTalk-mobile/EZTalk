@@ -8,9 +8,6 @@ import android.os.Build;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.project_ez_talk.ui.call.incoming.IntegratedIncomingCallActivity;
-import com.example.project_ez_talk.ui.call.video.IntegratedVideoCallActivity;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -165,13 +162,7 @@ public class PermissionHelper {
         return true;
     }
 
-    public static void requestCameraAndAudioPermission(IntegratedVideoCallActivity integratedVideoCallActivity) {
 
-    }
-
-    public static void requestCameraAndAudioPermission(IntegratedIncomingCallActivity integratedIncomingCallActivity) {
-
-    }
 
     /**
      * Interface for permission callbacks

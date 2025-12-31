@@ -20,11 +20,16 @@ import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.project_ez_talk.R;
+import com.example.project_ez_talk.model.CallLog;
 import com.example.project_ez_talk.service.CallService;
 import com.example.project_ez_talk.ui.BaseActivity;
 import com.example.project_ez_talk.webTRC.MainRepository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.webrtc.SurfaceViewRenderer;
 
@@ -32,6 +37,7 @@ public class VideoCallActivity extends BaseActivity implements MainRepository.Li
 
     private static final String TAG = "VideoCallActivity";
     private static final int PERMISSION_REQUEST_CODE = 100;
+    private static final String DATABASE_URL = "https://project-ez-talk-dccea-default-rtdb.europe-west1.firebasedatabase.app";
 
     // Constants matching CallActivity
     public static final String EXTRA_USER_ID = "user_id";
@@ -64,6 +70,13 @@ public class VideoCallActivity extends BaseActivity implements MainRepository.Li
     private boolean isCallConnected = false;
     private boolean isRinging = false;
     private Handler connectionTimeoutHandler = new Handler(Looper.getMainLooper());
+
+    // Call log tracking
+    private long callStartTime = 0;
+    private String currentUserName = "";
+    private String currentUserAvatar = "";
+    private FirebaseFirestore firestore;
+    private DatabaseReference callLogsRef;
     private Runnable connectionTimeoutRunnable = new Runnable() {
         @Override
         public void run() {
@@ -102,6 +115,13 @@ public class VideoCallActivity extends BaseActivity implements MainRepository.Li
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             currentUsername = FirebaseAuth.getInstance().getCurrentUser().getUid();
         }
+
+        // Initialize Firebase
+        firestore = FirebaseFirestore.getInstance();
+        callLogsRef = FirebaseDatabase.getInstance(DATABASE_URL).getReference("call_logs");
+
+        // Load current user info for call log
+        loadCurrentUserInfo();
 
         initViews();
 
@@ -243,6 +263,10 @@ public class VideoCallActivity extends BaseActivity implements MainRepository.Li
         isCallConnected = true;
         isRinging = false;
 
+        // Record call start time
+        callStartTime = System.currentTimeMillis();
+        Log.d(TAG, "📞 Call started at: " + callStartTime);
+
         // Cancel connection timeout
         connectionTimeoutHandler.removeCallbacks(connectionTimeoutRunnable);
         Log.d(TAG, "✅ Call connected successfully!");
@@ -293,6 +317,9 @@ public class VideoCallActivity extends BaseActivity implements MainRepository.Li
             ringingPlayer = null;
         }
 
+        // Save call log before ending
+        saveCallLog(isCallConnected ? "completed" : "missed");
+
         // End WebRTC call
         if (mainRepository != null) {
             mainRepository.endCall();
@@ -317,6 +344,84 @@ public class VideoCallActivity extends BaseActivity implements MainRepository.Li
         int minutes = secs / 60;
         int seconds = secs % 60;
         return String.format("%02d:%02d", minutes, seconds);
+    }
+
+    /**
+     * Load current user info from Firestore for call log
+     */
+    private void loadCurrentUserInfo() {
+        if (currentUsername == null) return;
+
+        firestore.collection("users")
+                .document(currentUsername)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    if (doc.exists()) {
+                        currentUserName = doc.getString("name");
+                        currentUserAvatar = doc.getString("profilePicture");
+                        Log.d(TAG, "✅ Current user info loaded: " + currentUserName);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "❌ Failed to load current user info: " + e.getMessage());
+                });
+    }
+
+    /**
+     * Save call log to Firebase Realtime Database
+     * @param status Call status: "completed", "missed", "rejected"
+     */
+    private void saveCallLog(String status) {
+        if (currentUsername == null || userId == null) {
+            Log.e(TAG, "❌ Cannot save call log: missing user IDs");
+            return;
+        }
+
+        // Calculate duration (make it final for lambda)
+        final long duration = (callStartTime > 0)
+                ? (System.currentTimeMillis() - callStartTime) / 1000
+                : 0; // seconds
+
+        // Create call log
+        CallLog callLog = new CallLog();
+
+        // Determine who is caller/receiver
+        if (isIncoming) {
+            // Current user is receiver, remote user is caller
+            callLog.setCallerId(userId);
+            callLog.setReceiverId(currentUsername);
+            callLog.setCallerName(userName != null ? userName : "Unknown");
+            callLog.setReceiverName(currentUserName != null ? currentUserName : "You");
+            callLog.setCallerAvatar(userAvatar != null ? userAvatar : "");
+            callLog.setReceiverAvatar(currentUserAvatar != null ? currentUserAvatar : "");
+        } else {
+            // Current user is caller, remote user is receiver
+            callLog.setCallerId(currentUsername);
+            callLog.setReceiverId(userId);
+            callLog.setCallerName(currentUserName != null ? currentUserName : "You");
+            callLog.setReceiverName(userName != null ? userName : "Unknown");
+            callLog.setCallerAvatar(currentUserAvatar != null ? currentUserAvatar : "");
+            callLog.setReceiverAvatar(userAvatar != null ? userAvatar : "");
+        }
+
+        callLog.setCallType("video");
+        callLog.setStatus(status);
+        callLog.setStartTime(callStartTime > 0 ? callStartTime : System.currentTimeMillis());
+        callLog.setDuration(duration);
+        callLog.setTimestamp(System.currentTimeMillis());
+
+        // Save to Realtime Database
+        String callLogId = callLogsRef.push().getKey();
+        if (callLogId != null) {
+            callLogsRef.child(callLogId)
+                    .setValue(callLog)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "✅ Call log saved: " + callLogId + " (status: " + status + ", duration: " + duration + "s)");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "❌ Failed to save call log: " + e.getMessage());
+                    });
+        }
     }
 
     @Override

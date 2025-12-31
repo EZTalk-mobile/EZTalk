@@ -2,6 +2,7 @@ package com.example.project_ez_talk.ui.call.incoming;
 import androidx.activity.OnBackPressedCallback;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -9,11 +10,19 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.project_ez_talk.R;
+import com.example.project_ez_talk.model.CallLog;
 import com.example.project_ez_talk.ui.BaseActivity;
 import com.example.project_ez_talk.ui.call.ongoing.CallActivity;
 import com.example.project_ez_talk.ui.call.video.VideoCallActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class IncomingCallActivity extends BaseActivity {
+
+    private static final String TAG = "IncomingCallActivity";
+    private static final String DATABASE_URL = "https://project-ez-talk-dccea-default-rtdb.europe-west1.firebasedatabase.app";
 
     public static final String EXTRA_CALLER_NAME = "caller_name";
     public static final String EXTRA_CALLER_AVATAR = "caller_avatar";
@@ -28,6 +37,12 @@ public class IncomingCallActivity extends BaseActivity {
     private String callerAvatar;
     private String callerId;
     private String callType;
+
+    private String currentUserId;
+    private String currentUserName = "";
+    private String currentUserAvatar = "";
+    private FirebaseFirestore firestore;
+    private DatabaseReference callLogsRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +69,16 @@ public class IncomingCallActivity extends BaseActivity {
         callerAvatar = getIntent().getStringExtra(EXTRA_CALLER_AVATAR);
         callerId = getIntent().getStringExtra(EXTRA_CALLER_ID);
         callType = getIntent().getStringExtra(EXTRA_CALL_TYPE);
+
+        // Initialize Firebase
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
+        firestore = FirebaseFirestore.getInstance();
+        callLogsRef = FirebaseDatabase.getInstance(DATABASE_URL).getReference("call_logs");
+
+        // Load current user info for call log
+        loadCurrentUserInfo();
 
         initViews();
         setupListeners();
@@ -121,7 +146,72 @@ public class IncomingCallActivity extends BaseActivity {
 
     private void declineCall() {
         Toast.makeText(this, "Call declined", Toast.LENGTH_SHORT).show();
+
+        // Save rejected call log
+        saveRejectedCallLog();
+
         // TODO: Send decline notification to caller via FCM or WebSocket
         finish();
+    }
+
+    /**
+     * Load current user info from Firestore for call log
+     */
+    private void loadCurrentUserInfo() {
+        if (currentUserId == null) return;
+
+        firestore.collection("users")
+                .document(currentUserId)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    if (doc.exists()) {
+                        currentUserName = doc.getString("name");
+                        currentUserAvatar = doc.getString("profilePicture");
+                        Log.d(TAG, "✅ Current user info loaded: " + currentUserName);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "❌ Failed to load current user info: " + e.getMessage());
+                });
+    }
+
+    /**
+     * Save rejected call log to Firebase Realtime Database
+     */
+    private void saveRejectedCallLog() {
+        if (currentUserId == null || callerId == null) {
+            Log.e(TAG, "❌ Cannot save call log: missing user IDs");
+            return;
+        }
+
+        // Create call log for rejected call
+        CallLog callLog = new CallLog();
+
+        // Caller is the remote user, receiver is current user
+        callLog.setCallerId(callerId);
+        callLog.setReceiverId(currentUserId);
+        callLog.setCallerName(callerName != null ? callerName : "Unknown");
+        callLog.setReceiverName(currentUserName != null ? currentUserName : "You");
+        callLog.setCallerAvatar(callerAvatar != null ? callerAvatar : "");
+        callLog.setReceiverAvatar(currentUserAvatar != null ? currentUserAvatar : "");
+
+        callLog.setCallType(callType != null ? callType : "video");
+        callLog.setStatus("rejected");
+        callLog.setStartTime(System.currentTimeMillis());
+        callLog.setDuration(0);
+        callLog.setTimestamp(System.currentTimeMillis());
+
+        // Save to Realtime Database
+        String callLogId = callLogsRef.push().getKey();
+        if (callLogId != null) {
+            callLogsRef.child(callLogId)
+                    .setValue(callLog)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "✅ Rejected call log saved: " + callLogId);
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "❌ Failed to save rejected call log: " + e.getMessage());
+                    });
+        }
     }
 }

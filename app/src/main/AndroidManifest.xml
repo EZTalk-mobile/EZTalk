@@ -122,9 +122,9 @@
         <activity android:name=".ui.call.incoming.IncomingCallActivity" android:exported="false" android:screenOrientation="portrait" android:showWhenLocked="true" android:turnScreenOn="true" android:theme="@style/Theme.EZTalk.Transparent" android:launchMode="singleInstance" android:attributionTags="call_handling" />
         <activity android:name=".ui.call.ongoing.CallActivity" android:exported="false" android:screenOrientation="portrait" android:launchMode="singleInstance" android:attributionTags="call_handling" />
         <activity android:name=".ui.call.video.VideoCallActivity" android:exported="false" android:screenOrientation="portrait" android:launchMode="singleInstance" android:showWhenLocked="true" android:turnScreenOn="true" />
-        <activity android:name=".ui.call.incoming.IntegratedIncomingCallActivity" android:exported="false" android:screenOrientation="portrait" android:showWhenLocked="true" android:turnScreenOn="true" android:theme="@style/Theme.EZTalk.Transparent" android:launchMode="singleInstance" android:excludeFromRecents="false" android:attributionTags="call_handling" />
-        <activity android:name=".ui.call.voice.VoiceCallActivity" android:exported="true" android:launchMode="singleInstance" android:screenOrientation="portrait" android:attributionTags="call_handling" tools:ignore="DiscouragedApi,LockedOrientationActivity" />
-        <activity android:name=".ui.call.video.IntegratedVideoCallActivity" android:exported="false" android:screenOrientation="portrait" android:launchMode="singleInstance" android:excludeFromRecents="false" android:configChanges="orientation|screenSize|keyboardHidden" android:attributionTags="call_handling" />
+
+
+
 
         <!-- Media Activities -->
         <activity android:name=".ui.media.ImageViewerActivity" android:exported="false" android:theme="@style/Theme.EZTalk.Transparent" />
