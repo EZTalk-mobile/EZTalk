@@ -1,4 +1,4 @@
-package com.example.project_ez_talk.ui.call.video;
+/* package com.example.project_ez_talk.ui.call.video;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -454,3 +454,4 @@ public class VideoCallActivity extends BaseActivity implements MainRepository.Li
         });
     }
 }
+*/
