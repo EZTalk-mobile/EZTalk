@@ -1,4 +1,4 @@
-package com.example.project_ez_talk.ui.call.incoming;
+/* package com.example.project_ez_talk.ui.call.incoming;
 import androidx.activity.OnBackPressedCallback;
 import android.content.Intent;
 import android.os.Bundle;
@@ -215,3 +215,4 @@ public class IncomingCallActivity extends BaseActivity {
         }
     }
 }
+*/

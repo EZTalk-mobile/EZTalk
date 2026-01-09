@@ -1,4 +1,4 @@
-package com.example.project_ez_talk.ui.call.ongoing;
+/* package com.example.project_ez_talk.ui.call.ongoing;
 
 import android.annotation.SuppressLint;
 import android.media.AudioManager;
@@ -170,3 +170,5 @@ public class CallActivity extends BaseActivity {
         }
     }
 }
+
+*/
