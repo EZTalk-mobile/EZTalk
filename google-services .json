@@ -1,6 +1,10 @@
 {
   "project_info": {
     "project_number": "883050824460",
+<<<<<<< HEAD
+=======
+    "firebase_url": "https://project-ez-talk-dccea-default-rtdb.europe-west1.firebasedatabase.app",
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
     "project_id": "project-ez-talk-dccea",
     "storage_bucket": "project-ez-talk-dccea.firebasestorage.app"
   },
@@ -12,7 +16,24 @@
           "package_name": "com.example.project_ez_talk"
         }
       },
+<<<<<<< HEAD
       "oauth_client": [],
+=======
+      "oauth_client": [
+        {
+          "client_id": "883050824460-1852jivjq6hospsdijng3nao6sq8md9i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.project_ez_talk",
+            "certificate_hash": "d9ee2dd72796711d940889e231709c10899d68b4"
+          }
+        },
+        {
+          "client_id": "883050824460-cm743j715pjfaub4mid99bsfca0hm42t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
       "api_key": [
         {
           "current_key": "AIzaSyDh60wiYIAblNBcu1EDoWrSmq06K0x5yEs"
@@ -20,7 +41,16 @@
       ],
       "services": {
         "appinvite_service": {
+<<<<<<< HEAD
           "other_platform_oauth_client": []
+=======
+          "other_platform_oauth_client": [
+            {
+              "client_id": "883050824460-cm743j715pjfaub4mid99bsfca0hm42t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
         }
       }
     }

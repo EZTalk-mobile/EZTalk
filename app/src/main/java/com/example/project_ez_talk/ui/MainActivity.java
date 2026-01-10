@@ -12,17 +12,28 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.project_ez_talk.R;
+<<<<<<< HEAD
 import com.example.project_ez_talk.model.CallData;
 import com.example.project_ez_talk.ui.auth.welcome.WelcomeActivity;
 import com.example.project_ez_talk.ui.call.incoming.IntegratedIncomingCallActivity;
 import com.example.project_ez_talk.ui.profile.AddFriendDialog;
 import com.example.project_ez_talk.utils.Preferences;
 import com.example.project_ez_talk.webrtc.FirebaseSignaling;
+=======
+
+import com.example.project_ez_talk.ui.auth.welcome.WelcomeActivity;
+import com.example.project_ez_talk.ui.profile.AddFriendDialog;
+import com.example.project_ez_talk.utils.Preferences;
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+<<<<<<< HEAD
 import com.google.firebase.auth.FirebaseUser;
+=======
+
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
 
 /**
  * ✅ COMPLETE MainActivity with FIXED incoming call listener
@@ -39,7 +50,11 @@ public class MainActivity extends BaseActivity {
     private ImageView ivSearch, ivNotification;
 
     // ✅ CRITICAL: Firebase Signaling for incoming calls (SINGLETON)
+<<<<<<< HEAD
     private FirebaseSignaling firebaseSignaling;
+=======
+
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +79,7 @@ public class MainActivity extends BaseActivity {
         setupToolbar();
         setupFab();
 
+<<<<<<< HEAD
         // ✅ CRITICAL: Initialize Firebase Signaling for incoming calls
         initializeIncomingCallListener();
     }
@@ -219,6 +235,11 @@ public class MainActivity extends BaseActivity {
     /**
      * Initialize UI views
      */
+=======
+
+    }
+
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
         bottomNav = findViewById(R.id.bottomNavigation);

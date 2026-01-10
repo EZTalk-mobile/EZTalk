@@ -8,9 +8,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+<<<<<<< HEAD
 /**
  * ✅ COMPLETE Message model with VIDEO + AUDIO support
  */
+=======
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
 public class Message {
 
     public enum MessageType {
@@ -21,11 +24,18 @@ public class Message {
     private String senderId;
     private String groupId;
     private String content;
+<<<<<<< HEAD
     private String text;
     private String fileUrl;
     private String messageType = "TEXT";
     private long timestamp;
     private long duration; // Duration in milliseconds for audio/video
+=======
+    private String text; // Alternative field for content
+    private String fileUrl;
+    private String messageType = "TEXT";
+    private long timestamp;
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
     private String senderName;
     private String senderAvatarUrl;
     private boolean isDeleted = false;
@@ -125,6 +135,7 @@ public class Message {
         this.timestamp = timestamp;
     }
 
+<<<<<<< HEAD
     public void setDuration(long duration) {
         this.duration = duration;
     }
@@ -133,6 +144,8 @@ public class Message {
         return duration;
     }
 
+=======
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
     public void setSenderName(String senderName) {
         this.senderName = senderName;
     }
@@ -145,6 +158,7 @@ public class Message {
         isDeleted = deleted;
     }
 
+<<<<<<< HEAD
     // ==================== SUPPRESS FIRESTORE WARNINGS ====================
 
     public void setTextMessage(String textMessage) {}
@@ -157,6 +171,50 @@ public class Message {
     public void setReceiverId(String receiverId) {}
     public void setThumbnailUrl(String thumbnailUrl) {}
     public void setStatus(String status) {}
+=======
+    // ==================== ✅ ADD THESE TO SUPPRESS WARNINGS ====================
+
+    // Firestore might have these fields - add dummy setters to suppress warnings
+    public void setTextMessage(String textMessage) {
+        // Ignore - this is just to suppress Firestore warnings
+    }
+
+    public void setVideoMessage(String videoMessage) {
+        // Ignore - this is just to suppress Firestore warnings
+    }
+
+    public void setAudioMessage(String audioMessage) {
+        // Ignore - this is just to suppress Firestore warnings
+    }
+
+    public void setImageMessage(String imageMessage) {
+        // Ignore - this is just to suppress Firestore warnings
+    }
+
+    public void setLocationMessage(String locationMessage) {
+        // Ignore - this is just to suppress Firestore warnings
+    }
+
+    public void setFileMessage(String fileMessage) {
+        // Ignore - this is just to suppress Firestore warnings
+    }
+
+    public void setType(String type) {
+        // Ignore - we use messageType instead
+    }
+
+    public void setReceiverId(String receiverId) {
+        // Ignore - we use groupId instead
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        // Ignore - optional field
+    }
+
+    public void setStatus(String status) {
+        // Ignore - optional field
+    }
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
 
     // ==================== UTILITY METHODS ====================
 
@@ -222,18 +280,27 @@ public class Message {
                 return "Image";
             case AUDIO:
                 return "Audio";
+<<<<<<< HEAD
             case VIDEO:
                 return "Video";
+=======
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
             case FILE:
                 return "File";
             case LOCATION:
                 return "Location";
+<<<<<<< HEAD
+=======
+            case VIDEO:
+                return "Video";
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
             case TEXT:
             default:
                 return "Text";
         }
     }
 
+<<<<<<< HEAD
     /**
      * ✅ Check if message is a media type
      */
@@ -266,6 +333,8 @@ public class Message {
         }
     }
 
+=======
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
     @Override
     public String toString() {
         return "Message{" +

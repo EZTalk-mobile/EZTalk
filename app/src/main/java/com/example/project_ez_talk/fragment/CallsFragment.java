@@ -20,7 +20,11 @@ import com.example.project_ez_talk.R;
 import com.example.project_ez_talk.adapter.CallLogAdapter;
 import com.example.project_ez_talk.model.CallLog;
 import com.example.project_ez_talk.repository.CallRepository;
+<<<<<<< HEAD
 import com.example.project_ez_talk.ui.call.video.IntegratedVideoCallActivity;
+=======
+import com.example.project_ez_talk.ui.call.video.VideoCallActivity;
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
 import com.example.project_ez_talk.ui.call.voice.VoiceCallActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
@@ -29,7 +33,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+<<<<<<< HEAD
 import com.google.firebase.database.Query;
+=======
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -74,8 +81,12 @@ public class CallsFragment extends Fragment {
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         callLogsRef = FirebaseDatabase.getInstance(DATABASE_URL).getReference("call_logs");
 
+<<<<<<< HEAD
         Log.d(TAG, "🔗 Connected to Firebase: " + DATABASE_URL);
         Log.d(TAG, "👤 Current User ID: " + currentUserId);
+=======
+        Log.d(TAG, "✅ Current User ID: " + currentUserId);
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
 
         initViews(view);
         setupRecyclerView();
@@ -129,9 +140,17 @@ public class CallsFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
         layoutEmpty.setVisibility(View.GONE);
 
+<<<<<<< HEAD
         Query query = callLogsRef.orderByChild("startTime");
 
         callLogsListener = query.addValueEventListener(new ValueEventListener() {
+=======
+        if (callLogsListener != null) {
+            callLogsRef.removeEventListener(callLogsListener);
+        }
+
+        callLogsListener = callLogsRef.addValueEventListener(new ValueEventListener() {
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 allCallLogs.clear();
@@ -140,8 +159,15 @@ public class CallsFragment extends Fragment {
                     try {
                         CallLog log = data.getValue(CallLog.class);
 
+<<<<<<< HEAD
                         // ✅ FIX: Check for null and validate data
                         if (log != null && isValidCallLog(log)) {
+=======
+                        if (log != null && isValidCallLog(log)) {
+                            // Set the callId from the key
+                            log.setCallId(data.getKey());
+
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
                             // Only show logs where current user is involved
                             if (log.getCallerId().equals(currentUserId) ||
                                     log.getReceiverId().equals(currentUserId)) {
@@ -177,10 +203,16 @@ public class CallsFragment extends Fragment {
 
     // ✅ Helper method to validate call log data
     private boolean isValidCallLog(CallLog log) {
+<<<<<<< HEAD
         return log.getCallId() != null &&
                 log.getCallerId() != null &&
                 log.getReceiverId() != null &&
                 log.getStatus() != null &&
+=======
+        // callId is set by Firestore, so we only check other required fields
+        return log.getCallerId() != null &&
+                log.getReceiverId() != null &&
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
                 log.getCallType() != null;
     }
 
@@ -188,10 +220,19 @@ public class CallsFragment extends Fragment {
         filteredCallLogs.clear();
 
         if (showOnlyMissed) {
+<<<<<<< HEAD
             // Show only missed calls where current user is receiver
             for (CallLog log : allCallLogs) {
                 if ("missed".equals(log.getStatus()) &&
                         !log.getCallerId().equals(currentUserId)) {
+=======
+            // Show missed/rejected calls where current user is receiver
+            for (CallLog log : allCallLogs) {
+                String status = log.getStatus();
+                boolean isReceiver = log.getReceiverId().equals(currentUserId);
+
+                if (isReceiver && ("missed".equals(status) || "rejected".equals(status))) {
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
                     filteredCallLogs.add(log);
                 }
             }
@@ -247,16 +288,27 @@ public class CallsFragment extends Fragment {
 
         Intent intent;
         if ("video".equals(callLog.getCallType())) {
+<<<<<<< HEAD
             intent = new Intent(requireContext(), IntegratedVideoCallActivity.class);
+=======
+            intent = new Intent(requireContext(), VideoCallActivity.class);
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
         } else {
             intent = new Intent(requireContext(), VoiceCallActivity.class);
         }
 
+<<<<<<< HEAD
         intent.putExtra("user_id", targetUserId);
         intent.putExtra("user_name", targetUserName != null ? targetUserName : "Unknown");
         intent.putExtra("user_avatar", targetAvatar != null ? targetAvatar : "");
         intent.putExtra("current_user_id", currentUserId);
         intent.putExtra("is_incoming", false);
+=======
+        intent.putExtra(VideoCallActivity.EXTRA_USER_ID, targetUserId);
+        intent.putExtra(VideoCallActivity.EXTRA_USER_NAME, targetUserName != null ? targetUserName : "Unknown");
+        intent.putExtra(VideoCallActivity.EXTRA_USER_AVATAR, targetAvatar != null ? targetAvatar : "");
+        intent.putExtra(VideoCallActivity.EXTRA_IS_INCOMING, false);
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
 
         startActivity(intent);
     }
@@ -272,7 +324,12 @@ public class CallsFragment extends Fragment {
 
     private void deleteCallLog(CallLog callLog) {
         if (callLog.getCallId() != null) {
+<<<<<<< HEAD
             callLogsRef.child(callLog.getCallId()).removeValue()
+=======
+            callLogsRef.child(callLog.getCallId())
+                    .removeValue()
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(requireContext(),
                                 "Call log deleted",
@@ -294,4 +351,8 @@ public class CallsFragment extends Fragment {
             callLogsRef.removeEventListener(callLogsListener);
         }
     }
+<<<<<<< HEAD
 }
+=======
+    }
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3

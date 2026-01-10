@@ -94,4 +94,8 @@ public class SearchResult {
     public void setOnline(boolean online) {
         isOnline = online;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3

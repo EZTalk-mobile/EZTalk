@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 package com.example.project_ez_talk.ui.call.ongoing;
+=======
+/* package com.example.project_ez_talk.ui.call.ongoing;
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
 
 import android.annotation.SuppressLint;
 import android.media.AudioManager;
@@ -49,7 +53,11 @@ public class CallActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD
         setContentView(R.layout.activity_voice_call);
+=======
+        setContentView(R.layout.activity_call);
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
 
         // Get extras from intent
         String userId = getIntent().getStringExtra(EXTRA_USER_ID);
@@ -169,4 +177,10 @@ public class CallActivity extends BaseActivity {
             }
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+
+*/
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3

@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+<<<<<<< HEAD
     <!-- Internet Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <!-- Camera & Audio Permissions -->
+=======
+
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
+<<<<<<< HEAD
     <!-- Storage Permissions for Android 12 and below -->
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
@@ -26,6 +35,14 @@
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
 
     <!-- Visual Media Picker for Android 14+ (API 34+) -->
+=======
+    <!-- Storage Permissions -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29" tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
     <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
 
     <!-- Location Permissions -->
@@ -48,7 +65,11 @@
     <uses-feature android:name="android.hardware.microphone" android:required="false" />
     <uses-feature android:name="android.hardware.location" android:required="false" />
     <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+<<<<<<< HEAD
     <uses-permission android:name="android.permission.INTERNET" />
+=======
+
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
@@ -64,12 +85,31 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
         android:extractNativeLibs="true"
+<<<<<<< HEAD
         tools:targetApi="34">
 
 
     <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+=======
+        tools:targetApi="34"
+        tools:ignore="MissingClass">
+
+        <!-- Firebase Metadata -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/primary_purple" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
 
         <!-- Splash Activity -->
         <activity
@@ -91,6 +131,7 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTask" />
 
+<<<<<<< HEAD
         <!-- Onboarding Activity -->
         <activity
             android:name=".ui.onboarding.OnboardingActivity"
@@ -316,10 +357,59 @@
             android:name=".service.FCMService"
             android:exported="false"
             tools:ignore="Instantiatable">
+=======
+        <!-- Onboarding & Welcome Activities -->
+        <activity android:name=".ui.onboarding.OnboardingActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".ui.auth.welcome.WelcomeActivity" android:exported="false" android:screenOrientation="portrait" />
+
+        <!-- Auth Activities -->
+        <activity android:name=".ui.auth.login.LoginActivity" android:exported="false" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.auth.signup.RegisterActivity" android:exported="false" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.auth.otp.OtpVerificationActivity" android:exported="false" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.auth.forgot.ForgotPasswordActivity" android:exported="false" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.auth.reset.ResetPasswordActivity" android:exported="false" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize" />
+
+        <!-- Search & Home Activities -->
+        <activity android:name=".ui.SearchActivity" android:exported="false" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize" android:parentActivityName=".ui.home.HomeActivity" />
+        <activity android:name=".ui.home.HomeActivity" android:exported="false" android:screenOrientation="portrait" android:launchMode="singleTask" tools:ignore="Instantiatable" />
+
+        <!-- Chat Activities -->
+        <activity android:name=".ui.chat.detail.ChatDetailActivity" android:exported="false" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize" android:parentActivityName=".ui.home.HomeActivity" />
+        <activity android:name=".ui.chat.group.GroupChatActivity" android:exported="false" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.chat.group.CreateGroupActivity" android:exported="false" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize" tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+        <activity android:name=".ui.chat.group.GroupDetailsActivity" android:exported="false" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize" android:parentActivityName=".ui.chat.group.GroupChatActivity" />
+        <activity android:name=".ui.chat.group.Grouplistactivity" android:exported="false" />
+
+        <!-- Profile Activities -->
+        <activity android:name=".ui.profile.ProfileActivity" android:exported="false" android:screenOrientation="portrait" tools:ignore="Instantiatable" />
+        <activity android:name=".ui.profile.SettingsActivity" android:exported="false" android:screenOrientation="portrait" android:parentActivityName=".ui.home.HomeActivity" tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+        <activity android:name=".ui.profile.EditProfileActivity" android:exported="false" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize" />
+
+        <!-- Call Activities -->
+        <activity android:name=".ui.call.incoming.IncomingCallActivity" android:exported="false" android:screenOrientation="portrait" android:showWhenLocked="true" android:turnScreenOn="true" android:theme="@style/Theme.EZTalk.Transparent" android:launchMode="singleInstance" android:attributionTags="call_handling" />
+        <activity android:name=".ui.call.ongoing.CallActivity" android:exported="false" android:screenOrientation="portrait" android:launchMode="singleInstance" android:attributionTags="call_handling" />
+        <activity android:name=".ui.call.video.VideoCallActivity" android:exported="false" android:screenOrientation="portrait" android:launchMode="singleInstance" android:showWhenLocked="true" android:turnScreenOn="true" />
+
+
+
+
+        <!-- Media Activities -->
+        <activity android:name=".ui.media.ImageViewerActivity" android:exported="false" android:theme="@style/Theme.EZTalk.Transparent" />
+        <activity android:name=".ui.media.VideoPlayerActivity" android:exported="false" android:screenOrientation="landscape" android:theme="@style/Theme.EZTalk.Transparent" />
+
+        <!-- Channel Activities -->
+        <activity android:name=".ui.channel.CreateChannelActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".ui.channel.ChannelListActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".ui.channel.ChannelDetailActivity" android:exported="false" android:screenOrientation="portrait" />
+
+        <!-- Services -->
+        <service android:name=".service.FCMService" android:exported="false" tools:ignore="Instantiatable">
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+<<<<<<< HEAD
 
         <!-- Call Service -->
         <service
@@ -365,8 +455,21 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
+=======
+        <service android:name=".service.CallService" android:enabled="true" android:exported="false" android:foregroundServiceType="phoneCall" tools:ignore="ForegroundServicePermission,Instantiatable" />
+        <service android:name=".service.MessageService" android:enabled="true" android:exported="false" tools:ignore="Instantiatable" />
+        <service android:name=".service.IncomingCallListenerService" android:enabled="true" android:exported="false" />
+
+        <!-- File Provider -->
+        <provider android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
         </provider>
 
     </application>
 
+<<<<<<< HEAD
 </manifest>
+=======
+</manifest>
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
