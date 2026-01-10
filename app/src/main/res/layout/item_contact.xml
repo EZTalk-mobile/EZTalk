@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:background="?attr/selectableItemBackground">
+
+    <!-- Avatar Circle -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvAvatar"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        app:cardCornerRadius="26dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="2dp"
+        app:strokeColor="@color/primary_purple_light"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/profile_picture"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_profile"
+            tools:ignore="ImageContrastCheck" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Online Status Dot -->
+    <View
+        android:id="@+id/vOnlineStatus"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:background="@drawable/bg_status_online"
+        app:layout_constraintBottom_toBottomOf="@id/cvAvatar"
+        app:layout_constraintEnd_toEndOf="@id/cvAvatar" />
+
+    <!-- Contact Name -->
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/inter_medium"
+        android:maxLines="1"
+        android:text="Contact Name"
+        android:textColor="@color/text_primary"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/cvAvatar"
+        app:layout_constraintEnd_toStartOf="@id/llActions"
+        app:layout_constraintTop_toTopOf="@id/cvAvatar"
+        app:layout_constraintBottom_toBottomOf="@id/cvAvatar"
+        tools:ignore="HardcodedText" />
+
+    <!-- Action Buttons for Pending Requests -->
+    <LinearLayout
+        android:id="@+id/llActions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:spacing="8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:visibility="visible">
+
+        <!-- Accept Button with inline style -->
+        <ImageButton
+            android:id="@+id/btnAccept"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="4dp"
+            android:background="@drawable/bg_action_button_simple"
+            android:contentDescription="Accept request"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_check"
+            android:tint="@color/primary_purple"
+            tools:ignore="HardcodedText,ImageContrastCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck,UseAppTint" />
+
+        <!-- Reject Button with inline style -->
+        <ImageButton
+            android:id="@+id/btnReject"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="4dp"
+            android:background="@drawable/bg_action_button_simple"
+            android:contentDescription="Reject request"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_close"
+            android:tint="#FF6B6B"
+            tools:ignore="HardcodedText,ImageContrastCheck,SpeakableTextPresentCheck,UseAppTint,TouchTargetSizeCheck" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

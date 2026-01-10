@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dark_mode" />
+    <string name="message_notifications" />
+    <string name="call_notifications" />
+    <string name="register_subtitle" />
+    <string name="profile_photo" />
+</resources>

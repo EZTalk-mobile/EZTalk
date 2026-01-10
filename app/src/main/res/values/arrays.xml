@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- User Roles -->
+    <string-array name="user_roles">
+        <item>@string/student</item>
+        <item>@string/teacher</item>
+    </string-array>
+
+    <!-- Call Types -->
+    <string-array name="call_types">
+        <item>@string/voice_call</item>
+        <item>@string/video_call</item>
+    </string-array>
+
+    <!-- Message Types -->
+    <string-array name="message_types">
+        <item>Text</item>
+        <item>Image</item>
+        <item>Video</item>
+        <item>Audio</item>
+        <item>Document</item>
+        <item>Location</item>
+    </string-array>
+
+    <!-- Privacy Options -->
+    <string-array name="privacy_options">
+        <item>Everyone</item>
+        <item>Contacts Only</item>
+        <item>Nobody</item>
+    </string-array>
+
+    <!-- Theme Options -->
+    <string-array name="theme_options">
+        <item>Dark</item>
+        <item>Light</item>
+        <item>System Default</item>
+    </string-array>
+
+    <!-- Language Options -->
+    <string-array name="language_options">
+        <item>English</item>
+        <item>ភាសាខ្មែរ (Khmer)</item>
+    </string-array>
+
+    <string-array name="language_codes">
+        <item>en</item>
+        <item>km</item>
+    </string-array>
+
+    <!-- Notification Sound Options -->
+    <string-array name="notification_sounds">
+        <item>Default</item>
+        <item>Chime</item>
+        <item>Bells</item>
+        <item>Ding</item>
+        <item>None</item>
+    </string-array>
+
+    <!-- Chat Background Options -->
+    <string-array name="chat_backgrounds">
+        <item>Default</item>
+        <item>Pattern 1</item>
+        <item>Pattern 2</item>
+        <item>Pattern 3</item>
+        <item>Solid Color</item>
+    </string-array>
+
+    <!-- Font Size Options -->
+    <string-array name="font_sizes">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+        <item>Extra Large</item>
+    </string-array>
+
+    <!-- Status Options -->
+    <string-array name="status_options">
+        <item>Available</item>
+        <item>Busy</item>
+        <item>Away</item>
+        <item>Offline</item>
+    </string-array>
+</resources>
