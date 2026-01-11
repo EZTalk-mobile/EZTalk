@@ -2,6 +2,7 @@ package com.example.project_ez_talk.webrtc;
 
 import android.util.Log;
 
+import org.webrtc.AudioTrack;
 import org.webrtc.DataChannel;
 import org.webrtc.IceCandidate;
 import org.webrtc.MediaStream;
@@ -74,6 +75,10 @@ public class MyPeerConnectionObserver implements PeerConnection.Observer {
 
     }
 
+    /**
+     * ✅ THIS IS THE KEY FIX!
+     * onAddTrack is called when REMOTE audio/video arrives (Unified Plan SDP)
+     */
     @Override
     public void onAddTrack(RtpReceiver rtpReceiver, MediaStream[] mediaStreams) {
         Log.d("MyPeerObserver", "🔥 onAddTrack called! MediaStreams: " + mediaStreams.length);

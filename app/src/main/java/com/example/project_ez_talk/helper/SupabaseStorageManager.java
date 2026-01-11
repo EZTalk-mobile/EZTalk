@@ -14,14 +14,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/**
- * Helper class to manage Supabase Storage operations
- * Handles uploading images to Supabase buckets
- * ✅ Thread-safe with proper main thread callbacks
- * ✅ Uses PUT for upsert (overwrite existing files)
- */
 public class SupabaseStorageManager {
-
     private static final String TAG = "SupabaseStorage";
 
     private static final String SUPABASE_URL = "https://ijcfvpodwmshmdecmxmk.supabase.co";
