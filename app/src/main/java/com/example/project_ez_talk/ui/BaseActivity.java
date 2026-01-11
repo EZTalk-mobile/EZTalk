@@ -1,9 +1,14 @@
 package com.example.project_ez_talk.ui;
 
+import android.content.Context;
+
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.project_ez_talk.helper.LocaleHelper;
+import com.example.project_ez_talk.helper.NotificationHelper;
 
 /**
  * ✅ Base Activity class
@@ -11,24 +16,35 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 public class BaseActivity extends AppCompatActivity {
 
-    protected static final String TAG = "BaseActivity";
+    private static final String TAG = "BaseActivity";
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate: " + this.getClass().getSimpleName());
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: " + this.getClass().getSimpleName());
+        // ==================== FCM INITIALIZATION ====================
+        // Initialize Firebase Cloud Messaging
+        // This will:
+        // 1. Get device FCM token
+        // 2. Save token to Firestore (for push notifications)
+        // 3. Request notification permission (Android 13+)
+        Log.d(TAG, "🔄 Initializing FCM for push notifications...");
+        NotificationHelper.initializeFCM(this);
+        NotificationHelper.requestNotificationPermission(this);
+        // ==================== END FCM INITIALIZATION ====================
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume: " + this.getClass().getSimpleName());
+        // Common resume logic
+
     }
 
     @Override
@@ -41,11 +57,14 @@ public class BaseActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "onStop: " + this.getClass().getSimpleName());
+        // Common pause logic
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onDestroy: " + this.getClass().getSimpleName());
+        // Common cleanup
+
     }
 }

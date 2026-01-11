@@ -3,6 +3,10 @@ import com.example.project_ez_talk.ui.profile.AddFriendDialog;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+<<<<<<< HEAD
+=======
+import android.util.Log;
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,12 +19,25 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.project_ez_talk.R;
 import com.example.project_ez_talk.ui.BaseActivity;
 import com.example.project_ez_talk.ui.auth.welcome.WelcomeActivity;
+<<<<<<< HEAD
 import com.example.project_ez_talk.ui.profile.AddFriendDialog;
 import com.example.project_ez_talk.utils.Preferences;
+=======
+import com.example.project_ez_talk.ui.call.incoming.IncomingCallActivity;
+import com.example.project_ez_talk.ui.profile.AddFriendDialog;
+import com.example.project_ez_talk.utils.Preferences;
+import com.example.project_ez_talk.webTRC.DataModelType;
+import com.example.project_ez_talk.webTRC.MainRepository;
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+<<<<<<< HEAD
+=======
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
 
 /**
  * HomeActivity - Main container for the app after login
@@ -29,12 +46,24 @@ import com.google.firebase.auth.FirebaseAuth;
  */
 public class HomeActivity extends BaseActivity {
 
+<<<<<<< HEAD
+=======
+    private static final String TAG = "HomeActivity";
+
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
     private NavController navController;
     private BottomNavigationView bottomNav;
     private FloatingActionButton fabCenter;
     private MaterialToolbar toolbar;
     private ImageView ivSearch, ivNotification;
 
+<<<<<<< HEAD
+=======
+    // WebRTC for incoming calls
+    private MainRepository mainRepository;
+    private String currentUserId;
+
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
     // Variables for draggable FAB
     private float dX = 0f;
     private float dY = 0f;
@@ -47,18 +76,46 @@ public class HomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+<<<<<<< HEAD
         if (FirebaseAuth.getInstance().getCurrentUser() == null || !Preferences.isLoggedIn(this)) {
+=======
+        Log.d(TAG, "=== HomeActivity onCreate() started ===");
+
+        if (FirebaseAuth.getInstance().getCurrentUser() == null || !Preferences.isLoggedIn(this)) {
+            Log.d(TAG, "User not authenticated, redirecting to WelcomeActivity");
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
             startActivity(new Intent(this, WelcomeActivity.class));
             finish();
             return;
         }
 
+<<<<<<< HEAD
         setContentView(R.layout.activity_main);
 
         initViews();
         setupNavigation();
         setupToolbar();
         setupDraggableFab();
+=======
+        currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.d(TAG, "✅ User authenticated: " + currentUserId);
+
+        setContentView(R.layout.activity_main);
+
+        Log.d(TAG, "Initializing views...");
+        initViews();
+        Log.d(TAG, "Setting up navigation...");
+        setupNavigation();
+        Log.d(TAG, "Setting up toolbar...");
+        setupToolbar();
+        Log.d(TAG, "Setting up draggable FAB...");
+        setupDraggableFab();
+
+        // Setup WebRTC for incoming calls
+        Log.d(TAG, "Setting up incoming call listener...");
+        setupIncomingCallListener();
+        Log.d(TAG, "✅ HomeActivity onCreate() completed");
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
     }
 
     private void initViews() {
@@ -187,6 +244,106 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Setup incoming call listener
+     * This allows the user to receive video call notifications
+     */
+    private void setupIncomingCallListener() {
+        Log.d(TAG, "=== setupIncomingCallListener() started ===");
+        Log.d(TAG, "Current user ID: " + currentUserId);
+
+        if (currentUserId == null || currentUserId.isEmpty()) {
+            Log.e(TAG, "❌ Cannot setup incoming call listener - user ID is null");
+            return;
+        }
+
+        // Get MainRepository instance
+        mainRepository = MainRepository.getInstance();
+        Log.d(TAG, "MainRepository instance obtained");
+
+        // Login to WebRTC signaling
+        Log.d(TAG, "Attempting to login to WebRTC signaling...");
+        mainRepository.login(currentUserId, this, () -> {
+            Log.d(TAG, "✅ Successfully logged into WebRTC signaling!");
+            Log.d(TAG, "User is now online and ready to receive calls");
+
+            // Subscribe to incoming call events
+            Log.d(TAG, "Subscribing to incoming call events...");
+            subscribeForLatestEvent();
+            Log.d(TAG, "✅ Incoming call listener setup complete!");
+        });
+    }
+
+    /**
+     * Subscribe for incoming call events
+     */
+    private void subscribeForLatestEvent() {
+        Log.d(TAG, "=== subscribeForLatestEvent() started ===");
+
+        mainRepository.subscribeForLatestEvent(model -> {
+            Log.d(TAG, "📩 Event received!");
+            Log.d(TAG, "Event type: " + model.getType());
+            Log.d(TAG, "Sender: " + model.getSender());
+            Log.d(TAG, "Target: " + model.getTarget());
+
+            // Only launch IncomingCallActivity for StartCall events
+            // Other events (Offer/Answer/IceCandidate) are handled by MainRepository automatically
+            if (model.getType() == DataModelType.StartCall) {
+                Log.d(TAG, "🔔 Incoming call detected from: " + model.getSender());
+
+                // Get caller info from Firestore
+                String callerId = model.getSender();
+                Log.d(TAG, "Fetching caller info from Firestore for: " + callerId);
+
+                FirebaseFirestore.getInstance()
+                        .collection("users")
+                        .document(callerId)
+                        .get()
+                        .addOnSuccessListener(documentSnapshot -> {
+                            String callerName = "Unknown User";
+                            String callerAvatar = "";
+
+                            if (documentSnapshot.exists()) {
+                                callerName = documentSnapshot.getString("name");
+                                callerAvatar = documentSnapshot.getString("profileImage");
+                                Log.d(TAG, "✅ Caller info retrieved: " + callerName);
+                            } else {
+                                Log.w(TAG, "⚠️ Caller document not found in Firestore");
+                            }
+
+                            // Launch IncomingCallActivity
+                            Log.d(TAG, "🚀 Launching IncomingCallActivity...");
+                            Intent intent = new Intent(HomeActivity.this, IncomingCallActivity.class);
+                            intent.putExtra("caller_id", callerId);
+                            intent.putExtra("caller_name", callerName);
+                            intent.putExtra("caller_avatar", callerAvatar);
+                            intent.putExtra("call_type", "video");
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            Log.d(TAG, "✅ IncomingCallActivity launched successfully");
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e(TAG, "❌ Failed to get caller info: " + e.getMessage());
+                            // Launch IncomingCallActivity anyway with default info
+                            Intent intent = new Intent(HomeActivity.this, IncomingCallActivity.class);
+                            intent.putExtra("caller_id", callerId);
+                            intent.putExtra("caller_name", "Unknown User");
+                            intent.putExtra("caller_avatar", "");
+                            intent.putExtra("call_type", "video");
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        });
+            }
+            // Note: Offer/Answer/IceCandidate events are automatically handled inside
+            // MainRepository.subscribeForLatestEvent() - no need to handle them here
+        });
+
+        Log.d(TAG, "✅ Subscribed to latest events successfully");
+    }
+
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
     @Override
     public boolean onSupportNavigateUp() {
         return navController.navigateUp() || super.onSupportNavigateUp();

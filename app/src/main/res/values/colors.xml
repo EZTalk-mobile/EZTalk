@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
     <resources xmlns:tools="http://schemas.android.com/tools">
+<<<<<<< HEAD
+=======
+
+    <!-- Video Call Colors -->
+    <color name="semi_transparent">#80000000</color>
+    <color name="red">#F44336</color>
+    <color name="call_overlay_gradient_start">#80000000</color>
+    <color name="call_overlay_gradient_end">#00000000</color>
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
         <!-- Primary Colors -->
         <color name="primary_purple">#6C5CE7</color>
         <color name="primary_purple_dark">#5B4CD6</color>
         <color name="primary_purple_light">#8B7CE8</color>
+<<<<<<< HEAD
+=======
+    <color name="black">#FF000000</color>
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
 
         <!-- Secondary Colors -->
         <color name="secondary_green">#00D9A3</color>

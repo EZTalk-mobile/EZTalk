@@ -4,12 +4,35 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="GroupDetailActivity">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="EditProfileActivity">
-        <option name="selectionMode" value="DROPDOWN" />
+<<<<<<< HEAD
+        <DropdownSelection timestamp="2026-01-09T10:49:57.286217700Z">
+=======
+        <DropdownSelection timestamp="2025-12-31T18:38:10.843117600Z">
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=84298ad4" />
+            </handle>
+          </Target>
+        </DropdownSelection>
+<<<<<<< HEAD
+        <DialogSelection />
+=======
+        <DialogSelection>
+          <targets>
+            <Target type="DEFAULT_BOOT">
+              <handle>
+                <DeviceId pluginId="PhysicalDevice" identifier="serial=84298ad4" />
+              </handle>
+            </Target>
+            <Target type="DEFAULT_BOOT">
+              <handle>
+                <DeviceId pluginId="PhysicalDevice" identifier="serial=89RX0EUBK" />
+              </handle>
+            </Target>
+          </targets>
+        </DialogSelection>
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
       </SelectionState>
     </selectionStates>
   </component>

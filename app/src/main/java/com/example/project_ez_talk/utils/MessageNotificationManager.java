@@ -62,7 +62,11 @@ public class MessageNotificationManager {
                         String fcmToken = doc.getString("fcmToken");
 
                         if (fcmToken != null && !fcmToken.isEmpty()) {
+<<<<<<< HEAD
+                             // Call backend to send notification
+=======
                             // Call backend to send notification
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
                             callBackendNotification(
                                     fcmToken,
                                     senderName,

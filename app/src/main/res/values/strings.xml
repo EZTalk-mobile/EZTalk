@@ -5,6 +5,20 @@
     <string name="app_name">EZ Talk</string>
     <string name="default_notification_channel_id">default_channel</string>
 
+<<<<<<< HEAD
+=======
+<!--    web trc-->
+
+    <string name="mic_button">mic_button</string>
+    <string name="someone_is_calling">someone is calling</string>
+    <string name="accpet_button">accpet button</string>
+    <string name="reject_button">reject button</string>
+    <string name="who_to_call">who to call ?</string>
+
+    <string name="mute_unmute_mic" />
+
+    <string name="video_button">video button</string>
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
     <!-- Welcome & Auth -->
     <string name="welcome_title">Welcome back! Glad to see you, Again!</string>
     <string name="welcome_subtitle">Join the chat and start talking with your friends and family</string>

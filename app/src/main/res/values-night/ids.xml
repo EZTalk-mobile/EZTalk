@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<<<<<<< HEAD
     <item name="tvLastMessage" type="id" />
     <item name="tvBadgeCount" type="id" />
     <item name="cvBadge" type="id" />
     <item name="tvMembers" type="id" />
     <item name="tv_role" type="id" />
+=======
+
+=======
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
     <item name="action_edit_group" type="id" />
     <item name="btnDownload" type="id" />
     <item name="videoView" type="id" />
     <item name="surfaceViewRenderer" type="id" />
+<<<<<<< HEAD
+=======
+>>>>>>> origin/NEWS
+>>>>>>> 61984a43d5c4b52195ebbb52041a92899843b7f3
 </resources>
